@@ -73,8 +73,9 @@ export default {
       codeUrl: "",
       loginForm: {
         username: "admin",
-        password: "admin123",
+        password: "123456",
         rememberMe: false,
+        loginType: "account",
         code: "",
         uuid: ""
       },
@@ -91,7 +92,7 @@ export default {
       // 验证码开关
       captchaEnabled: true,
       // 注册开关
-      register: false,
+      register: true,
       redirect: undefined
     };
   },
@@ -124,7 +125,8 @@ export default {
       this.loginForm = {
         username: username === undefined ? this.loginForm.username : username,
         password: password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+        loginType: this.loginForm.loginType===undefined?"account":this.loginForm.loginType
       };
     },
     handleLogin() {

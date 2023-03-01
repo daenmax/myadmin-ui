@@ -35,8 +35,9 @@ const user = {
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
+      const loginType = userInfo.loginType
       return new Promise((resolve, reject) => {
-        login(username, password, code, uuid).then(res => {
+        login(username, password, code, uuid,loginType).then(res => {
           setToken(res.data.token)
           commit('SET_TOKEN', res.data.token)
           resolve()
