@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">MyAdmin后台管理系统</h3>
+      <h3 class="title">{{ loginTitle }}</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -56,7 +56,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2023 daenx.cn & ruoyi.vip All Rights Reserved.</span>
+      <span>{{ copyright }}</span>
     </div>
   </div>
 </template>
@@ -70,6 +70,8 @@ export default {
   name: "Login",
   data() {
     return {
+      loginTitle : process.env.VUE_APP_LOGIN_TITLE,
+      copyright : process.env.VUE_APP_COPYRIGHT,
       codeUrl: "",
       loginForm: {
         username: "admin",

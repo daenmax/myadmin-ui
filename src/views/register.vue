@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form">
-      <h3 class="title">MyAdmin后台管理系统</h3>
+      <h3 class="title">{{ registerTitle }}</h3>
       <el-form-item prop="username">
         <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -61,7 +61,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>Copyright © 2018-2022 ruoyi.vip All Rights Reserved.</span>
+      <span>{{ copyright }}</span>
     </div>
   </div>
 </template>
@@ -80,6 +80,8 @@ export default {
       }
     };
     return {
+      registerTitle : process.env.VUE_APP_REGISTER_TITLE,
+      copyright : process.env.VUE_APP_COPYRIGHT,
       codeUrl: "",
       registerForm: {
         username: "",
