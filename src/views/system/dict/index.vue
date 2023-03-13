@@ -200,6 +200,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -287,6 +289,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.names = selection.map(item => item.name)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
@@ -323,7 +326,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除字典编号为"' + ids + '"的数据项？').then(function() {
+      const names = row.name || this.names;
+      this.$modal.confirm('是否确认删除字典编号为"' + names + '"的数据项？').then(function() {
         return delType(ids);
       }).then(() => {
         this.getList();

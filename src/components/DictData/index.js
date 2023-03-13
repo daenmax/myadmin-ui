@@ -22,8 +22,8 @@ function install() {
   Vue.use(DataDict, {
     metas: {
       '*': {
-        labelField: 'dictLabel',
-        valueField: 'dictValue',
+        labelField: 'label',
+        valueField: 'value',
         request(dictMeta) {
           const storeDict = searchDictByKey(store.getters.dict, dictMeta.type)
           if (storeDict) {
