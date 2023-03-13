@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="字典名称" prop="dictName">
+      <el-form-item label="字典名称" prop="name">
         <el-input
-          v-model="queryParams.dictName"
+          v-model="queryParams.name"
           placeholder="请输入字典名称"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="字典类型" prop="dictType">
+      <el-form-item label="字典编码" prop="code">
         <el-input
-          v-model="queryParams.dictType"
-          placeholder="请输入字典类型"
+          v-model="queryParams.code"
+          placeholder="请输入字典编码"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
@@ -110,12 +110,12 @@
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="字典编号" align="center" prop="dictId" />
-      <el-table-column label="字典名称" align="center" prop="dictName" :show-overflow-tooltip="true" />
-      <el-table-column label="字典类型" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="字典编号" align="center" prop="id" />
+      <el-table-column label="字典名称" align="center" prop="name" :show-overflow-tooltip="true" />
+      <el-table-column label="字典编码" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <router-link :to="'/system/dict-data/index/' + scope.row.dictId" class="link-type">
-            <span>{{ scope.row.dictType }}</span>
+          <router-link :to="'/system/dict-data/index/' + scope.row.id" class="link-type">
+            <span>{{ scope.row.code }}</span>
           </router-link>
         </template>
       </el-table-column>
@@ -161,11 +161,11 @@
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="字典名称" prop="dictName">
-          <el-input v-model="form.dictName" placeholder="请输入字典名称" />
+        <el-form-item label="字典名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入字典名称" />
         </el-form-item>
-        <el-form-item label="字典类型" prop="dictType">
-          <el-input v-model="form.dictType" placeholder="请输入字典类型" />
+        <el-form-item label="字典编码" prop="code">
+          <el-input v-model="form.code" placeholder="请输入字典编码" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
@@ -220,19 +220,19 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        dictName: undefined,
-        dictType: undefined,
+        name: undefined,
+        code: undefined,
         status: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        dictName: [
+        name: [
           { required: true, message: "字典名称不能为空", trigger: "blur" }
         ],
-        dictType: [
-          { required: true, message: "字典类型不能为空", trigger: "blur" }
+        code: [
+          { required: true, message: "字典编码不能为空", trigger: "blur" }
         ]
       }
     };
@@ -241,12 +241,12 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询字典类型列表 */
+    /** 查询字典编码列表 */
     getList() {
       this.loading = true;
       listType(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.typeList = response.rows;
-          this.total = response.total;
+          this.typeList = response.data.records;
+          this.total = response.data.total;
           this.loading = false;
         }
       );
@@ -259,9 +259,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        dictId: undefined,
-        dictName: undefined,
-        dictType: undefined,
+        id: undefined,
+        name: undefined,
+        code: undefined,
         status: "0",
         remark: undefined
       };
@@ -282,29 +282,29 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加字典类型";
+      this.title = "添加字典编码";
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.dictId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const dictId = row.dictId || this.ids
-      getType(dictId).then(response => {
+      const id = row.id || this.ids
+      getType(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改字典类型";
+        this.title = "修改字典编码";
       });
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.dictId != undefined) {
+          if (this.form.id != undefined) {
             updateType(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -322,9 +322,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const dictIds = row.dictId || this.ids;
-      this.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？').then(function() {
-        return delType(dictIds);
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否确认删除字典编号为"' + ids + '"的数据项？').then(function() {
+        return delType(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
