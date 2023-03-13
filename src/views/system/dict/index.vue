@@ -336,7 +336,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/dict/type/export', {
+      this.download('system/dict/export', {
         ...this.queryParams
       }, `type_${new Date().getTime()}.xlsx`)
     },
