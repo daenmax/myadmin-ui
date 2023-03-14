@@ -30,7 +30,7 @@
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
-          v-model="daterangeCreateTime"
+          v-model="dateRange"
           size="small"
           style="width: 240px"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -227,7 +227,7 @@ export default {
       // 预览列表图片
       previewListResource: true,
       // 创建时间时间范围
-      daterangeCreateTime: [],
+      dateRange: [],
       // 默认排序
       defaultSort: {prop: 'createTime', order: 'ascending'},
       // 查询参数
@@ -240,7 +240,9 @@ export default {
         url: undefined,
         createTime: undefined,
         createBy: undefined,
-        service: undefined
+        service: undefined,
+        startTime: undefined,
+        endTime: undefined
       },
       // 表单参数
       form: {},
@@ -259,11 +261,9 @@ export default {
     /** 查询OSS对象存储列表 */
     getList() {
       this.loading = true;
-      this.queryParams.params = {};
-      if (null != this.daterangeCreateTime && '' != this.daterangeCreateTime) {
-        this.queryParams.params["beginCreateTime"] = this.daterangeCreateTime[0];
-        this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
-      }
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
       this.getConfigKey("sys.oss.previewListResource").then(response => {
         this.previewListResource = response.msg === undefined ? true : response.msg === 'true';
       });
@@ -300,7 +300,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.showTable = false;
-      this.daterangeCreateTime = [];
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.queryParams.orderByColumn = this.defaultSort.prop;
       this.queryParams.isAsc = this.defaultSort.order;

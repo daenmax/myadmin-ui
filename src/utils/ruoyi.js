@@ -53,7 +53,7 @@ export function resetForm(refName) {
   }
 }
 
-// 添加日期范围
+// 添加日期范围-2023年3月14日14:44:57，弃用 By:DaenMax
 export function addDateRange(params, dateRange, propName) {
   let search = params;
   search.params = typeof (search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ? search.params : {};

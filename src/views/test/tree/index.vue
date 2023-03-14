@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
-          v-model="daterangeCreateTime"
+          v-model="dateRange"
           size="small"
           style="width: 240px"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -37,7 +37,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['demo:tree:add']"
+          v-hasPermi="['test:tree:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -76,21 +76,21 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['demo:tree:edit']"
+            v-hasPermi="['test:tree:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
-            v-hasPermi="['demo:tree:add']"
+            v-hasPermi="['test:tree:add']"
           >新增</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['demo:tree:remove']"
+            v-hasPermi="['test:tree:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { listTree, getTree, delTree, addTree, updateTree } from "@/api/demo/tree";
+import { listTree, getTree, delTree, addTree, updateTree } from "@/api/test/tree";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -151,11 +151,13 @@ export default {
       // 重新渲染表格状态
       refreshTable: true,
       // 创建时间时间范围
-      daterangeCreateTime: [],
+      dateRange: [],
       // 查询参数
       queryParams: {
         treeName: null,
         createTime: null,
+        startTime: undefined,
+        endTime: undefined
       },
       // 表单参数
       form: {},
@@ -174,11 +176,9 @@ export default {
     /** 查询测试树表列表 */
     getList() {
       this.loading = true;
-      this.queryParams.params = {};
-      if (null != this.daterangeCreateTime && '' != this.daterangeCreateTime) {
-        this.queryParams.params["beginCreateTime"] = this.daterangeCreateTime[0];
-        this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
-      }
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
       listTree(this.queryParams).then(response => {
         this.treeList = this.handleTree(response.data, "id", "parentId");
         this.loading = false;
@@ -232,7 +232,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeCreateTime = [];
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

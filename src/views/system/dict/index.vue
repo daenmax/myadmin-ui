@@ -224,7 +224,9 @@ export default {
         pageSize: 10,
         name: undefined,
         code: undefined,
-        status: undefined
+        status: undefined,
+        startTime: undefined,
+        endTime: undefined
       },
       // 表单参数
       form: {},
@@ -246,7 +248,10 @@ export default {
     /** 查询字典编码列表 */
     getList() {
       this.loading = true;
-      listType(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listType(this.queryParams).then(response => {
           this.typeList = response.data.records;
           this.total = response.data.total;
           this.loading = false;

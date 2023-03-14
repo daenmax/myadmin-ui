@@ -215,7 +215,9 @@ export default {
         pageSize: 10,
         configName: undefined,
         configKey: undefined,
-        configType: undefined
+        configType: undefined,
+        startTime: undefined,
+        endTime: undefined
       },
       // 表单参数
       form: {},
@@ -240,7 +242,10 @@ export default {
     /** 查询参数列表 */
     getList() {
       this.loading = true;
-      listConfig(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listConfig(this.queryParams).then(response => {
           this.configList = response.data.records
           this.total = response.data.total;
           this.loading = false;

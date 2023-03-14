@@ -320,7 +320,9 @@ export default {
         pageSize: 10,
         roleName: undefined,
         roleKey: undefined,
-        status: undefined
+        status: undefined,
+        startTime: undefined,
+        endTime: undefined
       },
       // 表单参数
       form: {},
@@ -349,7 +351,10 @@ export default {
     /** 查询角色列表 */
     getList() {
       this.loading = true;
-      listRole(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listRole(this.queryParams).then(response => {
           this.roleList = response.data.records
           this.total = response.data.total;
           this.loading = false;

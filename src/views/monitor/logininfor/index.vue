@@ -163,7 +163,9 @@ export default {
         pageSize: 10,
         ipaddr: undefined,
         userName: undefined,
-        status: undefined
+        status: undefined,
+        startTime: undefined,
+        endTime: undefined
       }
     };
   },
@@ -174,7 +176,10 @@ export default {
     /** 查询登录日志列表 */
     getList() {
       this.loading = true;
-      list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      list(this.queryParams).then(response => {
           this.list = response.data.records
           this.total = response.data.total;
           this.loading = false;

@@ -411,7 +411,9 @@ export default {
         userName: undefined,
         phonenumber: undefined,
         status: undefined,
-        deptId: undefined
+        deptId: undefined,
+        startTime: undefined,
+        endTime: undefined
       },
       // 列信息
       columns: [
@@ -470,7 +472,10 @@ export default {
     /** 查询用户列表 */
     getList() {
       this.loading = true;
-      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listUser(this.queryParams).then(response => {
           this.userList = response.data.records
           this.total = response.data.total;
           this.loading = false;

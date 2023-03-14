@@ -226,7 +226,9 @@ export default {
         pageSize: 10,
         tableName: undefined,
         tableComment: undefined,
-        dataName: "master"
+        dataName: "master",
+        startTime: undefined,
+        endTime: undefined
       },
       // 预览参数
       preview: {
@@ -253,7 +255,10 @@ export default {
     /** 查询表集合 */
     getList() {
       this.loading = true;
-      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listTable(this.queryParams).then(response => {
           this.tableList = response.data.records
           this.total = response.data.total;
           this.loading = false;
