@@ -110,7 +110,7 @@
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="字典编号" align="center" prop="id" />
+      <el-table-column label="字典编号" align="center" prop="id" v-if="false"/>
       <el-table-column label="字典名称" align="center" prop="name" :show-overflow-tooltip="true" />
       <el-table-column label="字典编码" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">

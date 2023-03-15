@@ -122,7 +122,7 @@
 
     <el-table v-loading="loading" :data="demoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="内容" align="center" prop="content" />
       
@@ -185,7 +185,7 @@
         <el-form-item label="类型" prop="type">
           <el-radio-group v-model="form.type">
             <el-radio
-              v-for="dict in dict.type.type"
+              v-for="dict in dict.type.test_data_type"
               :key="dict.value"
               :label="dict.value"
             >{{dict.label}}</el-radio>
