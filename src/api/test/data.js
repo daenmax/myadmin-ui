@@ -1,18 +1,27 @@
 import request from '@/utils/request'
 
-// 查询测试单表列表
-export function listDemo(query) {
+// 分页接口1
+export function listDemo1(query) {
   return request({
-    url: '/test/data/list',
+    url: '/test/data/list1',
     method: 'get',
     params: query
   })
 }
 
-// 自定义分页接口
-export function pageDemo(query) {
+// 分页接口2
+export function listDemo2(query) {
   return request({
-    url: '/test/data/page',
+    url: '/test/data/list2',
+    method: 'get',
+    params: query
+  })
+}
+
+// 分页接口3
+export function listDemo3(query) {
+  return request({
+    url: '/test/data/list3',
     method: 'get',
     params: query
   })

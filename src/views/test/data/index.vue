@@ -7,7 +7,7 @@
           placeholder="请输入标题"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
+          @keyup.enter.native="handleList1"
         />
       </el-form-item>
       <el-form-item label="内容" prop="content">
@@ -16,7 +16,7 @@
           placeholder="请输入内容"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
+          @keyup.enter.native="handleList1"
         />
       </el-form-item>
       <el-form-item label="创建时间">
@@ -33,8 +33,9 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handlePage">搜索(自定义分页接口)</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList1">搜索-MP分页插件</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList2">搜索-自己写的SQL</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList3">搜索-MP自定义SQL</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -92,25 +93,25 @@
           v-hasPermi="['test:data:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList1"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="demoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="id" align="center" prop="id" v-if="true"/>
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="内容" align="center" prop="content" />
       <el-table-column label="创建人部门" align="center" prop="createDept" />
       <el-table-column label="创建人" align="center" prop="createName" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新人" align="center" prop="updateName" />
       <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -138,7 +139,7 @@
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
-      @pagination="getList"
+      @pagination="getList1"
     />
 
     <!-- 添加或修改测试单表对话框 -->
@@ -190,7 +191,7 @@
 </template>
 
 <script>
-import { listDemo, pageDemo, getDemo, delDemo, addDemo, updateDemo } from "@/api/test/data";
+import { listDemo1, listDemo2, listDemo3, getDemo, delDemo, addDemo, updateDemo } from "@/api/test/data";
 import {getToken} from "@/utils/auth";
 
 export default {
@@ -258,28 +259,40 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getList1();
   },
   methods: {
-    /** 查询测试单表列表 */
-    getList() {
+    /** 分页列表1 */
+    getList1() {
       this.loading = true;
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listDemo(this.queryParams).then(response => {
+      listDemo1(this.queryParams).then(response => {
         this.demoList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
     },
-    /** 自定义分页查询 */
-    getPage() {
+    /** 分页列表2 */
+    getList2() {
       this.loading = true;
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageDemo(this.queryParams).then(response => {
+      listDemo2(this.queryParams).then(response => {
+        this.demoList = response.data.records
+        this.total = response.data.total;
+        this.loading = false;
+      });
+    },
+    /** 分页列表3 */
+    getList3() {
+      this.loading = true;
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime=this.dateRange[0]
+      this.queryParams.endTime=this.dateRange[1]
+      listDemo3(this.queryParams).then(response => {
         this.demoList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -306,20 +319,25 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleList1() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getList1();
     },
     /** 搜索按钮操作 */
-    handlePage() {
+    handleList2() {
       this.queryParams.pageNum = 1;
-      this.getPage();
+      this.getList2();
+    },
+    /** 搜索按钮操作 */
+    handleList3() {
+      this.queryParams.pageNum = 1;
+      this.getList3();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
       this.resetForm("queryForm");
-      this.handleQuery();
+      this.handleList1();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -354,7 +372,7 @@ export default {
             updateDemo(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.getList1();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -362,7 +380,7 @@ export default {
             addDemo(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.getList1();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -378,7 +396,7 @@ export default {
         return delDemo(ids);
       }).then(() => {
         this.loading = false;
-        this.getList();
+        this.getList1();
         this.$modal.msgSuccess("删除成功");
       }).finally(() => {
         this.loading = false;
@@ -405,7 +423,7 @@ export default {
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
       this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
-      this.getList();
+      this.getList1();
     },
     // 提交上传文件
     submitFileForm() {
