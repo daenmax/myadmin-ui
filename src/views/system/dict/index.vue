@@ -102,7 +102,7 @@
           icon="el-icon-refresh"
           size="mini"
           @click="handleRefreshCache"
-          v-hasPermi="['system:dict:remove']"
+          v-hasPermi="['system:dict:refreshCache']"
         >刷新缓存</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -347,7 +347,9 @@ export default {
     },
     /** 刷新缓存按钮操作 */
     handleRefreshCache() {
+      this.$modal.loading("正在刷新，请稍候...");
       refreshCache().then(() => {
+        this.$modal.closeLoading();
         this.$modal.msgSuccess("刷新成功");
         this.$store.dispatch('dict/cleanDict');
       });

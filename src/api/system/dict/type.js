@@ -47,14 +47,14 @@ export function delType(dictId) {
 export function refreshCache() {
   return request({
     url: '/system/dict/refreshCache',
-    method: 'delete'
+    method: 'post'
   })
 }
 
 // 获取字典选择框列表
-export function optionselect() {
+export function optionSelect() {
   return request({
-    url: '/system/dict/optionselect',
+    url: '/system/dict/optionSelect',
     method: 'get'
   })
 }
