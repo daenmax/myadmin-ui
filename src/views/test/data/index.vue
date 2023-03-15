@@ -19,6 +19,30 @@
           @keyup.enter.native="handleList1"
         />
       </el-form-item>
+      <el-form-item label="类型" prop="type">
+        <el-select
+          v-model="queryParams.type"
+          placeholder="数据类型"
+          clearable
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in dict.type.test_data_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          size="small"
+          @keyup.enter.native="handleList1"
+        />
+      </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
@@ -101,6 +125,13 @@
       <el-table-column label="id" align="center" prop="id" v-if="true"/>
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="内容" align="center" prop="content" />
+      
+      <el-table-column label="类型" align="center" prop="type">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.test_data_type" :value="scope.row.type"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建人部门" align="center" prop="createDept" />
       <el-table-column label="创建人" align="center" prop="createName" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -142,7 +173,7 @@
       @pagination="getList1"
     />
 
-    <!-- 添加或修改测试单表对话框 -->
+    <!-- 添加或修改测试数据对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
@@ -151,13 +182,17 @@
         <el-form-item label="内容" prop="content">
           <el-input v-model="form.content" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="创建时间" prop="createTime">
-          <el-date-picker clearable size="small"
-                          v-model="form.createTime"
-                          type="datetime"
-                          value-format="yyyy-MM-dd HH:mm:ss"
-                          placeholder="选择创建时间">
-          </el-date-picker>
+        <el-form-item label="类型" prop="type">
+          <el-radio-group v-model="form.type">
+            <el-radio
+              v-for="dict in dict.type.type"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -181,6 +216,10 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <span>仅允许导入xls、xlsx格式文件。</span>
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
+        </div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitFileForm">确 定</el-button>
@@ -196,6 +235,7 @@ import {getToken} from "@/utils/auth";
 
 export default {
   name: "Data",
+  dicts: ['test_data_type'],
   components: {
   },
   data() {
@@ -214,7 +254,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 测试单表表格数据
+      // 测试数据表格数据
       demoList: [],
       // 弹出层标题
       title: "",
@@ -241,6 +281,7 @@ export default {
         pageSize: 10,
         title: undefined,
         content: undefined,
+        remark: undefined,
         createTime: undefined,
         startTime: undefined,
         endTime: undefined
@@ -309,6 +350,7 @@ export default {
         id: undefined,
         title: undefined,
         content: undefined,
+        remark: undefined,
         createDept: undefined,
         createTime: undefined,
         createName: undefined,
@@ -349,7 +391,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加测试单表";
+      this.title = "添加测试数据";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -360,7 +402,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改测试单表";
+        this.title = "修改测试数据";
       });
     },
     /** 提交按钮 */
@@ -391,7 +433,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除测试单表id为"' + ids + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除测试数据id为"' + ids + '"的数据项？').then(() => {
         this.loading = true;
         return delDemo(ids);
       }).then(() => {
@@ -404,14 +446,19 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
-      this.upload.title = "用户导入";
+      this.upload.title = "测试数据导入";
       this.upload.open = true;
+    },
+    /** 下载模板操作 */
+    importTemplate() {
+      this.download('test/data/importTemplate', {
+      }, `data_template_${new Date().getTime()}.xlsx`)
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download('test/data/export', {
         ...this.queryParams
-      }, `demo_${new Date().getTime()}.xlsx`)
+      }, `data_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

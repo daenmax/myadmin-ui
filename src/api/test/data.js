@@ -27,7 +27,7 @@ export function listDemo3(query) {
   })
 }
 
-// 查询测试单表详细
+// 查询测试数据详细
 export function getDemo(id) {
   return request({
     url: '/test/data/' + id,
@@ -35,7 +35,7 @@ export function getDemo(id) {
   })
 }
 
-// 新增测试单表
+// 新增测试数据
 export function addDemo(data) {
   return request({
     url: '/test/data',
@@ -44,7 +44,7 @@ export function addDemo(data) {
   })
 }
 
-// 修改测试单表
+// 修改测试数据
 export function updateDemo(data) {
   return request({
     url: '/test/data',
@@ -53,7 +53,7 @@ export function updateDemo(data) {
   })
 }
 
-// 删除测试单表
+// 删除测试数据
 export function delDemo(id) {
   return request({
     url: '/test/data/' + id,
