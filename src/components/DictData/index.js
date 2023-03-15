@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from '@/store'
 import DataDict from '@/utils/dict'
-import { getDicts as getDicts } from '@/api/system/dict/data'
+import { getDicts as getDicts } from '@/api/system/dict/detail'
 
 function searchDictByKey(dict, key) {
   if (key == null && key == "") {

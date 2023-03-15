@@ -128,7 +128,7 @@
 
 <script>
 import { getGenTable, updateGenTable } from "@/api/tool/gen";
-import { optionSelect as getDictOptionSelect } from "@/api/system/dict/type";
+import { optionSelect as getDictOptionSelect } from "@/api/system/dict/index";
 import { listMenu as getMenuTreeselect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";

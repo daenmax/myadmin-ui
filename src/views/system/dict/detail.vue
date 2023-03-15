@@ -19,6 +19,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="字典键值" prop="value">
+        <el-input
+          v-model="queryParams.value"
+          placeholder="请输入字典键值"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="数据状态" clearable>
           <el-option
@@ -28,6 +36,14 @@
             :value="dict.value"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -190,11 +206,11 @@
 </template>
 
 <script>
-import { listData, getData, delData, addData, updateData } from "@/api/system/dict/data";
-import { optionSelect as getDictOptionSelect, getType } from "@/api/system/dict/type";
+import { listData, getData, delData, addData, updateData } from "@/api/system/dict/detail";
+import { optionSelect as getDictOptionSelect, getType } from "@/api/system/dict/index";
 
 export default {
-  name: "Data",
+  name: "Detail",
   dicts: ['sys_normal_disable'],
   data() {
     return {
@@ -253,7 +269,9 @@ export default {
         pageSize: 10,
         dictCode: undefined,
         label: undefined,
-        status: undefined
+        value: undefined,
+        status: undefined,
+        remark: undefined
       },
       // 表单参数
       form: {},
@@ -393,7 +411,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/dict/data/export', {
+      this.download('system/dict/detail/export', {
         ...this.queryParams
       }, `data_${new Date().getTime()}.xlsx`)
     }

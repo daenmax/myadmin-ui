@@ -114,7 +114,7 @@
       <el-table-column label="字典名称" align="center" prop="name" :show-overflow-tooltip="true" />
       <el-table-column label="字典编码" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <router-link :to="'/system/dict-data/index/' + scope.row.id" class="link-type">
+          <router-link :to="'/system/dict-detail/index/' + scope.row.id" class="link-type">
             <span>{{ scope.row.code }}</span>
           </router-link>
         </template>
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/type";
+import { listType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/index";
 
 export default {
   name: "Dict",
