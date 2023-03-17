@@ -105,7 +105,7 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['test:data:import']"
-        >导入(校验)</el-button>
+        >导入</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
