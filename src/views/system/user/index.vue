@@ -30,18 +30,18 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
+          <el-form-item label="用户名称" prop="username">
             <el-input
-              v-model="queryParams.userName"
+              v-model="queryParams.username"
               placeholder="请输入用户名称"
               clearable
               style="width: 240px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="手机号码" prop="phonenumber">
+          <el-form-item label="手机号码" prop="phone">
             <el-input
-              v-model="queryParams.phonenumber"
+              v-model="queryParams.phone"
               placeholder="请输入手机号码"
               clearable
               style="width: 240px"
@@ -140,10 +140,10 @@
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
-          <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="用户名称" align="center" key="username" prop="username" v-if="columns[1].visible" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
+          <el-table-column label="手机号码" align="center" key="phone" prop="phone" v-if="columns[4].visible" width="120" />
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
             <template slot-scope="scope">
               <el-switch
@@ -220,8 +220,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            <el-form-item label="手机号码" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -232,8 +232,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="username">
+              <el-input v-model="form.username" placeholder="请输入用户名称" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -408,8 +408,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userName: undefined,
-        phonenumber: undefined,
+        username: undefined,
+        phone: undefined,
         status: undefined,
         deptId: undefined,
         startTime: undefined,
@@ -427,7 +427,7 @@ export default {
       ],
       // 表单校验
       rules: {
-        userName: [
+        username: [
           { required: true, message: "用户名称不能为空", trigger: "blur" },
           { min: 5, max: 30, message: '用户名称长度必须介于 5 和 30 之间', trigger: 'blur' }
         ],
@@ -445,7 +445,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        phonenumber: [
+        phone: [
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
             message: "请输入正确的手机号码",
@@ -501,7 +501,7 @@ export default {
     // 用户状态修改
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
-      this.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗？').then(function() {
+      this.$modal.confirm('确认要"' + text + '""' + row.username + '"用户吗？').then(function() {
         return changeUserStatus(row.userId, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
@@ -519,10 +519,10 @@ export default {
       this.form = {
         userId: undefined,
         deptId: undefined,
-        userName: undefined,
+        username: undefined,
         nickName: undefined,
         password: undefined,
-        phonenumber: undefined,
+        phone: undefined,
         email: undefined,
         sex: undefined,
         status: "0",
@@ -592,7 +592,7 @@ export default {
     },
     /** 重置密码按钮操作 */
     handleResetPwd(row) {
-      this.$prompt('请输入"' + row.userName + '"的新密码', "提示", {
+      this.$prompt('请输入"' + row.username + '"的新密码', "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         closeOnClickModal: false,

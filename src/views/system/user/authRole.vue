@@ -9,8 +9,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" :offset="2">
-          <el-form-item label="登录账号" prop="userName">
-            <el-input  v-model="form.userName" disabled />
+          <el-form-item label="登录账号" prop="username">
+            <el-input  v-model="form.username" disabled />
           </el-form-item>
         </el-col>
       </el-row>

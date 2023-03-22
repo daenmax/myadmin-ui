@@ -10,9 +10,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用户名称" prop="userName">
+      <el-form-item label="用户名称" prop="username">
         <el-input
-          v-model="queryParams.userName"
+          v-model="queryParams.username"
           placeholder="请输入用户名称"
           clearable
           style="width: 240px;"
@@ -101,7 +101,7 @@
     <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="访问编号" align="center" prop="infoId" />
-      <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
+      <el-table-column label="用户名称" align="center" prop="username" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
       <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
       <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
       <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />
@@ -162,7 +162,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         ipaddr: undefined,
-        userName: undefined,
+        username: undefined,
         status: undefined,
         startTime: undefined,
         endTime: undefined
@@ -203,7 +203,7 @@ export default {
       this.ids = selection.map(item => item.infoId)
       this.single = selection.length!=1
       this.multiple = !selection.length
-      this.selectName = selection.map(item => item.userName);
+      this.selectName = selection.map(item => item.username);
     },
     /** 排序触发事件 */
     handleSortChange(column, prop, order) {
