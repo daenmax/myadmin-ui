@@ -10,44 +10,48 @@
             欢迎您
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
-                <svg-icon icon-class="user" />UID
-                <div class="pull-right">{{ user.id }}</div>
+                <svg-icon icon-class="star" /> 用户UID
+                <div class="pull-right"><el-tag type="info" size="mini" hit="true">{{ user.id }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="user" />用户账号
-                <div class="pull-right">{{ user.username }}</div>
+                <svg-icon icon-class="user" /> 用户账号
+                <div class="pull-right"><el-tag type="success" size="mini">{{ user.username }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="tree" />用户类型
-                <div class="pull-right">{{ user.userTypeName }}</div>
+                <svg-icon icon-class="theme" /> 用户类型
+                <div class="pull-right"><el-tag type="success" size="mini">{{ user.userTypeName }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="tree" />所属部门
-                <div class="pull-right" v-if="user.deptName">{{ user.deptName }}</div>
+                <svg-icon icon-class="tree" /> 所属部门
+                <div class="pull-right" v-if="user.deptName"><el-tag type="" size="mini">{{ user.deptName }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="tree" />所属岗位
-                <div class="pull-right">{{ postGroup }}</div>
+                <svg-icon icon-class="tree-table" /> 所属岗位
+                <div class="pull-right"><el-tag v-for="(item,index) in postGroup" :key="index" type="" size="mini"  hit="true" style="margin-left: 10px;">{{ item }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="peoples" />所属角色
-                <div class="pull-right">{{ roleGroup }}</div>
+                <svg-icon icon-class="peoples" /> 所属角色
+                <div class="pull-right"><el-tag v-for="(item,index) in roleGroup" :key="index" type="" size="mini"  hit="true" style="margin-left: 10px;">{{ item }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="email" />账户余额
-                <div class="pull-right">￥{{ user.money }}</div>
+                <svg-icon icon-class="money" /> 账户余额
+                <div class="pull-right"><el-tag type="danger" size="mini">{{ user.money/100 }}元</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" />注册日期
-                <div class="pull-right">{{ user.createTime }}</div>
+                <svg-icon icon-class="date" /> 注册日期
+                <div class="pull-right"><el-tag type="warning" size="mini">{{ user.createTime }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" />过期日期
-                <div class="pull-right">{{ user.expireToTime==null?"永久":user.banToTime }}</div>
+                <svg-icon icon-class="date" /> 过期日期
+                <div class="pull-right"><el-tag type="warning" size="mini">{{ user.expireToTime==null?"永久":user.banToTime }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" />解封日期
-                <div class="pull-right">{{ user.banToTime==null?"正常":user.banToTime }}</div>
+                <svg-icon icon-class="date" /> 解封日期
+                <div class="pull-right"><el-tag type="danger" size="mini">{{ user.banToTime==null?"正常":user.banToTime }}</el-tag></div>
+              </li>
+              <li class="list-group-item">
+                <svg-icon icon-class="form" /> 备注
+                <div class="pull-right">{{ user.remark }}</div>
               </li>
             </ul>
           </div>
@@ -64,36 +68,36 @@
             </div>
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
-                <svg-icon icon-class="user" />用户昵称
+                <svg-icon icon-class="dashboard" /> 用户昵称
                 <div class="pull-right">{{ user.nickName }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="user" />真实姓名
+                <svg-icon icon-class="user" /> 真实姓名
                 <div class="pull-right">{{ user.realName }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="user" />用户性别
+                <svg-icon icon-class="example" /> 用户性别
                 <div class="pull-right">{{ user.sex==1?"男":(user.age==0?"女":"未知") }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="user" />用户年龄
+                <svg-icon icon-class="guide" /> 用户年龄
                 <div class="pull-right">{{ user.age }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="phone" />手机号码
+                <svg-icon icon-class="phone" /> 手机号码
                 <div class="pull-right">{{ user.phone }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="email" />用户邮箱
-                <div class="pull-right">{{ user.email }}</div>
+                <svg-icon icon-class="email" /> 用户邮箱
+                <div class="pull-right"><el-link :href="'mailto:' + user.email" type="primary">{{ user.email }}</el-link></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="email" />个人说明
-                <div class="pull-right"><span>{{ user.profile }}</span></div>
-              </li>
-              <li class="list-group-item">
-                <svg-icon icon-class="email" />个人签名
+                <svg-icon icon-class="message" /> 个人签名
                 <div class="pull-right">{{ user.userSign }}</div>
+              </li>
+              <li class="list-group-item">
+                <svg-icon icon-class="documentation" /> 个人说明
+                <div class="pull-right">{{ user.profile }}</div>
               </li>
             </ul>
           </div>
@@ -108,6 +112,9 @@
             <el-tab-pane label="个人资料" name="userinfo">
               <userInfo :user="user" />
             </el-tab-pane>
+            <el-tab-pane label="账号绑定" name="userbind">
+              <userbind :bind="bind" />
+            </el-tab-pane>
             <el-tab-pane label="修改密码" name="resetPwd">
               <resetPwd />
             </el-tab-pane>
@@ -121,17 +128,22 @@
 <script>
 import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
+import userbind from "./userbind";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
 
 export default {
   name: "Profile",
-  components: { userAvatar, userInfo, resetPwd },
+  components: { userAvatar, userInfo, userbind, resetPwd },
   data() {
     return {
       user: {},
+      bind: {
+        phone: undefined,
+        email: undefined
+      },
       roleGroup: {},
-      postGroup: {},
+      postGroup: [],
       activeTab: "userinfo"
     };
   },
@@ -144,6 +156,8 @@ export default {
         this.user = response.data.user;
         this.roleGroup = response.data.roleGroup;
         this.postGroup = response.data.postGroup;
+        this.bind.phone = response.data.user.phone;
+        this.bind.email = response.data.user.email;
       });
     }
   }
