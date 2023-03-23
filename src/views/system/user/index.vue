@@ -30,19 +30,10 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="username">
+          <el-form-item label="账号" prop="username">
             <el-input
               v-model="queryParams.username"
-              placeholder="请输入用户名称"
-              clearable
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="phone">
-            <el-input
-              v-model="queryParams.phone"
-              placeholder="请输入手机号码"
+              placeholder="请输入账号"
               clearable
               style="width: 240px"
               @keyup.enter.native="handleQuery"
@@ -62,6 +53,58 @@
                 :value="dict.value"
               />
             </el-select>
+          </el-form-item>
+          <el-form-item label="类型" prop="userType">
+            <el-select
+              v-model="queryParams.userType"
+              placeholder="用户类型"
+              clearable
+              style="width: 240px"
+            >
+              <el-option
+                v-for="dict in dict.type.sys_user_type"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="手机" prop="phone">
+            <el-input
+              v-model="queryParams.phone"
+              placeholder="请输入手机"
+              clearable
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input
+              v-model="queryParams.email"
+              placeholder="请输入邮箱"
+              clearable
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="昵称" prop="nickName">
+            <el-input
+              v-model="queryParams.nickName"
+              placeholder="请输入昵称"
+              clearable
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="真实姓名" prop="realName">
+            <el-input
+              v-model="queryParams.realName"
+              placeholder="请输入真实姓名"
+              clearable
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -139,12 +182,9 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="用户编号" align="center" key="id" prop="id" v-if="columns[0].visible" />
-          <el-table-column label="用户名称" align="center" key="username" prop="username" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="手机号码" align="center" key="phone" prop="phone" v-if="columns[4].visible" width="120" />
-          <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+          <el-table-column label="UID" align="center" key="id" prop="id" v-if="columns[0].visible" />
+          <el-table-column label="账号" align="center" key="username" prop="username" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="状态" align="center" key="status" v-if="columns[2].visible">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -154,7 +194,25 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">
+          <el-table-column label="昵称" align="center" key="nickName" prop="nickName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="真实姓名" align="center" key="realName" prop="realName" v-if="columns[4].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[5].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="手机" align="center" key="phone" prop="phone" v-if="columns[6].visible" width="120" />
+          <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" />
+          <el-table-column label="类型" align="center" prop="userType"  v-if="columns[8].visible">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_user_type" :value="scope.row.userType"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="年龄" align="center" key="age" prop="age" v-if="columns[9].visible" width="120" />
+          <el-table-column label="性别" align="center" prop="sex"  v-if="columns[10].visible">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.sex"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center" key="remark" prop="remark" v-if="columns[11].visible" width="120" />
+          
+          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[12].visible" width="160">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -349,7 +407,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "User",
-  dicts: ['sys_normal_disable', 'sys_user_sex'],
+  dicts: ['sys_normal_disable', 'sys_user_sex', 'sys_user_type'],
   components: { Treeselect },
   data() {
     return {
@@ -417,13 +475,19 @@ export default {
       },
       // 列信息
       columns: [
-        { key: 0, label: `用户编号`, visible: true },
-        { key: 1, label: `用户名称`, visible: true },
-        { key: 2, label: `用户昵称`, visible: true },
-        { key: 3, label: `部门`, visible: true },
-        { key: 4, label: `手机号码`, visible: true },
-        { key: 5, label: `状态`, visible: true },
-        { key: 6, label: `创建时间`, visible: true }
+        { key: 0, label: `UID`, visible: true },
+        { key: 1, label: `账号`, visible: true },
+        { key: 2, label: `状态`, visible: true },
+        { key: 3, label: `昵称`, visible: true },
+        { key: 4, label: `真实姓名`, visible: true },
+        { key: 5, label: `部门`, visible: true },
+        { key: 6, label: `手机`, visible: true },
+        { key: 7, label: `邮箱`, visible: true },
+        { key: 8, label: `用户类型`, visible: true },
+        { key: 9, label: `年龄`, visible: false },
+        { key: 10, label: `性别`, visible: false },
+        { key: 11, label: `备注`, visible: true },
+        { key: 12, label: `创建时间`, visible: true }
       ],
       // 表单校验
       rules: {

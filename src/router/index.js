@@ -99,7 +99,7 @@ export const dynamicRoutes = [
     permissions: ['system:user:edit'],
     children: [
       {
-        path: 'role/:userId(\\d+)',
+        path: 'role/:userId',
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
         meta: { title: '分配角色', activeMenu: '/system/user' }
@@ -113,7 +113,7 @@ export const dynamicRoutes = [
     permissions: ['system:role:edit'],
     children: [
       {
-        path: 'user/:roleId(\\d+)',
+        path: 'user/:roleId',
         component: () => import('@/views/system/role/authUser'),
         name: 'AuthUser',
         meta: { title: '分配用户', activeMenu: '/system/role' }
@@ -127,7 +127,7 @@ export const dynamicRoutes = [
     permissions: ['system:dict:list'],
     children: [
       {
-        path: 'index/:dictId(\\d+)',
+        path: 'index/:dictId',
         component: () => import('@/views/system/dict/detail'),
         name: 'Data',
         meta: { title: '字典数据', activeMenu: '/system/dict' }
@@ -155,7 +155,7 @@ export const dynamicRoutes = [
     permissions: ['tool:gen:edit'],
     children: [
       {
-        path: 'index/:tableId(\\d+)',
+        path: 'index/:tableId',
         component: () => import('@/views/tool/gen/editTable'),
         name: 'GenEdit',
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
