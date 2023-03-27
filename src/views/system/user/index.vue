@@ -262,8 +262,22 @@
     </el-row>
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          
+          <el-col :span="12">
+            <el-form-item v-if="form.id == undefined" label="用户账号" prop="username">
+              <el-input v-model="form.username" placeholder="请输入用户账号" maxlength="30" />
+            </el-form-item>
+          </el-col>
+      
+          <el-col :span="12">
+            <el-form-item v-if="form.id == undefined" label="用户密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
+            </el-form-item>
+          </el-col>
+          </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -271,38 +285,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+            <el-form-item label="真实姓名" prop="realName">
+              <el-input v-model="form.realName" placeholder="请输入用户昵称" maxlength="30" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+          <el-row>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phone">
-              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item v-if="form.id == undefined" label="用户名称" prop="username">
-              <el-input v-model="form.username" placeholder="请输入用户名称" maxlength="30" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-if="form.id == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="用户性别">
+            <el-form-item label="性别">
               <el-select v-model="form.sex" placeholder="请选择性别">
                 <el-option
                   v-for="dict in dict.type.sys_user_sex"
@@ -324,32 +314,125 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+          </el-row>
+          <el-row>
+          <el-col :span="12">
+            <el-form-item label="年龄" prop="age">
+              <el-input v-model="form.age" placeholder="请输入年龄" maxlength="30" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="余额￥" prop="money">
+              <el-input v-model="form.money" placeholder="请输入账户余额/元" maxlength="30" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row>
+          <el-col :span="12">
+            <el-form-item label="手机" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row>
+          <el-col :span="12">
+            <el-form-item label="openId" prop="openId">
+              <el-input v-model="form.openId" placeholder="请输入微信open_id" maxlength="11" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="apiKey" prop="apiKey">
+              <el-input v-model="form.apiKey" placeholder="请输入开放API key" maxlength="50" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row>
+          <el-col :span="12">
+            <el-form-item label="解锁时间" prop="banToTime">
+              <el-date-picker clearable size="small"
+                              v-model="form.banToTime"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="账号结束锁定的时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="到期时间" prop="expireToTime">
+              <el-date-picker clearable size="small"
+                              v-model="form.expireToTime"
+                              type="datetime"
+                              value-format="yyyy-MM-dd HH:mm:ss"
+                              placeholder="留空则永久">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
+            <el-form-item label="用户角色">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择用户角色">
                 <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
+                  v-for="item in roleOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                   :disabled="item.status == 1"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
+            <el-form-item label="用户类型">
+              <el-select v-model="form.userType" placeholder="请选择用户类型">
                 <el-option
-                  v-for="item in roleOptions"
-                  :key="item.roleId"
-                  :label="item.roleName"
-                  :value="item.roleId"
+                  v-for="item in dict.type.sys_user_type"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
                   :disabled="item.status == 1"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="部门" prop="deptId">
+              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择所属部门" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="岗位">
+              <el-select v-model="form.positionIds" multiple placeholder="请选择岗位">
+                <el-option
+                  v-for="item in postOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                  :disabled="item.status == 1"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+          
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="个性签名">
+              <el-input v-model="form.userSign" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="个人简介">
+              <el-input v-model="form.profile" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -360,6 +443,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -433,8 +517,6 @@ export default {
       open: false,
       // 部门名称
       deptName: undefined,
-      // 默认密码
-      initPassword: undefined,
       // 日期范围
       dateRange: [],
       // 岗位选项
@@ -588,7 +670,7 @@ export default {
         sex: undefined,
         status: "0",
         remark: undefined,
-        postIds: [],
+        positionIds: [],
         roleIds: []
       };
       this.resetForm("form");
@@ -627,28 +709,32 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      this.$modal.loading("请稍候...");
       this.reset();
       getUser().then(response => {
-        this.postOptions = response.data.posts;
+        this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
         this.open = true;
         this.title = "添加用户";
-        this.form.password = this.initPassword;
+        this.$modal.closeLoading();
       });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.$modal.loading("请稍候...");
       this.reset();
       const id = row.id || this.ids;
       getUser(id).then(response => {
         this.form = response.data.user;
-        this.postOptions = response.data.posts;
+        this.form.money = this.form.money/100;
+        this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
-        this.$set(this.form, "postIds", response.data.postIds);
+        this.$set(this.form, "positionIds", response.data.positionIds);
         this.$set(this.form, "roleIds", response.data.roleIds);
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
+        this.$modal.closeLoading();
       });
     },
     /** 重置密码按钮操作 */

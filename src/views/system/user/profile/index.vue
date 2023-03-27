@@ -11,7 +11,7 @@
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
                 <svg-icon icon-class="star" /> 用户UID
-                <div class="pull-right"><el-tag type="info" size="mini" hit="true">{{ user.id }}</el-tag></div>
+                <div class="pull-right"><el-tag type="info" size="mini" >{{ user.id }}</el-tag></div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="user" /> 用户账号
@@ -27,11 +27,11 @@
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="tree-table" /> 所属岗位
-                <div class="pull-right"><el-tag v-for="(item,index) in postGroup" :key="index" type="" size="mini"  hit="true" style="margin-left: 10px;">{{ item }}</el-tag></div>
+                <div class="pull-right"><el-tag v-for="(item,index) in postGroup" :key="index" type="" size="mini"  style="margin-left: 10px;">{{ item }}</el-tag></div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="peoples" /> 所属角色
-                <div class="pull-right"><el-tag v-for="(item,index) in roleGroup" :key="index" type="" size="mini"  hit="true" style="margin-left: 10px;">{{ item }}</el-tag></div>
+                <div class="pull-right"><el-tag v-for="(item,index) in roleGroup" :key="index" type="" size="mini"   style="margin-left: 10px;">{{ item }}</el-tag></div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="money" /> 账户余额
