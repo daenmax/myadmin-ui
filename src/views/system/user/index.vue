@@ -292,7 +292,7 @@
         </el-row>
           <el-row>
           <el-col :span="12">
-            <el-form-item label="性别">
+            <el-form-item label="性别" prop="sex">
               <el-select v-model="form.sex" placeholder="请选择性别">
                 <el-option
                   v-for="dict in dict.type.sys_user_sex"
@@ -304,7 +304,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="状态">
+            <el-form-item label="状态" prop="status">
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in dict.type.sys_normal_disable"
@@ -375,7 +375,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户角色">
+            <el-form-item label="用户角色" prop="roleIds">
               <el-select v-model="form.roleIds" multiple placeholder="请选择用户角色">
                 <el-option
                   v-for="item in roleOptions"
@@ -388,7 +388,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="用户类型">
+            <el-form-item label="用户类型" prop="userType">
               <el-select v-model="form.userType" placeholder="请选择用户类型">
                 <el-option
                   v-for="item in dict.type.sys_user_type"
@@ -597,6 +597,18 @@ export default {
             message: "请输入正确的手机号码",
             trigger: "blur"
           }
+        ],
+        sex: [
+          { required: true, message: "性别不能为空", trigger: "blur" }
+        ],
+        roleIds: [
+          { required: true, message: "用户角色不能为空", trigger: "blur" }
+        ],
+        userType: [
+          { required: true, message: "用户类型不能为空", trigger: "blur" }
+        ],
+        deptId: [
+          { required: true, message: "部门不能为空", trigger: "blur" }
         ]
       }
     };
@@ -709,19 +721,16 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$modal.loading("请稍候...");
       this.reset();
       getUser().then(response => {
         this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
         this.open = true;
         this.title = "添加用户";
-        this.$modal.closeLoading();
       });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.$modal.loading("请稍候...");
       this.reset();
       const id = row.id || this.ids;
       getUser(id).then(response => {
@@ -734,7 +743,6 @@ export default {
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
-        this.$modal.closeLoading();
       });
     },
     /** 重置密码按钮操作 */
