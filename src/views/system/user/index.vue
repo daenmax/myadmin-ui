@@ -486,6 +486,7 @@
 <script>
 import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
+import { checkTwoPointNum,regYuanToFen,regFenToYuan } from '@/utils/myUtil'
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -735,7 +736,7 @@ export default {
       const id = row.id || this.ids;
       getUser(id).then(response => {
         this.form = response.data.user;
-        this.form.money = this.form.money/100;
+        this.form.money = regFenToYuan(this.form.money);
         this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
         this.$set(this.form, "positionIds", response.data.positionIds);
@@ -768,6 +769,13 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if(this.form.money != undefined){
+            if(!checkTwoPointNum(this.form.money)){
+              this.$modal.msgError("余额单位最多支持到分");
+              return;
+            }
+            this.form.money = regYuanToFen(this.form.money);
+          }
           if (this.form.id != undefined) {
             updateUser(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

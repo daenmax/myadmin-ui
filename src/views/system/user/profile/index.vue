@@ -35,7 +35,7 @@
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="money" /> 账户余额
-                <div class="pull-right"><el-tag type="danger" size="mini">{{ user.money/100 }}元</el-tag></div>
+                <div class="pull-right"><el-tag type="danger" size="mini">{{ user.money}}元</el-tag></div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="date" /> 注册日期
@@ -131,6 +131,7 @@ import userInfo from "./userInfo";
 import userbind from "./userbind";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
+import { checkTwoPointNum,regYuanToFen,regFenToYuan } from '@/utils/myUtil'
 
 export default {
   name: "Profile",
@@ -154,6 +155,7 @@ export default {
     getUser() {
       getUserProfile().then(response => {
         this.user = response.data.user;
+        this.user.money = regFenToYuan(this.user.money);
         this.roleGroup = response.data.roleGroup;
         this.postGroup = response.data.postGroup;
         this.bind.phone = response.data.user.phone;
