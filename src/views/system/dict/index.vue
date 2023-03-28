@@ -347,9 +347,7 @@ export default {
     },
     /** 刷新缓存按钮操作 */
     handleRefreshCache() {
-      this.$modal.loading("正在刷新，请稍候...");
       refreshCache().then(() => {
-        this.$modal.closeLoading();
         this.$modal.msgSuccess("刷新成功");
         this.$store.dispatch('dict/cleanDict');
       });

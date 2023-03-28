@@ -51,9 +51,7 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.$modal.loading("请稍候...");
           updateUserProfile(this.user).then(response => {
-            this.$modal.closeLoading();
             this.$modal.msgSuccess("修改成功");
           });
         }

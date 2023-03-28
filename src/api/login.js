@@ -12,7 +12,10 @@ export function login(username, password, code, uuid, loginType) {
   return request({
     url: '/login',
     headers: {
-      isToken: false
+      //是否忽略token，不填写此参数的话，默认是false。
+      //false是不忽略，即接口需要带上token
+      //true是忽略token，即不登录也能调用的接口
+      ignoreToken: true
     },
     method: 'post',
     data: data
@@ -24,7 +27,7 @@ export function register(data) {
   return request({
     url: '/register',
     headers: {
-      isToken: false
+      ignoreToken: true
     },
     method: 'post',
     data: data
@@ -52,7 +55,7 @@ export function getCodeImg() {
   return request({
     url: '/captchaImage',
     headers: {
-      isToken: false
+      ignoreToken: true
     },
     method: 'get',
     timeout: 20000
@@ -64,7 +67,7 @@ export function getCodeSms() {
   return request({
     url: '/captchaSms',
     headers: {
-      isToken: false
+      ignoreToken: true
     },
     method: 'get',
     timeout: 20000

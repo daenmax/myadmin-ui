@@ -82,6 +82,12 @@ export function getUserProfile() {
 export function updateUserProfile(data) {
   return request({
     url: '/system/user/profile',
+    headers: {
+      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
+      //false是不忽略限制，不允许重复
+      //true是忽略限制，允许重复
+      ignoreRepeatSubmit: false
+    },
     method: 'put',
     data: data
   })
