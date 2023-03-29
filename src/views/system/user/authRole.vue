@@ -24,9 +24,15 @@
         </template>
       </el-table-column>
       <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-      <el-table-column label="角色编号" align="center" prop="roleId" />
-      <el-table-column label="角色名称" align="center" prop="roleName" />
-      <el-table-column label="权限字符" align="center" prop="roleKey" />
+      <el-table-column label="角色编号" align="center" prop="id" />
+      <el-table-column label="角色名称" align="center" prop="name" />
+      <el-table-column label="角色编码" align="center" prop="code" />
+      <el-table-column label="数据权限" align="center" prop="dataScope">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.data_scope" :value="scope.row.dataScope"/>
+            </template>
+          </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -50,6 +56,7 @@ import { getAuthRole, updateAuthRole } from "@/api/system/user";
 
 export default {
   name: "AuthRole",
+  dicts: ['data_scope'],
   data() {
     return {
        // 遮罩层
@@ -92,17 +99,17 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.roleIds = selection.map((item) => item.roleId);
+      this.roleIds = selection.map((item) => item.id);
     },
     // 保存选中的数据编号
     getRowKey(row) {
-      return row.roleId;
+      return row.id;
     },
     /** 提交按钮 */
     submitForm() {
-      const userId = this.form.userId;
+      const userId = this.form.id;
       const roleIds = this.roleIds.join(",");
-      updateAuthRole({ userId: userId, roleIds: roleIds }).then((response) => {
+      updateAuthRole({ id: userId, roleIds: roleIds }).then((response) => {
         this.$modal.msgSuccess("授权成功");
         this.close();
       });

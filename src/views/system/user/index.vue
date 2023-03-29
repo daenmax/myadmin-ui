@@ -762,8 +762,8 @@ export default {
     },
     /** 分配角色操作 */
     handleAuthRole: function(row) {
-      const id = row.id;
-      this.$router.push("/system/user-auth/role/" + id);
+      const userId = row.id;
+      this.$router.push("/system/user-auth/role/" + userId);
     },
     /** 提交按钮 */
     submitForm: function() {
