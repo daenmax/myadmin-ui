@@ -129,7 +129,7 @@
 <script>
 import { getGenTable, updateGenTable } from "@/api/tool/gen";
 import { optionSelect as getDictOptionSelect } from "@/api/system/dict/index";
-import { listMenu as getMenuTreeselect } from "@/api/system/menu";
+import { listMenu as getMenuTreeSelect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import Sortable from 'sortablejs'
@@ -172,7 +172,7 @@ export default {
         this.dictOptions = response.data;
       });
       /** 查询菜单下拉列表 */
-      getMenuTreeselect().then(response => {
+      getMenuTreeSelect().then(response => {
         this.menus = this.handleTree(response.data, "menuId");
       });
     }

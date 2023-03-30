@@ -1,25 +1,34 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
-      <el-form-item label="角色名称" prop="roleName">
+      <el-form-item label="角色名称" prop="name">
         <el-input
-          v-model="queryParams.roleName"
+          v-model="queryParams.name"
           placeholder="请输入角色名称"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="权限字符" prop="roleKey">
+      <el-form-item label="角色编码" prop="code">
         <el-input
-          v-model="queryParams.roleKey"
-          placeholder="请输入权限字符"
+          v-model="queryParams.code"
+          placeholder="请输入角色编码"
           clearable
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="角色状态" prop="status">
         <el-select
           v-model="queryParams.status"
           placeholder="角色状态"
@@ -28,6 +37,21 @@
         >
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="数据权限" prop="dataScope">
+        <el-select
+          v-model="queryParams.dataScope"
+          placeholder="角色状态"
+          clearable
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in dict.type.data_scope"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -100,10 +124,15 @@
 
     <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="roleId" width="120" />
-      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="显示顺序" prop="roleSort" width="100" />
+      <!-- <el-table-column label="角色编号" prop="roleId" width="120" /> -->
+      <el-table-column label="角色名称" prop="name" :show-overflow-tooltip="true" width="150" />
+      <el-table-column label="角色编码" prop="code" :show-overflow-tooltip="true" width="150" />
+      <el-table-column label="排序" prop="sort" width="120" />
+      <el-table-column label="数据权限" align="center" width="150">
+        <template slot-scope="scope">
+              <dict-tag :options="dict.type.data_scope" :value="scope.row.dataScope"/>
+            </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <el-switch
@@ -114,6 +143,7 @@
           ></el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" width="120" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -159,20 +189,20 @@
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="form.roleName" placeholder="请输入角色名称" />
+        <el-form-item label="角色名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入角色名称" />
         </el-form-item>
-        <el-form-item prop="roleKey">
+        <el-form-item prop="code">
           <span slot="label">
-            <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
+            <el-tooltip content="控制器中定义的角色编码，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
-            权限字符
+            角色编码
           </span>
-          <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
+          <el-input v-model="form.code" placeholder="请输入角色编码" />
         </el-form-item>
-        <el-form-item label="角色顺序" prop="roleSort">
-          <el-input-number v-model="form.roleSort" controls-position="right" :min="0" />
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="form.sort" controls-position="right" :min="0" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -212,10 +242,10 @@
     <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
       <el-form :model="form" label-width="80px">
         <el-form-item label="角色名称">
-          <el-input v-model="form.roleName" :disabled="true" />
+          <el-input v-model="form.name" :disabled="true" />
         </el-form-item>
-        <el-form-item label="权限字符">
-          <el-input v-model="form.roleKey" :disabled="true" />
+        <el-form-item label="角色编码">
+          <el-input v-model="form.code" :disabled="true" />
         </el-form-item>
         <el-form-item label="权限范围">
           <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
@@ -254,11 +284,11 @@
 
 <script>
 import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
-import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
+import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from "@/api/system/menu";
 
 export default {
   name: "Role",
-  dicts: ['sys_normal_disable'],
+  dicts: ['sys_normal_disable','data_scope'],
   data() {
     return {
       // 遮罩层
@@ -318,8 +348,10 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        roleName: undefined,
-        roleKey: undefined,
+        name: undefined,
+        code: undefined,
+        dataScope: undefined,
+        remark: undefined,
         status: undefined,
         startTime: undefined,
         endTime: undefined
@@ -332,13 +364,13 @@ export default {
       },
       // 表单校验
       rules: {
-        roleName: [
+        name: [
           { required: true, message: "角色名称不能为空", trigger: "blur" }
         ],
-        roleKey: [
-          { required: true, message: "权限字符不能为空", trigger: "blur" }
+        code: [
+          { required: true, message: "角色编码不能为空", trigger: "blur" }
         ],
-        roleSort: [
+        sort: [
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
       }
@@ -362,8 +394,8 @@ export default {
       );
     },
     /** 查询菜单树结构 */
-    getMenuTreeselect() {
-      menuTreeselect().then(response => {
+    getMenuTreeSelect() {
+      menuTreeSelect().then(response => {
         this.menuOptions = response.data;
       });
     },
@@ -386,8 +418,8 @@ export default {
       return checkedKeys;
     },
     /** 根据角色ID查询菜单树结构 */
-    getRoleMenuTreeselect(roleId) {
-      return roleMenuTreeselect(roleId).then(response => {
+    getRoleMenuTreeSelect(roleId) {
+      return roleMenuTreeSelect(roleId).then(response => {
         this.menuOptions = response.data.menus;
         return response;
       });
@@ -402,7 +434,7 @@ export default {
     // 角色状态修改
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
-      this.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗？').then(function() {
+      this.$modal.confirm('确认要"' + text + '""' + row.name + '"角色吗？').then(function() {
         return changeRoleStatus(row.roleId, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
@@ -431,9 +463,9 @@ export default {
       this.deptNodeAll = false,
       this.form = {
         roleId: undefined,
-        roleName: undefined,
-        roleKey: undefined,
-        roleSort: 0,
+        name: undefined,
+        code: undefined,
+        sort: 0,
         status: "0",
         menuIds: [],
         deptIds: [],
@@ -506,7 +538,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.getMenuTreeselect();
+      this.getMenuTreeSelect();
       this.open = true;
       this.title = "添加角色";
     },
@@ -514,7 +546,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const roleId = row.roleId || this.ids
-      const roleMenu = this.getRoleMenuTreeselect(roleId);
+      const roleMenu = this.getRoleMenuTreeSelect(roleId);
       getRole(roleId).then(response => {
         this.form = response.data;
         this.open = true;
