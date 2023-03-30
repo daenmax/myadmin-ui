@@ -54,10 +54,11 @@ export function updateDemo(data) {
 }
 
 // 删除测试数据
-export function delDemo(id) {
+export function delDemo(ids) {
   return request({
-    url: '/test/data/' + id,
-    method: 'delete'
+    url: '/test/data',
+    method: 'delete',
+    data: ids
   })
 }
 

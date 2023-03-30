@@ -36,9 +36,10 @@ export function updateTree(data) {
 }
 
 // 删除测试树表
-export function delTree(id) {
+export function delTree(ids) {
   return request({
-    url: '/test/tree/' + id,
-    method: 'delete'
+    url: '/test/tree',
+    method: 'delete',
+    data: ids
   })
 }

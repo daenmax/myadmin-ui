@@ -107,9 +107,11 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      const userId = this.form.id;
-      const roleIds = this.roleIds.join(",");
-      updateAuthRole({ id: userId, roleIds: roleIds }).then((response) => {
+      const data = {
+        userId: this.form.id,
+        roleIds: this.roleIds
+      }
+      updateAuthRole(data).then((response) => {
         this.$modal.msgSuccess("授权成功");
         this.close();
       });

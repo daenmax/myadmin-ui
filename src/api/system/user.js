@@ -37,10 +37,11 @@ export function updateUser(data) {
 }
 
 // 删除用户
-export function delUser(id) {
+export function delUser(ids) {
   return request({
-    url: '/system/user/' + id,
-    method: 'delete'
+    url: '/system/user',
+    method: 'delete',
+    data: ids
   })
 }
 
@@ -128,7 +129,7 @@ export function updateAuthRole(data) {
   return request({
     url: '/system/user/authRole',
     method: 'put',
-    params: data
+    data: data
   })
 }
 
