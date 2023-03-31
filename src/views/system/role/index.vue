@@ -150,7 +150,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope" v-if="scope.row.roleId !== 1">
+        <template slot-scope="scope" v-if="scope.row.id !== 1">
           <el-button
             size="mini"
             type="text"
@@ -295,6 +295,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -435,7 +437,7 @@ export default {
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""' + row.name + '"角色吗？').then(function() {
-        return changeRoleStatus(row.roleId, row.status);
+        return changeRoleStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
@@ -488,7 +490,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.roleId)
+      this.ids = selection.map(item => item.id)
+      this.names = selection.map(item => item.name)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
@@ -545,7 +548,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const roleId = row.roleId || this.ids
+      const roleId = row.id || this.ids
       const roleMenu = this.getRoleMenuTreeSelect(roleId);
       getRole(roleId).then(response => {
         this.form = response.data;
@@ -572,8 +575,8 @@ export default {
     /** 分配数据权限操作 */
     handleDataScope(row) {
       this.reset();
-      const deptTreeSelect = this.getDeptTree(row.roleId);
-      getRole(row.roleId).then(response => {
+      const deptTreeSelect = this.getDeptTree(row.id);
+      getRole(row.id).then(response => {
         this.form = response.data;
         this.openDataScope = true;
         this.$nextTick(() => {
@@ -586,14 +589,14 @@ export default {
     },
     /** 分配用户操作 */
     handleAuthUser: function(row) {
-      const roleId = row.roleId;
+      const roleId = row.id;
       this.$router.push("/system/role-auth/user/" + roleId);
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.roleId != undefined) {
+          if (this.form.id != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             updateRole(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -613,7 +616,7 @@ export default {
     },
     /** 提交按钮（数据权限） */
     submitDataScope: function() {
-      if (this.form.roleId != undefined) {
+      if (this.form.id != undefined) {
         this.form.deptIds = this.getDeptAllCheckedKeys();
         dataScope(this.form).then(response => {
           this.$modal.msgSuccess("修改成功");
@@ -624,8 +627,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const roleIds = row.roleId || this.ids;
-      this.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项？').then(function() {
+      const roleIds = row.id || this.ids;
+      const names = row.name || this.names;
+      this.$modal.confirm('是否确认删除角色名称为"' + names + '"的数据项？').then(function() {
         return delRole(roleIds);
       }).then(() => {
         this.getList();

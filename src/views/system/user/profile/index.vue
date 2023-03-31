@@ -15,7 +15,7 @@
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="user" /> 用户账号
-                <div class="pull-right"><el-tag type="success" size="mini">{{ user.username }}</el-tag></div>
+                <div class="pull-right"><el-tag type="success" size="mini" :hit="true">{{ user.username }}</el-tag></div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="theme" /> 用户类型
@@ -131,7 +131,7 @@ import userInfo from "./userInfo";
 import userbind from "./userbind";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
-import { checkTwoPointNum,regYuanToFen,regFenToYuan } from '@/utils/myUtil'
+import { regFenToYuan } from '@/utils/myUtil'
 
 export default {
   name: "Profile",
