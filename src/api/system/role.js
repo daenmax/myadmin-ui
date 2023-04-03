@@ -112,9 +112,9 @@ export function authUserSelectAll(data) {
 }
 
 // 根据角色ID查询部门树结构
-export function deptTreeSelect(roleId) {
+export function roleDeptTreeSelect(roleId) {
   return request({
-    url: '/system/role/deptTree/' + roleId,
+    url: '/system/role/roleDeptTreeSelect/' + roleId,
     method: 'get'
   })
 }

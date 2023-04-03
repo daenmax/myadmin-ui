@@ -283,7 +283,7 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, deptTreeSelect } from "@/api/system/role";
+import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, roleDeptTreeSelect } from "@/api/system/role";
 import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from "@/api/system/menu";
 
 export default {
@@ -428,7 +428,7 @@ export default {
     },
     /** 根据角色ID查询部门树结构 */
     getDeptTree(roleId) {
-      return deptTreeSelect(roleId).then(response => {
+      return roleDeptTreeSelect(roleId).then(response => {
         this.deptOptions = response.data.depts;
         return response;
       });
