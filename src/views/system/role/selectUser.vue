@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { unallocatedUserList, authUserSelectAll } from "@/api/system/role";
+import { unallocatedUserList, authUserSave } from "@/api/system/role";
 export default {
   dicts: ['sys_normal_disable','sys_user_type'],
   props: {
@@ -124,13 +124,15 @@ export default {
     },
     /** 选择授权用户操作 */
     handleSelectUser() {
-      const roleId = this.queryParams.roleId;
-      const userIds = this.userIds.join(",");
-      if (userIds == "") {
+      if (this.userIds == "") {
         this.$modal.msgError("请选择要分配的用户");
         return;
       }
-      authUserSelectAll({ roleId: roleId, userIds: userIds }).then(res => {
+      const data = {
+        userIds: this.userIds,
+        roleId: this.queryParams.roleId
+      }
+      authUserSave(data).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;
