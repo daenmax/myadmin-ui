@@ -2,10 +2,10 @@
   <!-- 授权用户 -->
   <el-dialog title="选择用户" :visible.sync="visible" width="800px" top="5vh" append-to-body>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
-      <el-form-item label="用户名称" prop="username">
+      <el-form-item label="用户账号" prop="username">
         <el-input
           v-model="queryParams.username"
-          placeholder="请输入用户名称"
+          placeholder="请输入用户账号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -26,10 +26,15 @@
     <el-row>
       <el-table @row-click="clickRow" ref="table" :data="userList" @selection-change="handleSelectionChange" height="260px">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="用户名称" prop="username" :show-overflow-tooltip="true" />
+        <el-table-column label="用户账号" prop="username" :show-overflow-tooltip="true" />
         <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
         <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
         <el-table-column label="手机" prop="phone" :show-overflow-tooltip="true" />
+        <el-table-column label="类型" align="center" prop="userType">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_user_type" :value="scope.row.userType"/>
+          </template>
+        </el-table-column>
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
@@ -59,7 +64,7 @@
 <script>
 import { unallocatedUserList, authUserSelectAll } from "@/api/system/role";
 export default {
-  dicts: ['sys_normal_disable'],
+  dicts: ['sys_normal_disable','sys_user_type'],
   props: {
     // 角色编号
     roleId: {
@@ -103,8 +108,8 @@ export default {
     // 查询表数据
     getList() {
       unallocatedUserList(this.queryParams).then(res => {
-        this.userList = res.rows;
-        this.total = res.total;
+        this.userList = res.data.records;
+        this.total = res.data.total;
       });
     },
     /** 搜索按钮操作 */

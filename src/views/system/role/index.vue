@@ -46,7 +46,7 @@
       <el-form-item label="数据权限" prop="dataScope">
         <el-select
           v-model="queryParams.dataScope"
-          placeholder="角色状态"
+          placeholder="数据权限"
           clearable
           style="width: 240px"
         >
@@ -250,14 +250,14 @@
         <el-form-item label="权限范围">
           <el-select v-model="form.dataScope" @change="dataScopeSelectChange">
             <el-option
-              v-for="item in dataScopeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            v-for="dict in dict.type.data_scope"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
           </el-select>
         </el-form-item>
-        <el-form-item label="数据权限" v-show="form.dataScope == 2">
+        <el-form-item label="数据权限" v-show="form.dataScope == 4">
           <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
           <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
           <el-checkbox v-model="form.deptCheckStrictly" @change="handleCheckedTreeConnect($event, 'dept')">父子联动</el-checkbox>
@@ -319,29 +319,6 @@ export default {
       deptNodeAll: false,
       // 日期范围
       dateRange: [],
-      // 数据范围选项
-      dataScopeOptions: [
-        {
-          value: "1",
-          label: "全部数据权限"
-        },
-        {
-          value: "2",
-          label: "自定数据权限"
-        },
-        {
-          value: "3",
-          label: "本部门数据权限"
-        },
-        {
-          value: "4",
-          label: "本部门及以下数据权限"
-        },
-        {
-          value: "5",
-          label: "仅本人数据权限"
-        }
-      ],
       // 菜单列表
       menuOptions: [],
       // 部门列表
