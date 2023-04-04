@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { allocatedUserList, authUserCancel, authUserCancelAll } from "@/api/system/role";
+import { allocatedUserList, authUserCancel } from "@/api/system/role";
 import selectUser from "./selectUser";
 
 export default {
@@ -171,7 +171,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.userIds = selection.map(item => item.userId)
+      this.userIds = selection.map(item => item.id)
       this.multiple = !selection.length
     },
     /** 打开授权用户表弹窗 */
@@ -180,9 +180,12 @@ export default {
     },
     /** 取消授权按钮操作 */
     cancelAuthUser(row) {
-      const roleId = this.queryParams.roleId;
-      this.$modal.confirm('确认要取消该用户"' + row.username + '"角色吗？').then(function() {
-        return authUserCancel({ userId: row.userId, roleId: roleId });
+      const data = {
+        userIds: [row.id],
+        roleId: this.queryParams.roleId
+      }
+      this.$modal.confirm('确认要取消该用户"' + row.username + '"角色吗？如果该用户只有一个角色，那么将不会被删除').then(function() {
+        return authUserCancel(data);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("取消授权成功");
@@ -190,10 +193,12 @@ export default {
     },
     /** 批量取消授权按钮操作 */
     cancelAuthUserAll(row) {
-      const roleId = this.queryParams.roleId;
-      const userIds = this.userIds.join(",");
-      this.$modal.confirm('是否取消选中用户授权数据项？').then(function() {
-        return authUserCancelAll({ roleId: roleId, userIds: userIds });
+      const data = {
+        userIds: this.userIds,
+        roleId: this.queryParams.roleId
+      }
+      this.$modal.confirm('是否取消选中用户授权数据项？如果用户只有一个角色，那么将不会被删除').then(function() {
+        return authUserCancel(data);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("取消授权成功");
