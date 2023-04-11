@@ -19,7 +19,7 @@
       <el-input v-model="user.userSign" maxlength="50" show-word-limit/>
     </el-form-item>
     <el-form-item label="个人说明" prop="profile">
-      <el-input type="textarea" style="font-family: ;" v-model="user.profile" maxlength="100" show-word-limit/>
+      <el-input type="textarea" v-model="user.profile" maxlength="100" show-word-limit/>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="mini" @click="submit">保存</el-button>
