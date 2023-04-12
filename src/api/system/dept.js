@@ -50,3 +50,12 @@ export function delDept(id) {
     method: 'delete'
   })
 }
+
+// 获取用户列表
+export function userList(params) {
+  return request({
+    url: '/system/dept/userList',
+    method: 'get',
+    params: params
+  })
+}

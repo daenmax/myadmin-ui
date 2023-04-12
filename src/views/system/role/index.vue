@@ -194,10 +194,10 @@
         </el-form-item>
         <el-form-item prop="code">
           <span slot="label">
+            角色编码
             <el-tooltip content="控制器中定义的角色编码，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
-            角色编码
           </span>
           <el-input v-model="form.code" placeholder="请输入角色编码" />
         </el-form-item>
