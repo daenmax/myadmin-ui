@@ -91,11 +91,11 @@
             <el-form-item prop="leaderUserId">
               <span slot="label">
                 负责人
-                <el-tooltip content="支持输入：用户账号、真实姓名、手机、邮箱" placement="top">
+                <el-tooltip content="支持输入：用户账号、用户昵称、真实姓名、手机、邮箱" placement="top">
                   <i class="el-icon-question"></i>
                 </el-tooltip>
               </span>
-              <el-select v-model="form.leaderUserId" filterable remote reserve-keyword placeholder="请输入关键字"
+              <el-select v-model="form.leaderUserId" filterable remote reserve-keyword placeholder="请输入查询关键字"
                 :remote-method="remoteMethod" clearable :loading="userLoading">
                 <el-option v-for="item in userList" :key="item.id" :label="item.deptName + ':' + item.realName"
                   :value="item.id">
