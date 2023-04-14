@@ -218,6 +218,21 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "handleAuthUser":
+          this.handleAuthUser(row);
+          break;
+        default:
+          break;
+      }
+    },
+    /** 分配用户操作 */
+    handleAuthUser: function(row) {
+      const positionId = row.id;
+      this.$router.push("/system/position-auth/user/" + positionId);
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();

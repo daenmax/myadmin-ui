@@ -121,6 +121,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/system/position-auth',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:position:edit'],
+    children: [
+      {
+        path: 'user/:positionId',
+        component: () => import('@/views/system/position/authUser'),
+        name: 'AuthUser',
+        meta: { title: '分配用户', activeMenu: '/system/position' }
+      }
+    ]
+  },
+  {
     path: '/system/dict-detail',
     component: Layout,
     hidden: true,

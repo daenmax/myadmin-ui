@@ -43,3 +43,40 @@ export function delPosition(ids) {
     data: ids
   })
 }
+
+// 查询岗位已授权用户列表
+export function allocatedUserList(query) {
+  return request({
+    url: '/system/position/authUser/allocatedList',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询岗位未授权用户列表
+export function unallocatedUserList(query) {
+  return request({
+    url: '/system/position/authUser/unallocatedList',
+    method: 'get',
+    params: query
+  })
+}
+
+// 取消用户授权岗位
+export function authUserCancel(data) {
+  return request({
+    url: '/system/position/authUser/cancel',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 保存授权用户选择
+export function authUserSave(data) {
+  return request({
+    url: '/system/position/authUser/save',
+    method: 'put',
+    data: data
+  })
+}
