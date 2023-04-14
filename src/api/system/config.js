@@ -18,9 +18,9 @@ export function getConfig(configId) {
 }
 
 // 根据参数键名查询参数值
-export function getConfigKey(configKey) {
+export function getConfigKey(key) {
   return request({
-    url: '/system/config/configKey/' + configKey,
+    url: '/system/config/key/' + key,
     method: 'get'
   })
 }
@@ -43,23 +43,12 @@ export function updateConfig(data) {
   })
 }
 
-// 修改参数配置
-export function updateConfigByKey(key, value) {
-  return request({
-    url: '/system/config/updateByKey',
-    method: 'put',
-    data: {
-      configKey: key,
-      configValue: value
-    }
-  })
-}
-
 // 删除参数配置
-export function delConfig(configId) {
+export function delConfig(ids) {
   return request({
-    url: '/system/config/' + configId,
-    method: 'delete'
+    url: '/system/config',
+    method: 'delete',
+    data: ids
   })
 }
 
@@ -67,7 +56,7 @@ export function delConfig(configId) {
 export function refreshCache() {
   return request({
     url: '/system/config/refreshCache',
-    method: 'delete'
+    method: 'post'
   })
 }
 

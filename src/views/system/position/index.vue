@@ -195,6 +195,7 @@ export default {
         id: undefined,
         code: undefined,
         name: undefined,
+        summary: undefined,
         sort: 0,
         status: "0",
         remark: undefined
@@ -271,7 +272,6 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      console.log(row)
       const ids = row.id ? [row.id] : this.ids;
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除岗位名称为"' + names + '"的数据项？').then(function () {

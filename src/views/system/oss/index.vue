@@ -402,7 +402,8 @@ export default {
     handlePreviewListResource(previewListResource) {
       let text = previewListResource ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""预览列表图片"配置吗?').then(() => {
-        return this.updateConfigByKey("sys.oss.previewListResource", previewListResource);
+        // return this.updateConfigByKey("sys.oss.previewListResource", previewListResource);
+        return;
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess(text + "成功");
