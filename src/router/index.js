@@ -152,13 +152,13 @@ export const dynamicRoutes = [
     path: '/system/oss-config',
     component: Layout,
     hidden: true,
-    permissions: ['system:oss:list'],
+    permissions: ['system:oss:edit'],
     children: [
       {
         path: 'index',
-        component: () => import('@/views/system/oss/config'),
+        component: () => import('@/views/system/file/config'),
         name: 'OssConfig',
-        meta: { title: '配置管理', activeMenu: '/system/oss' }
+        meta: { title: '配置管理', activeMenu: '/system/file' }
       }
     ]
   },

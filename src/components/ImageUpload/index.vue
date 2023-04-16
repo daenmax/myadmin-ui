@@ -44,7 +44,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { listByIds, delOss } from "@/api/system/oss";
+import { listByIds, delFile } from "@/api/system/file";
 
 export default {
   props: {
@@ -78,7 +78,7 @@ export default {
       dialogVisible: false,
       hideUpload: false,
       baseUrl: process.env.VUE_APP_BASE_API,
-      uploadImgUrl: process.env.VUE_APP_BASE_API + "/system/oss/upload", // 上传的图片服务器地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/system/file/upload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
       },
