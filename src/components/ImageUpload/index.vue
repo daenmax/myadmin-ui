@@ -1,43 +1,23 @@
 <template>
   <div class="component-upload-image">
-    <el-upload
-      multiple
-      :action="uploadImgUrl"
-      list-type="picture-card"
-      :on-success="handleUploadSuccess"
-      :before-upload="handleBeforeUpload"
-      :limit="limit"
-      :on-error="handleUploadError"
-      :on-exceed="handleExceed"
-      ref="imageUpload"
-      :on-remove="handleDelete"
-      :show-file-list="true"
-      :headers="headers"
-      :file-list="fileList"
-      :on-preview="handlePictureCardPreview"
-      :class="{hide: this.fileList.length >= this.limit}"
-    >
+    <el-upload multiple :action="uploadImgUrl" list-type="picture-card" :on-success="handleUploadSuccess"
+      :before-upload="handleBeforeUpload" :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed"
+      ref="imageUpload" :on-remove="handleDelete" :show-file-list="true" :headers="headers" :file-list="fileList"
+      :on-preview="handlePictureCardPreview" :class="{ hide: this.fileList.length >= this.limit }">
       <i class="el-icon-plus"></i>
     </el-upload>
 
     <!-- 上传提示 -->
     <div class="el-upload__tip" slot="tip" v-if="showTip">
-      请上传
+      可上传
+      <template v-if="limit"> 最多 <b style="color: #f56c6c">{{ limit }}个</b> </template>
       <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
       <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
-      的文件
+      的图片
     </div>
 
-    <el-dialog
-      :visible.sync="dialogVisible"
-      title="预览"
-      width="800"
-      append-to-body
-    >
-      <img
-        :src="dialogImageUrl"
-        style="display: block; max-width: 100%; margin: 0 auto"
-      />
+    <el-dialog :visible.sync="dialogVisible" title="预览" width="800" append-to-body>
+      <img :src="dialogImageUrl" style="display: block; max-width: 100%; margin: 0 auto" />
     </el-dialog>
   </div>
 </template>
@@ -52,17 +32,17 @@ export default {
     // 图片数量限制
     limit: {
       type: Number,
-      default: 5,
+      default: 4,
     },
     // 大小限制(MB)
     fileSize: {
-       type: Number,
-      default: 5,
+      type: Number,
+      default: 2,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["png", "jpg", "jpeg"],
+      default: () => ["bmp", "gif", "jpg", "jpeg", "png"],
     },
     // 是否显示提示
     isShowTip: {
@@ -78,7 +58,7 @@ export default {
       dialogVisible: false,
       hideUpload: false,
       baseUrl: process.env.VUE_APP_BASE_API,
-      uploadImgUrl: process.env.VUE_APP_BASE_API + "/system/file/upload", // 上传的图片服务器地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/system/file/uploadImage", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -100,8 +80,7 @@ export default {
           }
           // 然后将数组转为对象数组
           this.fileList = list.map(item => {
-            // 此处name使用ossId 防止删除出现重名
-            item = { name: item.ossId, url: item.url, ossId: item.ossId };
+            item = { originalName: item.originalName, url: item.fileUrl, sysFileId: item.id };
             return item;
           });
         } else {
@@ -158,7 +137,15 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-        this.uploadList.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId });
+        if (res.data.isExist) {
+          this.number--;
+          this.$modal.closeLoading();
+          this.$modal.msgError("该文件MD5用已经存在，请勿改名重复上传");
+          this.$refs.imageUpload.handleRemove(file);
+          this.uploadedSuccessfully();
+          return;
+        }
+        this.uploadList.push({ originalName: res.data.originalName, url: res.data.fileUrl, sysFileId: res.data.sysFileId });
         this.uploadedSuccessfully();
       } else {
         this.number--;
@@ -170,10 +157,10 @@ export default {
     },
     // 删除图片
     handleDelete(file) {
-      const findex = this.fileList.map(f => f.name).indexOf(file.name);
-      if(findex > -1) {
-        let ossId = this.fileList[findex].ossId;
-        delOss(ossId);
+      const findex = this.fileList.map(f => f.sysFileId).indexOf(file.sysFileId);
+      if (findex > -1) {
+        let sysFileId = this.fileList[findex].sysFileId;
+        delFile(sysFileId);
         this.fileList.splice(findex, 1);
         this.$emit("input", this.listToString(this.fileList));
       }
@@ -203,8 +190,8 @@ export default {
       let strs = "";
       separator = separator || ",";
       for (let i in list) {
-        if (list[i].ossId) {
-          strs += list[i].ossId + separator;
+        if (list[i].sysFileId) {
+          strs += list[i].sysFileId + separator;
         }
       }
       return strs != "" ? strs.substr(0, strs.length - 1) : "";
@@ -215,15 +202,17 @@ export default {
 <style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 ::v-deep.hide .el-upload--picture-card {
-    display: none;
+  display: none;
 }
+
 // 去掉动画效果
 ::v-deep .el-list-enter-active,
 ::v-deep .el-list-leave-active {
-    transition: all 0s;
+  transition: all 0s;
 }
 
-::v-deep .el-list-enter, .el-list-leave-active {
+::v-deep .el-list-enter,
+.el-list-leave-active {
   opacity: 0;
   transform: translateY(0);
 }

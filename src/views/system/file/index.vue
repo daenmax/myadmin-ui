@@ -140,8 +140,10 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="文件名">
-          <fileUpload v-model="form.file" v-if="type === 0" />
-          <imageUpload v-model="form.file" v-if="type === 1" />
+          <fileUpload v-model="form.file" :limit="uploadFileConfig.limit" :fileSize="uploadFileConfig.fileSize"
+          :fileType="uploadFileConfig.fileType" :isShowTip="uploadFileConfig.isShowTip" v-if="type === 0" />
+          <imageUpload v-model="form.file" :limit="uploadImageConfig.limit" :fileSize="uploadImageConfig.fileSize"
+          :fileType="uploadImageConfig.fileType" :isShowTip="uploadImageConfig.isShowTip" v-if="type === 1" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -160,6 +162,10 @@ export default {
   dicts: ['sys_normal_disable', 'oss_type'],
   data() {
     return {
+      // 文件上传限制策略
+      uploadFileConfig: {},
+      // 图片上传限制策略
+      uploadImageConfig: {},
       showTable: true,
       // 按钮loading
       buttonLoading: false,
@@ -169,6 +175,8 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
+      // 选中数组
+      fileNames: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -233,6 +241,16 @@ export default {
       this.getConfigKey("sys.file.previewListResource").then(response => {
         this.previewListResource = response.data === undefined ? true : response.data === 'true';
       });
+      this.getConfigKey("sys.upload.file").then(response => {
+        if (response.data && response.data.length > 0) {
+          this.uploadFileConfig = JSON.parse(response.data)
+        }
+      });
+      this.getConfigKey("sys.upload.image").then(response => {
+        if (response.data && response.data.length > 0) {
+          this.uploadImageConfig = JSON.parse(response.data)
+        }
+      });
       listFile(this.queryParams).then(response => {
         this.fileList = response.data.records
         this.total = response.data.total;
@@ -274,7 +292,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.fileId)
+      this.ids = selection.map(item => item.id)
+      this.fileNames = selection.map(item => item.fileName)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -352,8 +371,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const fileIds = row.fileId || this.ids;
-      this.$modal.confirm('是否确认删除文件ID为"' + fileIds + '"的数据项?').then(() => {
+      const fileIds = row.id ? [row.id] : this.ids;
+      const fileNames = row.fileName || this.fileNames;
+      this.$modal.confirm('是否确认删除文件名为"' + fileNames + '"的数据项?').then(() => {
         this.loading = true;
         return delFile(fileIds);
       }).then(() => {

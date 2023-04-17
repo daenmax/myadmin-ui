@@ -1,24 +1,14 @@
 <template>
   <div class="upload-file">
-    <el-upload
-      multiple
-      :action="uploadFileUrl"
-      :before-upload="handleBeforeUpload"
-      :file-list="fileList"
-      :limit="limit"
-      :on-error="handleUploadError"
-      :on-exceed="handleExceed"
-      :on-success="handleUploadSuccess"
-      :show-file-list="false"
-      :headers="headers"
-      class="upload-file-uploader"
-      ref="fileUpload"
-    >
+    <el-upload multiple :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit"
+      :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false"
+      :headers="headers" class="upload-file-uploader" ref="fileUpload">
       <!-- 上传按钮 -->
       <el-button size="mini" type="primary">选取文件</el-button>
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
-        请上传
+        可上传
+        <template v-if="limit"> 最多 <b style="color: #f56c6c">{{ limit }}个</b> </template>
         <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
         <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
         的文件
@@ -27,9 +17,10 @@
 
     <!-- 文件列表 -->
     <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
-      <li :key="file.url" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
-        <el-link :href="`${file.url}`" :underline="false" target="_blank">
-          <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
+      <li :key="file.sysFileId" class="el-upload-list__item ele-upload-list__item-content"
+        v-for="(file, index) in fileList">
+        <el-link :href="`${file.fileUrl}`" :underline="false" target="_blank">
+          <span class="el-icon-document"> {{ getFileName(file.originalName) }} </span>
         </el-link>
         <div class="ele-upload-list__item-content-action">
           <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
@@ -51,7 +42,7 @@ export default {
     // 数量限制
     limit: {
       type: Number,
-      default: 5,
+      default: 3,
     },
     // 大小限制(MB)
     fileSize: {
@@ -61,7 +52,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc", "xls", "ppt", "txt", "pdf"],
+      default: () => ["zip", "txt"],
     },
     // 是否显示提示
     isShowTip: {
@@ -74,7 +65,7 @@ export default {
       number: 0,
       uploadList: [],
       baseUrl: process.env.VUE_APP_BASE_API,
-      uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/file/upload", // 上传文件服务器地址
+      uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/file/uploadFile", // 上传文件服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -92,15 +83,15 @@ export default {
             list = val;
           } else {
             await listByIds(val).then(res => {
-              list = res.data.map(oss => {
-                oss = { name: oss.originalName, url: oss.url, ossId: oss.ossId };
-                return oss;
+              list = res.data.map(obj => {
+                obj = { originalName: obj.originalName, fileUrl: obj.fileUrl, sysFileId: obj.id };
+                return obj;
               });
             })
           }
           // 然后将数组转为对象数组
           this.fileList = list.map(item => {
-            item = { name: item.name, url: item.url, ossId: item.ossId };
+            item = { originalName: item.originalName, fileUrl: item.fileUrl, sysFileId: item.sysFileId };
             item.uid = item.uid || new Date().getTime() + temp++;
             return item;
           });
@@ -156,7 +147,15 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-        this.uploadList.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId });
+        if (res.data.isExist) {
+          this.number--;
+          this.$modal.closeLoading();
+          this.$modal.msgError("该文件MD5用已经存在，请勿改名重复上传");
+          this.$refs.fileUpload.handleRemove(file);
+          this.uploadedSuccessfully();
+          return;
+        }
+        this.uploadList.push({ originalName: res.data.originalName, fileUrl: res.data.fileUrl, sysFileId: res.data.sysFileId });
         this.uploadedSuccessfully();
       } else {
         this.number--;
@@ -168,8 +167,8 @@ export default {
     },
     // 删除文件
     handleDelete(index) {
-      let ossId = this.fileList[index].ossId;
-      delOss(ossId);
+      let sysFileId = this.fileList[index].sysFileId;
+      delFile(sysFileId);
       this.fileList.splice(index, 1);
       this.$emit("input", this.listToString(this.fileList));
     },
@@ -197,7 +196,7 @@ export default {
       let strs = "";
       separator = separator || ",";
       for (let i in list) {
-        strs += list[i].ossId + separator;
+        strs += list[i].sysFileId + separator;
       }
       return strs != "" ? strs.substr(0, strs.length - 1) : "";
     },
@@ -209,18 +208,21 @@ export default {
 .upload-file-uploader {
   margin-bottom: 5px;
 }
+
 .upload-file-list .el-upload-list__item {
   border: 1px solid #e4e7ed;
   line-height: 2;
   margin-bottom: 10px;
   position: relative;
 }
+
 .upload-file-list .ele-upload-list__item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: inherit;
 }
+
 .ele-upload-list__item-content-action .el-link {
   margin-right: 10px;
 }

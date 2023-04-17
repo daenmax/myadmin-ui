@@ -19,10 +19,18 @@ export function listByIds(fileIds) {
 
 // 删除对象存储
 export function delFile(ids) {
+  let data;
+  console.log(typeof ids)
+  if(typeof ids == 'string'){
+    data = [ids]
+  }else{
+    data =ids
+  }
+  console.log(data)
   return request({
     url: '/system/file',
     method: 'delete',
-    data: ids
+    data: data
   })
 }
 
