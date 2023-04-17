@@ -62,11 +62,11 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleFile"
-          v-hasPermi="['system:file:upload']">上传文件</el-button>
+          v-hasPermi="['system:file:upload']" v-show="uploadFileShow">上传文件</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleImage"
-          v-hasPermi="['system:file:upload']">上传图片</el-button>
+          v-hasPermi="['system:file:upload']" v-show="uploadImageShow">上传图片</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
@@ -141,9 +141,9 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="文件名">
           <fileUpload v-model="form.file" :limit="uploadFileConfig.limit" :fileSize="uploadFileConfig.fileSize"
-          :fileType="uploadFileConfig.fileType" :isShowTip="uploadFileConfig.isShowTip" v-if="type === 0" />
+            :fileType="uploadFileConfig.fileType" :isShowTip="uploadFileConfig.isShowTip" v-if="type === 0" />
           <imageUpload v-model="form.file" :limit="uploadImageConfig.limit" :fileSize="uploadImageConfig.fileSize"
-          :fileType="uploadImageConfig.fileType" :isShowTip="uploadImageConfig.isShowTip" v-if="type === 1" />
+            :fileType="uploadImageConfig.fileType" :isShowTip="uploadImageConfig.isShowTip" v-if="type === 1" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -169,6 +169,12 @@ export default {
       showTable: true,
       // 按钮loading
       buttonLoading: false,
+      // 文件上传按钮是否可见
+      // 注意，只有这个参数 和 数据权限['system:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
+      uploadFileShow: false,
+      // 图片上传按钮是否可见
+      // 注意，只有这个参数 和 数据权限['system:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
+      uploadImageShow: false,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -242,13 +248,31 @@ export default {
         this.previewListResource = response.data === undefined ? true : response.data === 'true';
       });
       this.getConfigKey("sys.upload.file").then(response => {
-        if (response.data && response.data.length > 0) {
-          this.uploadFileConfig = JSON.parse(response.data)
+        if (response.data === null) {
+          //null，不存在该参数
+          this.uploadFileShow = true;
+        } else {
+          if (response.data === "") {
+            //存在该参数，但是禁用了，所以禁止上传任何文件
+            this.uploadFileShow = false;
+          } else {
+            this.uploadFileShow = true;
+            this.uploadFileConfig = JSON.parse(response.data)
+          }
         }
       });
       this.getConfigKey("sys.upload.image").then(response => {
-        if (response.data && response.data.length > 0) {
+        if (response.data === null) {
+          //null，不存在该参数
+          this.uploadImageShow = true;
+        } else {
+          if (response.data === "") {
+            //存在该参数，但是禁用了，所以禁止上传任何文件
+            this.uploadImageShow = false;
+          } else {
+            this.uploadImageShow = true;
           this.uploadImageConfig = JSON.parse(response.data)
+          }
         }
       });
       listFile(this.queryParams).then(response => {
