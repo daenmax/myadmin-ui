@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询OSS对象存储列表
+// 查询文件列表
 export function listFile(query) {
   return request({
     url: '/system/file/list',
@@ -9,10 +9,10 @@ export function listFile(query) {
   })
 }
 
-// 查询文件列表
-export function listByIds(fileId) {
+// 查询文件列表_根据指定ID列表
+export function listByIds(fileIds) {
   return request({
-    url: '/system/file/listByIds/' + fileId,
+    url: '/system/file/listByIds/' + fileIds,
     method: 'get'
   })
 }
