@@ -9,8 +9,8 @@ const baseURL = process.env.VUE_APP_BASE_API
 let downloadLoadingInstance;
 
 export default {
-  oss(ossId) {
-    var url = baseURL + '/system/oss/download/' + ossId
+  file(sysFileId ) {
+    var url = baseURL + '/system/file/download/' + sysFileId
     downloadLoadingInstance = Loading.service({ text: "正在下载数据，请稍候", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)", })
     axios({
       method: 'get',

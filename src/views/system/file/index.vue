@@ -391,7 +391,7 @@ export default {
     },
     /** 下载按钮操作 */
     handleDownload(row) {
-      this.$download.oss(row.id)
+      this.$download.file(row.id)
     },
     /** 删除按钮操作 */
     handleDelete(row) {
