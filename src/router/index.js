@@ -152,7 +152,7 @@ export const dynamicRoutes = [
     path: '/system/oss-config',
     component: Layout,
     hidden: true,
-    permissions: ['system:oss:edit'],
+    permissions: ['system:ossConfig:edit'],
     children: [
       {
         path: 'index',

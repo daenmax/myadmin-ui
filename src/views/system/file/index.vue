@@ -40,14 +40,16 @@
             :value="dict.value" />
         </el-select>
       </el-form-item>
+      <el-form-item label="OSS" prop="ossId">
+        <el-select v-model="queryParams.ossId" placeholder="OSS" clearable style="width: 240px">
+          <el-option v-for="ossConfig in ossConfigAllList" :key="ossConfig.id" :label="ossConfig.name"
+            :value="ossConfig.id" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker v-model="dateRange" size="small" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
           :default-time="['00:00:00', '23:59:59']"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="OSS" prop="ossId">
-        <el-input v-model="queryParams.ossId" placeholder="请输入所属OSS" clearable size="small"
-          @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="queryParams.remark" placeholder="请输入备注" clearable size="small"
@@ -74,7 +76,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="el-icon-s-operation" size="mini" @click="handleOssConfig"
-          v-hasPermi="['system:oss:list']">配置管理</el-button>
+          v-hasPermi="['system:ossConfig:list']">配置管理</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -156,6 +158,7 @@
 
 <script>
 import { listFile, delFile } from "@/api/system/file";
+import { allListOssConfig } from "@/api/system/ossConfig";
 
 export default {
   name: "File",
@@ -193,6 +196,8 @@ export default {
       total: 0,
       // file对象存储表格数据
       fileList: [],
+      // 所有配置信息列表
+      ossConfigAllList: [],
       // 弹出层标题
       title: "",
       // 弹出层标题
@@ -235,9 +240,15 @@ export default {
     };
   },
   created() {
+    this.getAllOssConfigList();
     this.getList();
   },
   methods: {
+    getAllOssConfigList(){
+      allListOssConfig().then(response => {
+        this.ossConfigAllList = response.data
+      });
+    },
     /** 查询file对象存储列表 */
     getList() {
       this.loading = true;
