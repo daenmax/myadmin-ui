@@ -62,3 +62,15 @@ export function delDemo(ids) {
   })
 }
 
+// 数据状态修改
+export function changeDataStatus(id, status) {
+  const data = {
+    id,
+    status
+  }
+  return request({
+    url: '/test/data/changeStatus',
+    method: 'put',
+    data: data
+  })
+}

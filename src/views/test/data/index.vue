@@ -34,6 +34,12 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 240px">
+          <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
+            :value="dict.value" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input
           v-model="queryParams.remark"
@@ -125,10 +131,19 @@
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="内容" align="center" prop="content" />
-      
       <el-table-column label="类型" align="center" prop="type">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.test_data_type" :value="scope.row.type"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center" width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-value="0"
+            inactive-value="1"
+            @change="handleDataChange(scope.row)"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
@@ -183,9 +198,15 @@
           <el-input v-model="form.content" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="类型" prop="type">
-          <el-radio-group v-model="form.type">
+          <el-select v-model="form.type" placeholder="请选择类型">
+            <el-option v-for="item in dict.type.test_data_type" :key="item.value" :label="item.label"
+              :value="item.value" :disabled="item.status == 1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in dict.type.test_data_type"
+              v-for="dict in dict.type.sys_normal_disable"
               :key="dict.value"
               :label="dict.value"
             >{{dict.label}}</el-radio>
@@ -230,12 +251,12 @@
 </template>
 
 <script>
-import { listDemo1, listDemo2, listDemo3, getDemo, delDemo, addDemo, updateDemo } from "@/api/test/data";
+import { listDemo1, listDemo2, listDemo3, getDemo, delDemo, addDemo, updateDemo ,changeDataStatus} from "@/api/test/data";
 import {getToken} from "@/utils/auth";
 
 export default {
   name: "Data",
-  dicts: ['test_data_type'],
+  dicts: ['sys_normal_disable','test_data_type'],
   components: {
   },
   data() {
@@ -246,6 +267,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      titles: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -281,6 +304,8 @@ export default {
         pageSize: 10,
         title: undefined,
         content: undefined,
+        type: undefined,
+        status: undefined,
         remark: undefined,
         createTime: undefined,
         startTime: undefined,
@@ -350,6 +375,8 @@ export default {
         id: undefined,
         title: undefined,
         content: undefined,
+        type: "0",
+        status: "0",
         remark: undefined,
         createDept: undefined,
         createTime: undefined,
@@ -432,8 +459,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除测试数据id为"' + ids + '"的数据项？').then(() => {
+      const ids = row.id ? [row.id] : this.ids;
+      const titles = row.title || this.titles;
+      this.$modal.confirm('是否确认删除 "' + titles + '" ？').then(() => {
         this.loading = true;
         return delDemo(ids);
       }).then(() => {
@@ -442,6 +470,17 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).finally(() => {
         this.loading = false;
+      });
+    },
+    // 数据状态修改
+    handleDataChange(row) {
+      let text = row.status === "0" ? "启用" : "停用";
+      this.$modal.confirm('确认要 ' + text + ' ' + row.title + ' 这条数据吗？').then(function() {
+        return changeDataStatus(row.id, row.status);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+      }).catch(function() {
+        row.status = row.status === "0" ? "1" : "0";
       });
     },
     /** 导入按钮操作 */
