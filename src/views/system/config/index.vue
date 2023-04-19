@@ -104,7 +104,7 @@
           <el-input v-model="form.key" placeholder="请输入参数键名" />
         </el-form-item>
         <el-form-item label="参数键值" prop="value">
-          <el-input v-model="form.value" type="textarea" placeholder="请输入参数键值" />
+          <el-input v-model="form.value" type="textarea" :rows="4" placeholder="请输入参数键值" />
         </el-form-item>
         <el-form-item label="系统内置" prop="type">
           <el-radio-group v-model="form.type">
