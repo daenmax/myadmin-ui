@@ -124,7 +124,7 @@
           <el-input v-model="form.region" placeholder="请输入地域" />
         </el-form-item>
         <el-form-item label="权限类型" prop="accessPolicy">
-          <el-select v-model="form.userType" placeholder="请选择权限类型">
+          <el-select v-model="form.accessPolicy" placeholder="请选择权限类型">
             <el-option v-for="item in dict.type.sys_oss_access_policy" :key="item.value" :label="item.label"
               :value="item.value" :disabled="item.status == 1"></el-option>
           </el-select>
