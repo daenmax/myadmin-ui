@@ -66,7 +66,7 @@
           <dict-tag color="red" :options="dict.type.sys_oss_access_policy" :value="scope.row.accessPolicy" />
         </template>
       </el-table-column>
-      <el-table-column label="是否启用" align="center" prop="status">
+      <el-table-column label="当前启用" align="center" prop="status">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.inUse" active-value="1" inactive-value="0"
             @change="handleInUseChange(scope.row)"></el-switch>
