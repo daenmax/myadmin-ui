@@ -210,7 +210,7 @@
               <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.sex"/>
             </template>
           </el-table-column>
-          <el-table-column label="备注" align="center" key="remark" prop="remark" v-if="columns[11].visible" width="120" />
+          <el-table-column label="备注" align="center" key="remark" prop="remark" v-if="columns[11].visible" width="120"   :show-overflow-tooltip="true"/>
           
           <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[12].visible" width="160">
             <template slot-scope="scope">

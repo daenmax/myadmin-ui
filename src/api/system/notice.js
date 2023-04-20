@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询公告列表
+// 查询列表
 export function listNotice(query) {
   return request({
     url: '/system/notice/list',
@@ -9,7 +9,7 @@ export function listNotice(query) {
   })
 }
 
-// 查询公告详细
+// 查询详细
 export function getNotice(noticeId) {
   return request({
     url: '/system/notice/' + noticeId,
@@ -17,7 +17,7 @@ export function getNotice(noticeId) {
   })
 }
 
-// 新增公告
+// 新增
 export function addNotice(data) {
   return request({
     url: '/system/notice',
@@ -26,7 +26,7 @@ export function addNotice(data) {
   })
 }
 
-// 修改公告
+// 修改
 export function updateNotice(data) {
   return request({
     url: '/system/notice',
@@ -35,10 +35,11 @@ export function updateNotice(data) {
   })
 }
 
-// 删除公告
-export function delNotice(noticeId) {
+// 删除
+export function delNotice(ids) {
   return request({
-    url: '/system/notice/' + noticeId,
-    method: 'delete'
+    url: '/system/notice',
+    method: 'delete',
+    data: ids
   })
 }

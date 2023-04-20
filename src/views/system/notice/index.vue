@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标题" prop="noticeTitle">
+      <el-form-item label="标题" prop="title">
         <el-input
-          v-model="queryParams.noticeTitle"
+          v-model="queryParams.title"
           placeholder="请输入标题"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="操作人员" prop="createBy">
+      <el-form-item label="创建人" prop="createName">
         <el-input
-          v-model="queryParams.createBy"
-          placeholder="请输入操作人员"
+          v-model="queryParams.createName"
+          placeholder="请输入创建人账号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="类型" prop="noticeType">
-        <el-select v-model="queryParams.noticeType" placeholder="类型" clearable>
+      <el-form-item label="类型" prop="type">
+        <el-select v-model="queryParams.type" placeholder="类型" clearable>
           <el-option
             v-for="dict in dict.type.sys_notice_type"
             :key="dict.value"
@@ -26,6 +26,15 @@
             :value="dict.value"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="状态" clearable>
+          <el-option v-for="dict in dict.type.sys_notice_status" :key="dict.value" :label="dict.label"
+            :value="dict.value" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="queryParams.remark" placeholder="请输入备注" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -71,16 +80,16 @@
 
     <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="noticeId" width="100" />
+      <el-table-column label="ID" align="center" prop="id" width="100"  v-if="false"/>
       <el-table-column
         label="标题"
         align="center"
-        prop="noticeTitle"
+        prop="title"
         :show-overflow-tooltip="true"
       />
-      <el-table-column label="类型" align="center" prop="noticeType" width="100">
+      <el-table-column label="类型" align="center" prop="type" width="100">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
+          <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status" width="100">
@@ -88,12 +97,13 @@
           <dict-tag :options="dict.type.sys_notice_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建者" align="center" prop="createBy" width="100" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="100">
+      <el-table-column label="创建人账号" align="center" prop="createName" width="100" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="150">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" width="150"   :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -127,13 +137,13 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="标题" prop="noticeTitle">
-              <el-input v-model="form.noticeTitle" placeholder="请输入标题" />
+            <el-form-item label="标题" prop="title">
+              <el-input v-model="form.title" placeholder="请输入标题" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="类型" prop="noticeType">
-              <el-select v-model="form.noticeType" placeholder="请选择类型">
+            <el-form-item label="类型" prop="type">
+              <el-select v-model="form.type" placeholder="请选择类型">
                 <el-option
                   v-for="dict in dict.type.sys_notice_type"
                   :key="dict.value"
@@ -156,7 +166,12 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="内容">
-              <editor v-model="form.noticeContent" :min-height="192" :fileSize="uploadImageConfig.fileSize" :fileType="uploadImageConfig.fileType" :uploadImageShow="uploadImageShow" />
+              <editor v-model="form.content" :min-height="192" :fileSize="uploadImageConfig.fileSize" :fileType="uploadImageConfig.fileType" :uploadImageShow="uploadImageShow" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" placeholder="请输入备注" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -185,6 +200,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      titles: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -203,18 +220,20 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        noticeTitle: undefined,
-        createBy: undefined,
+        title: undefined,
+        createName: undefined,
+        type: undefined,
+        remark: undefined,
         status: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        noticeTitle: [
+        title: [
           { required: true, message: "标题不能为空", trigger: "blur" }
         ],
-        noticeType: [
+        type: [
           { required: true, message: "类型不能为空", trigger: "change" }
         ]
       }
@@ -258,10 +277,10 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        noticeId: undefined,
-        noticeTitle: undefined,
-        noticeType: undefined,
-        noticeContent: undefined,
+        id: undefined,
+        title: undefined,
+        type: undefined,
+        content: undefined,
         status: "0"
       };
       this.resetForm("form");
@@ -278,7 +297,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.noticeId)
+      this.ids = selection.map(item => item.id)
+      this.titles = selection.map(item => item.title)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
@@ -291,8 +311,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const noticeId = row.noticeId || this.ids
-      getNotice(noticeId).then(response => {
+      const id = row.id || this.ids
+      getNotice(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改";
@@ -302,7 +322,7 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.noticeId != undefined) {
+          if (this.form.id != undefined) {
             updateNotice(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -320,9 +340,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const noticeIds = row.noticeId || this.ids
-      this.$modal.confirm('是否确认删除编号为"' + noticeIds + '"的数据项？').then(function() {
-        return delNotice(noticeIds);
+      const ids = row.id ? [row.id] : this.ids;
+      const titles = row.title || this.titles;
+      this.$modal.confirm('是否确认删除标题为"' + titles + '"的内容吗？').then(function() {
+        return delNotice(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
