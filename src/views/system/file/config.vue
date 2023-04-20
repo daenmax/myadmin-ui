@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item label="权限类型" prop="accessPolicy">
         <el-select v-model="queryParams.accessPolicy" placeholder="权限类型" clearable style="width: 240px">
-          <el-option v-for="dict in dict.type.sys_oss_access_policy" :key="dict.value" :label="dict.label"
+          <el-option v-for="dict in dict.type.sys_oss_scope" :key="dict.value" :label="dict.label"
             :value="dict.value" />
         </el-select>
       </el-form-item>
@@ -63,7 +63,7 @@
       <el-table-column label="地域" align="center" prop="region" />
       <el-table-column label="权限类型" align="center" prop="accessPolicy">
         <template slot-scope="scope">
-          <dict-tag color="red" :options="dict.type.sys_oss_access_policy" :value="scope.row.accessPolicy" />
+          <dict-tag color="red" :options="dict.type.sys_oss_scope" :value="scope.row.accessPolicy" />
         </template>
       </el-table-column>
       <el-table-column label="当前启用" align="center" prop="status">
@@ -125,7 +125,7 @@
         </el-form-item>
         <el-form-item label="权限类型" prop="accessPolicy">
           <el-select v-model="form.accessPolicy" placeholder="请选择权限类型">
-            <el-option v-for="item in dict.type.sys_oss_access_policy" :key="item.value" :label="item.label"
+            <el-option v-for="item in dict.type.sys_oss_scope" :key="item.value" :label="item.label"
               :value="item.value" :disabled="item.status == 1"></el-option>
           </el-select>
         </el-form-item>
@@ -162,7 +162,7 @@ import {
 
 export default {
   name: "OssConfig",
-  dicts: ['sys_yes_no', 'sys_normal_disable', 'sys_oss_access_policy'],
+  dicts: ['sys_yes_no', 'sys_normal_disable', 'sys_oss_scope'],
   data() {
     return {
       // 按钮loading

@@ -47,10 +47,10 @@
 
     <el-table v-loading="loading" :data="positionList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id"   :show-overflow-tooltip="true"/>
+      <el-table-column label="ID" align="center" prop="id"    v-if="false"/>
       <el-table-column label="岗位名称" align="center" prop="name" />
       <el-table-column label="岗位编码" align="center" prop="code" />
-      <el-table-column label="岗位简介" align="center" prop="summary" />
+      <el-table-column label="岗位简介" align="center" prop="summary"  :show-overflow-tooltip="true"/>
       <el-table-column label="岗位排序" align="center" prop="sort" />
       <el-table-column label="岗位备注" align="center" prop="remark"   :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center" prop="status">

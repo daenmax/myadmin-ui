@@ -110,7 +110,7 @@
       </el-table-column>
       <el-table-column label="所属OSS" align="center" prop="ossName">
         <template slot-scope="scope">
-          <dict-tag color="red" :options="dict.type.oss_type" :value="scope.row.ossName" />
+          <dict-tag color="red" :options="dict.type.sys_oss_type" :value="scope.row.ossName" />
         </template>
       </el-table-column>
 
@@ -162,7 +162,7 @@ import { allListOssConfig } from "@/api/system/ossConfig";
 
 export default {
   name: "File",
-  dicts: ['sys_normal_disable', 'oss_type'],
+  dicts: ['sys_normal_disable', 'sys_oss_type'],
   data() {
     return {
       // 文件上传限制策略
