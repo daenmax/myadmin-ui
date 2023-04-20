@@ -1,28 +1,55 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="登录地址" prop="ipaddr">
-        <el-input
-          v-model="queryParams.ipaddr"
-          placeholder="请输入登录地址"
-          clearable
-          style="width: 240px;"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户名称" prop="username">
+      <el-form-item label="用户账号" prop="username">
         <el-input
           v-model="queryParams.username"
-          placeholder="请输入用户名称"
+          placeholder="请输入用户账号"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="登录IP" prop="ip">
+        <el-input
+          v-model="queryParams.ip"
+          placeholder="请输入登录IP"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="登录地点" prop="location">
+        <el-input
+          v-model="queryParams.location"
+          placeholder="请输入登录地点"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="浏览器" prop="browser">
+        <el-input
+          v-model="queryParams.browser"
+          placeholder="请输入浏览器"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="操作系统" prop="os">
+        <el-input
+          v-model="queryParams.os"
+          placeholder="请输入操作系统"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="登录结果" prop="status">
         <el-select
           v-model="queryParams.status"
-          placeholder="登录状态"
+          placeholder="登录结果"
           clearable
           style="width: 240px"
         >
@@ -45,6 +72,15 @@
           end-placeholder="结束日期"
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -89,21 +125,21 @@
 
     <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="访问编号" align="center" prop="infoId" />
-      <el-table-column label="用户名称" align="center" prop="username" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-      <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+      <el-table-column label="登录ID" align="center" prop="id"  :show-overflow-tooltip="true"/>
+      <el-table-column label="用户账号" align="center" prop="username" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
+      <el-table-column label="登录IP" align="center" prop="ip" width="130" :show-overflow-tooltip="true" />
+      <el-table-column label="登录地点" align="center" prop="location" width="130" :show-overflow-tooltip="true" />
       <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />
       <el-table-column label="操作系统" align="center" prop="os" />
-      <el-table-column label="登录状态" align="center" prop="status">
+      <el-table-column label="登录结果" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作信息" align="center" prop="msg" />
-      <el-table-column label="登录日期" align="center" prop="loginTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+      <el-table-column label="操作信息" align="center" prop="remark" />
+      <el-table-column label="登录日期" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.loginTime) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -145,16 +181,20 @@ export default {
       // 日期范围
       dateRange: [],
       // 默认排序
-      defaultSort: {prop: 'loginTime', order: 'descending'},
+      defaultSort: {prop: 'createTime', order: 'descending'},
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ipaddr: undefined,
         username: undefined,
+        ip: undefined,
+        location: undefined,
+        browser: undefined,
+        os: undefined,
         status: undefined,
         startTime: undefined,
-        endTime: undefined
+        endTime: undefined,
+        remark: undefined
       }
     };
   },

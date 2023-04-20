@@ -1,27 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="系统模块" prop="title">
+      <el-form-item label="操作名称" prop="name">
         <el-input
-          v-model="queryParams.title"
-          placeholder="请输入系统模块"
+          v-model="queryParams.name"
+          placeholder="请输入操作名称"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="操作人员" prop="operName">
-        <el-input
-          v-model="queryParams.operName"
-          placeholder="请输入操作人员"
-          clearable
-          style="width: 240px;"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="类型" prop="businessType">
+      <el-form-item label="操作类型" prop="type">
         <el-select
-          v-model="queryParams.businessType"
+          v-model="queryParams.type"
           placeholder="操作类型"
           clearable
           style="width: 240px"
@@ -34,10 +25,82 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="请求方法" prop="method">
+        <el-input
+          v-model="queryParams.method"
+          placeholder="请输入请求方法"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="请求方式" prop="requestType">
+        <el-input
+          v-model="queryParams.requestType"
+          placeholder="请输入请求方式"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="URL" prop="requestUrl">
+        <el-input
+          v-model="queryParams.requestUrl"
+          placeholder="请输入请求URL"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="请求者IP" prop="requestIp">
+        <el-input
+          v-model="queryParams.requestIp"
+          placeholder="请输入请求者IP"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="请求地址" prop="requestLocation">
+        <el-input
+          v-model="queryParams.requestLocation"
+          placeholder="请输入请求者地址"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="请求参数" prop="requestParams">
+        <el-input
+          v-model="queryParams.requestParams"
+          placeholder="请输入请求参数"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="响应结果" prop="responseResult">
+        <el-input
+          v-model="queryParams.responseResult"
+          placeholder="请输入响应结果"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="错误信息" prop="errorMsg">
+        <el-input
+          v-model="queryParams.errorMsg"
+          placeholder="请输入错误信息"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="请求结果" prop="status">
         <el-select
           v-model="queryParams.status"
-          placeholder="操作状态"
+          placeholder="请求结果"
           clearable
           style="width: 240px"
         >
@@ -60,6 +123,15 @@
           end-placeholder="结束日期"
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -104,25 +176,32 @@
 
     <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="日志编号" align="center" prop="operId" />
-      <el-table-column label="系统模块" align="center" prop="title" />
-      <el-table-column label="操作类型" align="center" prop="businessType">
+      <el-table-column label="操作ID" align="center" prop="id"  :show-overflow-tooltip="true"/>
+      <el-table-column label="用户ID" align="center" prop="createId" :show-overflow-tooltip="true" />
+      <el-table-column label="操作名称" align="center" prop="name"  :show-overflow-tooltip="true"/>
+      <el-table-column label="操作类型" align="center" prop="type">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_oper_type" :value="scope.row.businessType"/>
+          <dict-tag :options="dict.type.sys_oper_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
-      <el-table-column label="请求方式" align="center" prop="requestMethod" />
-      <el-table-column label="操作人员" align="center" prop="operName" width="100" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-      <el-table-column label="操作地址" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="操作地点" align="center" prop="operLocation" :show-overflow-tooltip="true" />
-      <el-table-column label="操作状态" align="center" prop="status">
+      <el-table-column label="请求方法" align="center" prop="method" :show-overflow-tooltip="true"/>
+      <el-table-column label="请求方式" align="center" prop="requestType" />
+      <el-table-column label="请求URL" align="center" prop="requestUrl"  :show-overflow-tooltip="true"/>
+      <el-table-column label="请求者IP" align="center" prop="requestIp" />
+      <el-table-column label="请求者地址" align="center" prop="requestLocation" width="130" :show-overflow-tooltip="true" />
+      <el-table-column label="请求时间" align="center" prop="requestTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.requestTime) }} </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="请求结果" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作日期" align="center" prop="operTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+      <el-table-column label="执行耗时" align="center" prop="executeTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.operTime) }}</span>
+          <span>{{ scope.row.executeTime }} 毫秒</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -147,39 +226,48 @@
     />
 
     <!-- 操作日志详细 -->
-    <el-dialog title="操作日志详细" :visible.sync="open" width="700px" append-to-body>
+    <el-dialog name="操作日志详细" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="操作模块：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
+            <el-form-item label="操作名称：">{{ form.name }} / {{ typeFormat(form) }}</el-form-item>
             <el-form-item
               label="登录信息："
-            >{{ form.operName }} / {{ form.operIp }} / {{ form.operLocation }}</el-form-item>
+            >{{ form.createId }} / {{ form.requestIp }} / {{ form.requestLocation }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="请求地址：">{{ form.operUrl }}</el-form-item>
-            <el-form-item label="请求方式：">{{ form.requestMethod }}</el-form-item>
+            <el-form-item label="请求地址：">{{ form.requestUrl }}</el-form-item>
+            <el-form-item label="请求方式：">{{ form.requestType }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="操作方法：">{{ form.method }}</el-form-item>
+            <el-form-item label="请求方法：">{{ form.method }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="请求参数：">{{ form.operParam }}</el-form-item>
+            <el-form-item label="请求参数：">{{ form.requestParams }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="返回参数：">{{ form.jsonResult }}</el-form-item>
+            <el-form-item label="响应结果：">{{ form.responseResult }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作状态：">
-              <div v-if="form.status === 0">正常</div>
-              <div v-else-if="form.status === 1">失败</div>
+            <el-form-item label="请求结果：">
+              <div v-if="form.status === '0'">正常</div>
+              <div v-else-if="form.status === '1'">失败</div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作时间：">{{ parseTime(form.operTime) }}</el-form-item>
+            <el-form-item label="执行耗时">{{ form.executeTime }}毫秒</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="请求时间：">{{ parseTime(form.requestTime) }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="响应时间：">{{ parseTime(form.responseTime) }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="异常信息：" v-if="form.status === 1">{{ form.errorMsg }}</el-form-item>
+            <el-form-item label="异常信息：" v-if="form.status === '1'">{{ form.errorMsg }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注信息：">{{ form.remark }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -215,16 +303,24 @@ export default {
       // 日期范围
       dateRange: [],
       // 默认排序
-      defaultSort: {prop: 'operTime', order: 'descending'},
+      defaultSort: {prop: 'requestTime', order: 'descending'},
       // 表单参数
       form: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        title: undefined,
-        operName: undefined,
-        businessType: undefined,
+        name: undefined,
+        type: undefined,
+        method: undefined,
+        requestType: undefined,
+        requestUrl: undefined,
+        requestIp: undefined,
+        requestLocation: undefined,
+        requestParams: undefined,
+        responseResult: undefined,
+        errorMsg: undefined,
+        remark: undefined,
         status: undefined,
         startTime: undefined,
         endTime: undefined
@@ -250,7 +346,7 @@ export default {
     },
     // 操作日志类型字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.dict.type.sys_oper_type, row.businessType);
+      return this.selectDictLabel(this.dict.type.sys_oper_type, row.type);
     },
     /** 搜索按钮操作 */
     handleQuery() {
