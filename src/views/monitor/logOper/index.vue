@@ -226,7 +226,7 @@
     />
 
     <!-- 操作日志详细 -->
-    <el-dialog name="操作日志详细" :visible.sync="open" width="700px" append-to-body>
+    <el-dialog name="操作日志详细" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="12">
@@ -362,7 +362,7 @@ export default {
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId)
+      this.ids = selection.map(item => item.id)
       this.multiple = !selection.length
     },
     /** 排序触发事件 */
@@ -378,9 +378,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const operIds = row.operId || this.ids;
-      this.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项？').then(function() {
-        return delLogOper(operIds);
+      const ids = row.id ? [row.id] : this.ids;
+      this.$modal.confirm('是否确认删除日志ID为"' + ids + '"的数据项？').then(function() {
+        return delLogOper(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -388,7 +388,7 @@ export default {
     },
     /** 清空按钮操作 */
     handleClean() {
-      this.$modal.confirm('是否确认清空所有操作日志数据项？').then(function() {
+      this.$modal.confirm('是否确认清空所有操作日志吗？').then(function() {
         return cleanLogOper();
       }).then(() => {
         this.getList();

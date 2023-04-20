@@ -131,17 +131,17 @@
       <el-table-column label="登录地点" align="center" prop="location" width="130" :show-overflow-tooltip="true" />
       <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />
       <el-table-column label="操作系统" align="center" prop="os" />
-      <el-table-column label="登录结果" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作信息" align="center" prop="remark" />
       <el-table-column label="登录日期" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="登录结果" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_common_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" />
     </el-table>
 
     <pagination
@@ -229,7 +229,7 @@ export default {
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.infoId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!=1
       this.multiple = !selection.length
       this.selectName = selection.map(item => item.username);
@@ -242,9 +242,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const infoIds = row.infoId || this.ids;
-      this.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项？').then(function() {
-        return delLogLogin(infoIds);
+      const ids = row.id ? [row.id] : this.ids;
+      this.$modal.confirm('是否确认删除ID为"' + ids + '"的数据项？').then(function() {
+        return delLogLogin(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -252,7 +252,7 @@ export default {
     },
     /** 清空按钮操作 */
     handleClean() {
-      this.$modal.confirm('是否确认清空所有登录日志数据项？').then(function() {
+      this.$modal.confirm('是否确认清空所有登录日志？').then(function() {
         return cleanLogLogin();
       }).then(() => {
         this.getList();
