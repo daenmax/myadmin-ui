@@ -4,11 +4,14 @@
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="queryParams.name" placeholder="请输入部门名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="部门状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="部门状态" clearable>
           <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
             :value="dict.value" />
         </el-select>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="queryParams.remark" placeholder="请输入备注" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -29,7 +32,7 @@
 
     <el-table v-if="refreshTable" v-loading="loading" :data="deptList" row-key="id" :default-expand-all="isExpandAll"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-      <el-table-column prop="name" label="部门名称" width="200"></el-table-column>
+      <el-table-column prop="name" label="部门名称" width="250"></el-table-column>
       <el-table-column prop="sort" label="排序" width="80"></el-table-column>
       <el-table-column prop="leaderUser.realName" label="负责人" width="100"></el-table-column>
       <el-table-column prop="leaderUser.phone" label="负责人手机号" width="120"></el-table-column>
@@ -39,7 +42,7 @@
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status" />
         </template>
       </el-table-column>
-      <el-table-column prop="remark" label="备注" width="100"></el-table-column>
+      <el-table-column prop="remark" label="备注" width="200"></el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -162,7 +165,8 @@ export default {
       // 查询参数
       queryParams: {
         deptName: undefined,
-        status: undefined
+        status: undefined,
+        remark: undefined
       },
       // 表单参数
       form: {},

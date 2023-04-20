@@ -18,7 +18,7 @@
           <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="参数状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="参数状态" clearable>
           <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
             :value="dict.value" />

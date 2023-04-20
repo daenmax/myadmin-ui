@@ -19,7 +19,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="字典状态" prop="status">
         <el-select
           v-model="queryParams.status"
           placeholder="字典状态"
