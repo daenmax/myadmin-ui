@@ -3,24 +3,25 @@ import request from '@/utils/request'
 // 查询操作日志列表
 export function list(query) {
   return request({
-    url: '/monitor/operlog/list',
+    url: '/monitor/logOper/list',
     method: 'get',
     params: query
   })
 }
 
 // 删除操作日志
-export function delOperlog(operId) {
+export function delLogOper(ids) {
   return request({
-    url: '/monitor/operlog/' + operId,
-    method: 'delete'
+    url: '/monitor/logOper',
+    method: 'delete',
+    data: ids
   })
 }
 
 // 清空操作日志
-export function cleanOperlog() {
+export function cleanLogOper() {
   return request({
-    url: '/monitor/operlog/clean',
+    url: '/monitor/logOper/clean',
     method: 'delete'
   })
 }
