@@ -45,11 +45,13 @@ export default {
       default: 3,
     },
     // 大小限制(MB)
+    // 这里是默认的，如果后端接口没有配置相应参数，那么将会使用这个
     fileSize: {
       type: Number,
       default: 5,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
+    // 这里是默认的，如果后端接口没有配置相应参数，那么将会使用这个
     fileType: {
       type: Array,
       default: () => ["zip", "txt"],

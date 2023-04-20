@@ -240,6 +240,7 @@ export default {
     };
   },
   created() {
+    this.getConfig();
     this.getAllOssConfigList();
     this.getList();
   },
@@ -249,12 +250,7 @@ export default {
         this.ossConfigAllList = response.data
       });
     },
-    /** 查询file对象存储列表 */
-    getList() {
-      this.loading = true;
-      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
-      this.queryParams.startTime = this.dateRange[0]
-      this.queryParams.endTime = this.dateRange[1]
+    getConfig(){
       this.getConfigKey("sys.file.previewListResource").then(response => {
         this.previewListResource = response.data === undefined ? true : response.data === 'true';
       });
@@ -286,6 +282,13 @@ export default {
           }
         }
       });
+    },
+    /** 查询file对象存储列表 */
+    getList() {
+      this.loading = true;
+      this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
+      this.queryParams.startTime = this.dateRange[0]
+      this.queryParams.endTime = this.dateRange[1]
       listFile(this.queryParams).then(response => {
         this.fileList = response.data.records
         this.total = response.data.total;

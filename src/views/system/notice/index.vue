@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="公告标题" prop="noticeTitle">
+      <el-form-item label="标题" prop="noticeTitle">
         <el-input
           v-model="queryParams.noticeTitle"
-          placeholder="请输入公告标题"
+          placeholder="请输入标题"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -18,7 +18,7 @@
         />
       </el-form-item>
       <el-form-item label="类型" prop="noticeType">
-        <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable>
+        <el-select v-model="queryParams.noticeType" placeholder="类型" clearable>
           <el-option
             v-for="dict in dict.type.sys_notice_type"
             :key="dict.value"
@@ -73,12 +73,12 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="noticeId" width="100" />
       <el-table-column
-        label="公告标题"
+        label="标题"
         align="center"
         prop="noticeTitle"
         :show-overflow-tooltip="true"
       />
-      <el-table-column label="公告类型" align="center" prop="noticeType" width="100">
+      <el-table-column label="类型" align="center" prop="noticeType" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
         </template>
@@ -122,18 +122,18 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改公告对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
+    <!-- 添加或修改对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="公告标题" prop="noticeTitle">
-              <el-input v-model="form.noticeTitle" placeholder="请输入公告标题" />
+          <el-col :span="24">
+            <el-form-item label="标题" prop="noticeTitle">
+              <el-input v-model="form.noticeTitle" placeholder="请输入标题" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="公告类型" prop="noticeType">
-              <el-select v-model="form.noticeType" placeholder="请选择公告类型">
+            <el-form-item label="类型" prop="noticeType">
+              <el-select v-model="form.noticeType" placeholder="请选择类型">
                 <el-option
                   v-for="dict in dict.type.sys_notice_type"
                   :key="dict.value"
@@ -143,7 +143,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -156,7 +156,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="内容">
-              <editor v-model="form.noticeContent" :min-height="192"/>
+              <editor v-model="form.noticeContent" :min-height="192" :fileSize="uploadImageConfig.fileSize" :fileType="uploadImageConfig.fileType" :uploadImageShow="uploadImageShow" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -177,6 +177,10 @@ export default {
   dicts: ['sys_notice_status', 'sys_notice_type'],
   data() {
     return {
+      // 图片上传限制策略
+      uploadImageConfig: {},
+      // 图片上传按钮是否可见
+      uploadImageShow: false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -189,7 +193,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 公告表格数据
+      // 表格数据
       noticeList: [],
       // 弹出层标题
       title: "",
@@ -208,19 +212,36 @@ export default {
       // 表单校验
       rules: {
         noticeTitle: [
-          { required: true, message: "公告标题不能为空", trigger: "blur" }
+          { required: true, message: "标题不能为空", trigger: "blur" }
         ],
         noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "change" }
+          { required: true, message: "类型不能为空", trigger: "change" }
         ]
       }
     };
   },
   created() {
     this.getList();
+    this.getConfig();
   },
   methods: {
-    /** 查询公告列表 */
+    getConfig(){
+      this.getConfigKey("sys.upload.image").then(response => {
+        if (response.data === null) {
+          //null，不存在该参数
+          this.uploadImageShow = true;
+        } else {
+          if (response.data === "") {
+            //存在该参数，但是禁用了，所以禁止上传任何文件
+            this.uploadImageShow = false;
+          } else {
+            this.uploadImageShow = true;
+          this.uploadImageConfig = JSON.parse(response.data)
+          }
+        }
+      });
+    },
+    /** 查询列表 */
     getList() {
       this.loading = true;
       listNotice(this.queryParams).then(response => {
@@ -265,7 +286,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加公告";
+      this.title = "添加";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -274,7 +295,7 @@ export default {
       getNotice(noticeId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改公告";
+        this.title = "修改";
       });
     },
     /** 提交按钮 */
@@ -300,7 +321,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const noticeIds = row.noticeId || this.ids
-      this.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除编号为"' + noticeIds + '"的数据项？').then(function() {
         return delNotice(noticeIds);
       }).then(() => {
         this.getList();

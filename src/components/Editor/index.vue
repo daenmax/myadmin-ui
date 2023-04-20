@@ -48,10 +48,19 @@ export default {
       default: false,
     },
     // 上传文件大小限制(MB)
+    // 这里是默认的，如果后端接口没有配置相应参数，那么将会使用这个
     fileSize: {
       type: Number,
-      default: 5,
+      default: 2,
     },
+    // 文件类型, 例如['png', 'jpg', 'jpeg']
+    // 这里是默认的，如果后端接口没有配置相应参数，那么将会使用这个
+    fileType: {
+      type: Array,
+      default: () => ["bmp", "gif", "jpg", "jpeg", "png"],
+    },
+    // 图片上传按钮是否可见
+    uploadImageShow: false,
     /* 类型（base64格式、url格式） */
     type: {
       type: String,
@@ -60,7 +69,7 @@ export default {
   },
   data() {
     return {
-      uploadUrl: process.env.VUE_APP_BASE_API + "/system/file/upload", // 上传的图片服务器地址
+      uploadUrl: process.env.VUE_APP_BASE_API + "/system/file/uploadImage", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken()
       },
@@ -100,7 +109,7 @@ export default {
         style.height = `${this.height}px`;
       }
       return style;
-    },
+    }
   },
   watch: {
     value: {
@@ -120,6 +129,10 @@ export default {
   },
   beforeDestroy() {
     this.Quill = null;
+  },
+  created() {
+    console.log(this.fileSize,"fileSize")
+    console.log(this.fileType,"fileType")
   },
   methods: {
     init() {
@@ -158,6 +171,29 @@ export default {
     },
     // 上传前校检格式和大小
     handleBeforeUpload(file) {
+      if(!this.uploadImageShow){
+        this.$modal.msgError(`当前系统不允许上传图片`);
+        return false;
+      }
+      let isImg = false;
+      if (this.fileType.length) {
+        let fileExtension = "";
+        if (file.name.lastIndexOf(".") > -1) {
+          fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
+        }
+        isImg = this.fileType.some((type) => {
+          if (file.type.indexOf(type) > -1) return true;
+          if (fileExtension && fileExtension.indexOf(type) > -1) return true;
+          return false;
+        });
+      } else {
+        isImg = file.type.indexOf("image") > -1;
+      }
+
+      if (!isImg) {
+        this.$modal.msgError(`文件格式不正确, 请上传${this.fileType.join("/")}图片格式文件!`);
+        return false;
+      }
       // 校检文件大小
       if (this.fileSize) {
         const isLt = file.size / 1024 / 1024 < this.fileSize;
@@ -175,8 +211,8 @@ export default {
       if (res.code == 200) {
         // 获取光标所在位置
         let length = quill.getSelection().index;
-        // 插入图片  res.url为服务器返回的图片地址
-        quill.insertEmbed(length, "image", res.data.url);
+        // 插入图片  res.data.fileUrl为服务器返回的图片地址
+        quill.insertEmbed(length, "image", res.data.fileUrl);
         // 调整光标到最后
         quill.setSelection(length + 1);
       } else {
