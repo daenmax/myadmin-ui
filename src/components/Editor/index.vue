@@ -59,7 +59,7 @@ export default {
       type: Array,
       default: () => ["bmp", "gif", "jpg", "jpeg", "png"],
     },
-    // 图片上传按钮是否可见
+    // 是否允许上传图片
     uploadImageShow: false,
     /* 类型（base64格式、url格式） */
     type: {
@@ -129,10 +129,6 @@ export default {
   },
   beforeDestroy() {
     this.Quill = null;
-  },
-  created() {
-    console.log(this.fileSize,"fileSize")
-    console.log(this.fileType,"fileType")
   },
   methods: {
     init() {
