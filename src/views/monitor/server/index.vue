@@ -84,7 +84,7 @@
                     <div class="cell">总内存</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.mem">{{ server.mem.total }}{{ server.mem.unit }}</div>
+                    <div class="cell" v-if="server.memory">{{ server.memory.total }}{{ server.memory.unit }}</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="server.jvm">{{ server.jvm.total }}{{ server.jvm.unit }}</div>
@@ -95,7 +95,7 @@
                     <div class="cell">已用内存</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.mem">{{ server.mem.used }}{{ server.mem.unit }}</div>
+                    <div class="cell" v-if="server.memory">{{ server.memory.used }}{{ server.memory.unit }}</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="server.jvm">{{ server.jvm.used }}{{ server.jvm.unit }}</div>
@@ -106,7 +106,7 @@
                     <div class="cell">剩余内存</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.mem">{{ server.mem.free }}{{ server.mem.unit }}</div>
+                    <div class="cell" v-if="server.memory">{{ server.memory.free }}{{ server.memory.unit }}</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="server.jvm">{{ server.jvm.free }}{{ server.jvm.unit }}</div>
@@ -117,8 +117,8 @@
                     <div class="cell">使用率</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.mem" :class="{ 'text-danger': server.mem.usage > 80 }">{{
-                      server.mem.usage }}%</div>
+                    <div class="cell" v-if="server.memory" :class="{ 'text-danger': server.memory.usage > 80 }">{{
+                      server.memory.usage }}%</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="server.jvm" :class="{ 'text-danger': server.jvm.usage > 80 }">{{
@@ -144,13 +144,13 @@
                     <div class="cell">服务器名称</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">{{ server.sys.computerName }}</div>
+                    <div class="cell" v-if="server.system">{{ server.system.computerName }}</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell">操作系统</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">{{ server.sys.osName }}</div>
+                    <div class="cell" v-if="server.system">{{ server.system.osName }}</div>
                   </td>
                 </tr>
                 <tr>
@@ -158,13 +158,13 @@
                     <div class="cell">服务器IP</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">{{ server.sys.computerIp }}</div>
+                    <div class="cell" v-if="server.system">{{ server.system.computerIp }}</div>
                   </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell">系统架构</div>
                   </td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">{{ server.sys.osArch }}</div>
+                    <div class="cell" v-if="server.system">{{ server.system.osArch }}</div>
                   </td>
                 </tr>
               </tbody>
@@ -222,7 +222,7 @@
                     <div class="cell">项目路径</div>
                   </td>
                   <td colspan="3" class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">{{ server.sys.userDir }}</div>
+                    <div class="cell" v-if="server.system">{{ server.system.userDir }}</div>
                   </td>
                 </tr>
                 <tr>
