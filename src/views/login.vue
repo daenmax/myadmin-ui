@@ -23,7 +23,7 @@
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
+      <el-form-item prop="code" v-if="captchaImgLock">
         <el-input
           v-model="loginForm.code"
           auto-complete="off"
@@ -49,7 +49,7 @@
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
-        <div style="float: right;" v-if="register">
+        <div style="float: right;" v-if="registerLock">
           <router-link class="link-type" :to="'/register'">立即注册</router-link>
         </div>
       </el-form-item>
@@ -92,9 +92,9 @@ export default {
       },
       loading: false,
       // 验证码开关
-      captchaEnabled: true,
+      captchaImgLock: true,
       // 注册开关
-      register: true,
+      registerLock: true,
       redirect: undefined
     };
   },
@@ -113,8 +113,8 @@ export default {
   methods: {
     getCode() {
       getCodeImg().then(res => {
-        this.captchaEnabled = res.data.captchaEnabled === undefined ? true : res.data.captchaEnabled;
-        if (this.captchaEnabled) {
+        this.captchaImgLock = res.data.captchaImgLock === undefined ? true : res.data.captchaImgLock;
+        if (this.captchaImgLock) {
           this.codeUrl = "data:image/gif;base64," + res.data.img;
           this.loginForm.uuid = res.data.uuid;
         }
@@ -148,7 +148,7 @@ export default {
             this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           }).catch(() => {
             this.loading = false;
-            if (this.captchaEnabled) {
+            if (this.captchaImgLock) {
               this.getCode();
             }
           });
