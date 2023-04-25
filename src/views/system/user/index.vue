@@ -219,7 +219,7 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            align="center"
+            align="right"
             width="160"
             class-name="small-padding fixed-width"
           >
