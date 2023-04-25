@@ -425,21 +425,21 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="个性签名">
-              <el-input v-model="form.userSign" placeholder="请输入内容"></el-input>
+              <el-input v-model="form.userSign" placeholder="请输入个性签名"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="个人简介">
-              <el-input v-model="form.profile" type="textarea" placeholder="请输入内容"></el-input>
+              <el-input v-model="form.profile" type="textarea" placeholder="请输入个人简介"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备注">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
