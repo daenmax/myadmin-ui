@@ -1,13 +1,52 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="树节点名" prop="treeName">
+      <el-form-item label="标题" prop="title">
         <el-input
-          v-model="queryParams.treeName"
-          placeholder="请输入树节点名"
+          v-model="queryParams.title"
+          placeholder="请输入标题"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
+          @keyup.enter.native="handleList1"
+        />
+      </el-form-item>
+      <el-form-item label="内容" prop="content">
+        <el-input
+          v-model="queryParams.content"
+          placeholder="请输入内容"
+          clearable
+          size="small"
+          @keyup.enter.native="handleList1"
+        />
+      </el-form-item>
+      <el-form-item label="类型" prop="type">
+        <el-select
+          v-model="queryParams.type"
+          placeholder="数据类型"
+          clearable
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in dict.type.test_data_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 240px">
+          <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
+            :value="dict.value" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入备注"
+          clearable
+          size="small"
+          @keyup.enter.native="handleList1"
         />
       </el-form-item>
       <el-form-item label="创建时间">
@@ -37,7 +76,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['test:tree:add']"
+          v-hasPermi="['test:dataTree:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -60,15 +99,39 @@
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="父id" prop="parentId" />
-      <el-table-column label="部门id" align="center" prop="deptId" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="树节点名" align="center" prop="treeName" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+      <el-table-column label="id" align="center" prop="id" v-if="false"/>
+      <el-table-column label="父id" prop="parentId" v-if="false" />
+      <el-table-column label="标题" align="center" prop="title" />
+      <el-table-column label="内容" align="center" prop="content" />
+      <el-table-column label="类型" align="center" prop="type">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.test_data_type" :value="scope.row.type"/>
         </template>
       </el-table-column>
+      <el-table-column label="状态" align="center" width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-value="0"
+            inactive-value="1"
+            @change="handleDataTreeChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
+        </template>
+      </el-table-column>
+
+
+
       <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
@@ -76,21 +139,21 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['test:tree:edit']"
+            v-hasPermi="['test:dataTree:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
-            v-hasPermi="['test:tree:add']"
+            v-hasPermi="['test:dataTree:add']"
           >新增</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['test:tree:remove']"
+            v-hasPermi="['test:dataTree:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -99,17 +162,32 @@
     <!-- 添加或修改测试树表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="父id" prop="parentId">
-          <treeselect v-model="form.parentId" :options="treeOptions" :normalizer="normalizer" placeholder="请选择父id" />
+        <el-form-item label="父级" prop="parentId">
+          <treeselect v-model="form.parentId" :options="treeOptions" :normalizer="normalizer" placeholder="请选择父级" />
         </el-form-item>
-        <el-form-item label="部门id" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门id" />
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="form.title" placeholder="请输入标题" />
         </el-form-item>
-        <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id" />
+        <el-form-item label="内容" prop="content">
+          <el-input v-model="form.content" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="树节点名" prop="treeName">
-          <el-input v-model="form.treeName" placeholder="请输入树节点名" />
+        <el-form-item label="类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择类型">
+            <el-option v-for="item in dict.type.test_data_type" :key="item.value" :label="item.label"
+              :value="item.value" :disabled="item.status == 1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -121,12 +199,13 @@
 </template>
 
 <script>
-import { listTree, getTree, delTree, addTree, updateTree } from "@/api/test/tree";
+import { listTree, getTree, delTree, addTree, updateTree, changeDataTreeStatus } from "@/api/test/dataTree";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "Tree",
+  name: "DataTree",
+  dicts: ['sys_normal_disable','test_data_type'],
   components: {
     Treeselect
   },
@@ -154,8 +233,14 @@ export default {
       dateRange: [],
       // 查询参数
       queryParams: {
-        treeName: null,
-        createTime: null,
+        pageNum: 1,
+        pageSize: 10,
+        title: undefined,
+        content: undefined,
+        type: undefined,
+        status: undefined,
+        remark: undefined,
+        createTime: undefined,
         startTime: undefined,
         endTime: undefined
       },
@@ -163,8 +248,14 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        treeName: [
-          { required: true, message: "树节点名不能为空", trigger: "blur" }
+        parentId: [
+          { required: true, message: "父级不能为空", trigger: "blur" }
+        ],
+        title: [
+          { required: true, message: "标题不能为空", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "内容不能为空", trigger: "blur" }
         ],
       }
     };
@@ -191,7 +282,7 @@ export default {
       }
       return {
         id: node.id,
-        label: node.treeName,
+        label: node.title,
         children: node.children
       };
     },
@@ -199,7 +290,7 @@ export default {
     getTreeselect() {
       listTree().then(response => {
         this.treeOptions = [];
-        const data = { id: 0, treeName: '顶级节点', children: [] };
+        const data = { id: 0, title: '顶级节点', children: [] };
         data.children = this.handleTree(response.data, "id", "parentId");
         this.treeOptions.push(data);
       });
@@ -212,17 +303,19 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: null,
+        id: undefined,
         parentId: null,
-        deptId: null,
-        userId: null,
-        treeName: null,
-        version: null,
-        createTime: null,
-        createBy: null,
-        updateTime: null,
-        updateBy: null,
-        delFlag: null
+        title: undefined,
+        content: undefined,
+        type: "0",
+        status: "0",
+        remark: undefined,
+        createDept: undefined,
+        createTime: undefined,
+        createName: undefined,
+        updateTime: undefined,
+        updateName: undefined,
+        isDelete: undefined
       };
       this.resetForm("form");
     },
@@ -296,9 +389,23 @@ export default {
         }
       });
     },
+    // 数据状态修改
+    handleDataTreeChange(row) {
+      let text = row.status === "0" ? "启用" : "停用";
+      let msg = row.status === "0" ? "" : "其所有子级也将会被禁用"; 
+      this.$modal.confirm('确认要 ' + text + ' ' + row.title + ' 这条数据吗？'+msg).then(function() {
+        return changeDataTreeStatus(row.id, row.status);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+        this.getList();
+      }).catch(function() {
+        console.log("我是catch")
+        row.status = row.status === "0" ? "1" : "0";
+      });
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$modal.confirm('是否确认删除测试树表编号为"' + row.id + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除 "' + row.title + '" ？').then(() => {
         this.loading = true;
         return delTree(row.id);
       }).then(() => {
