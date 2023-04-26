@@ -113,7 +113,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "1.0.0",
+      version: process.env.VUE_APP_VERSION,
     };
   },
   methods: {
