@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 分页接口1
-export function listDemo1(query) {
+export function listData1(query) {
   return request({
     url: '/test/data/list1',
     method: 'get',
@@ -10,7 +10,7 @@ export function listDemo1(query) {
 }
 
 // 分页接口2
-export function listDemo2(query) {
+export function listData2(query) {
   return request({
     url: '/test/data/list2',
     method: 'get',
@@ -19,7 +19,7 @@ export function listDemo2(query) {
 }
 
 // 分页接口3
-export function listDemo3(query) {
+export function listData3(query) {
   return request({
     url: '/test/data/list3',
     method: 'get',
@@ -28,7 +28,7 @@ export function listDemo3(query) {
 }
 
 // 查询测试数据详细
-export function getDemo(id) {
+export function getData(id) {
   return request({
     url: '/test/data/' + id,
     method: 'get'
@@ -36,7 +36,7 @@ export function getDemo(id) {
 }
 
 // 新增测试数据
-export function addDemo(data) {
+export function addData(data) {
   return request({
     url: '/test/data',
     method: 'post',
@@ -45,7 +45,7 @@ export function addDemo(data) {
 }
 
 // 修改测试数据
-export function updateDemo(data) {
+export function updateData(data) {
   return request({
     url: '/test/data',
     method: 'put',
@@ -54,7 +54,7 @@ export function updateDemo(data) {
 }
 
 // 删除测试数据
-export function delDemo(ids) {
+export function delData(ids) {
   return request({
     url: '/test/data',
     method: 'delete',

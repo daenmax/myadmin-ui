@@ -126,7 +126,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList1"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="demoList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="dataList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" v-if="false"/>
       <el-table-column label="标题" align="center" prop="title" />
@@ -251,7 +251,7 @@
 </template>
 
 <script>
-import { listDemo1, listDemo2, listDemo3, getDemo, delDemo, addDemo, updateDemo ,changeDataStatus} from "@/api/test/data";
+import { listData1, listData2, listData3, getData, delData, addData, updateData ,changeDataStatus} from "@/api/test/data";
 import {getToken} from "@/utils/auth";
 
 export default {
@@ -278,7 +278,7 @@ export default {
       // 总条数
       total: 0,
       // 测试数据表格数据
-      demoList: [],
+      dataList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -334,8 +334,8 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listDemo1(this.queryParams).then(response => {
-        this.demoList = response.data.records
+      listData1(this.queryParams).then(response => {
+        this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
@@ -346,8 +346,8 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listDemo2(this.queryParams).then(response => {
-        this.demoList = response.data.records
+      listData2(this.queryParams).then(response => {
+        this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
@@ -358,8 +358,8 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listDemo3(this.queryParams).then(response => {
-        this.demoList = response.data.records
+      listData3(this.queryParams).then(response => {
+        this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
@@ -425,7 +425,7 @@ export default {
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
-      getDemo(id).then(response => {
+      getData(id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
@@ -438,7 +438,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateDemo(this.form).then(response => {
+            updateData(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList1();
@@ -446,7 +446,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addDemo(this.form).then(response => {
+            addData(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList1();
@@ -463,7 +463,7 @@ export default {
       const titles = row.title || this.titles;
       this.$modal.confirm('是否确认删除 "' + titles + '" ？').then(() => {
         this.loading = true;
-        return delDemo(ids);
+        return delData(ids);
       }).then(() => {
         this.loading = false;
         this.getList1();

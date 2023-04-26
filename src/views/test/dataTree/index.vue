@@ -94,7 +94,7 @@
     <el-table
       v-if="refreshTable"
       v-loading="loading"
-      :data="treeList"
+      :data="dataTreeList"
       row-key="id"
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import { listTree, getTree, delTree, addTree, updateTree, changeDataTreeStatus } from "@/api/test/dataTree";
+import { listDataTree, getDataTree, delDataTree, addDataTree, updateDataTree, changeDataTreeStatus } from "@/api/test/dataTree";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -218,7 +218,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 测试树表表格数据
-      treeList: [],
+      dataTreeList: [],
       // 测试树表树选项
       treeOptions: [],
       // 弹出层标题
@@ -270,8 +270,8 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listTree(this.queryParams).then(response => {
-        this.treeList = this.handleTree(response.data, "id", "parentId");
+      listDataTree(this.queryParams).then(response => {
+        this.dataTreeList = this.handleTree(response.data, "id", "parentId");
         this.loading = false;
       });
     },
@@ -288,7 +288,7 @@ export default {
     },
     /** 查询测试树表下拉树结构 */
     getTreeselect() {
-      listTree().then(response => {
+      listDataTree().then(response => {
         this.treeOptions = [];
         const data = { id: 0, title: '顶级节点', children: [] };
         data.children = this.handleTree(response.data, "id", "parentId");
@@ -357,7 +357,7 @@ export default {
       if (row != null) {
         this.form.parentId = row.id;
       }
-      getTree(row.id).then(response => {
+      getDataTree(row.id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
@@ -370,7 +370,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateTree(this.form).then(response => {
+            updateDataTree(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -378,7 +378,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addTree(this.form).then(response => {
+            addDataTree(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -407,7 +407,7 @@ export default {
     handleDelete(row) {
       this.$modal.confirm('是否确认删除 "' + row.title + '" ？').then(() => {
         this.loading = true;
-        return delTree(row.id);
+        return delDataTree(row.id);
       }).then(() => {
         this.loading = false;
         this.getList();
