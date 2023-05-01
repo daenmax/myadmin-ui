@@ -96,7 +96,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
+          type="info"
           plain
           icon="el-icon-close"
           size="mini"

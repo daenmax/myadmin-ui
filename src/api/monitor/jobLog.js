@@ -10,10 +10,11 @@ export function listJobLog(query) {
 }
 
 // 删除调度日志
-export function delJobLog(jobLogId) {
+export function delJobLog(ids) {
   return request({
-    url: '/monitor/jobLog/' + jobLogId,
-    method: 'delete'
+    url: '/monitor/jobLog',
+    method: 'delete',
+    data: ids
   })
 }
 

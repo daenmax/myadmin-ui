@@ -399,7 +399,6 @@ export default {
         this.$modal.msgSuccess(text + "成功");
         this.getList();
       }).catch(function() {
-        console.log("我是catch")
         row.status = row.status === "0" ? "1" : "0";
       });
     },

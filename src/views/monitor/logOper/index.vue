@@ -237,7 +237,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="请求地址：">{{ form.requestUrl }}</el-form-item>
-            <el-form-item label="请求方式：">{{ form.requestType }}</el-form-item>
+            <el-form-item label="请求方式："><el-tag  size="mini">{{ form.requestType }}</el-tag></el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="请求方法：">{{ form.method }}</el-form-item>
@@ -250,8 +250,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="请求结果：">
-              <div v-if="form.status === '0'">正常</div>
-              <div v-else-if="form.status === '1'">失败</div>
+              <div v-if="form.status === '0'"><el-tag type="success" size="mini">成功</el-tag></div>
+              <div v-else-if="form.status === '1'"><el-tag type="danger" size="mini">失败</el-tag></div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
