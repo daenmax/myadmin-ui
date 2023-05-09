@@ -180,3 +180,14 @@ aside {
     margin-bottom: 10px;
   }
 }
+
+
+// 修改treeselect组件树形选择框选项高度
+.vue-treeselect__option {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+// 修改treeselect组件被选中项字体颜色
+.vue-treeselect--single .vue-treeselect__option--selected {
+  color: #409EFF;
+}

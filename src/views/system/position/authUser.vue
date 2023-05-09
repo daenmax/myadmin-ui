@@ -49,7 +49,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
+          type="info"
           plain
           icon="el-icon-close"
           size="mini"
@@ -80,7 +80,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"

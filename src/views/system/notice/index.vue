@@ -104,7 +104,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" width="150"   :show-overflow-tooltip="true"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -171,7 +171,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" placeholder="请输入备注" />
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
             </el-form-item>
           </el-col>
         </el-row>
