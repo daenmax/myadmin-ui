@@ -2,6 +2,8 @@
 
 因本人不擅长前端，所以 MyAdmin-UI 基于 RuoYi-Vue & RuoYi-Vue-Plus 的前端部分
 
+最后同步于 2023/5/8 9:30
+
 在此特别感谢 RuoYi-Vue & RuoYi-Vue-Plus
 
 ## 开发
