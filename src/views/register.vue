@@ -107,7 +107,8 @@ export default {
             //文字点选验证码（待实现）
           }
         }
-
+      }).catch(() => { 
+        this.codeUrl = "data:image/gif;base64,xxx";
       });
     },
     handleRegister() {

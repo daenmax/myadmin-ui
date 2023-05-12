@@ -107,7 +107,7 @@ export default {
         }
       }).catch(() => { 
         this.codeUrl = "data:image/gif;base64,xxx";
-      });;
+      });
     },
     getCookie() {
       const username = Cookies.get("username");
