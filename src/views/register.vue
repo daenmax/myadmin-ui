@@ -8,49 +8,29 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input
-          v-model="registerForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="密码"
-          @keyup.enter.native="handleRegister"
-        >
+        <el-input v-model="registerForm.password" type="password" auto-complete="off" placeholder="密码"
+          @keyup.enter.native="handleRegister">
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
       <el-form-item prop="confirmPassword">
-        <el-input
-          v-model="registerForm.confirmPassword"
-          type="password"
-          auto-complete="off"
-          placeholder="确认密码"
-          @keyup.enter.native="handleRegister"
-        >
+        <el-input v-model="registerForm.confirmPassword" type="password" auto-complete="off" placeholder="确认密码"
+          @keyup.enter.native="handleRegister">
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="registerForm.code"
-          auto-complete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleRegister"
-        >
+      <el-form-item prop="code" v-if="captchaLock">
+        <el-input v-model="registerForm.code" auto-complete="off" placeholder="验证码" style="width: 63%"
+          @keyup.enter.native="handleRegister">
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
         <div class="register-code">
-          <img :src="codeUrl" @click="getCode" class="register-code-img"/>
+          <img :src="codeUrl" @click="getCode" class="register-code-img" />
         </div>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button
-          :loading="loading"
-          size="medium"
-          type="primary"
-          style="width:100%;"
-          @click.native.prevent="handleRegister"
-        >
+        <el-button :loading="loading" size="medium" type="primary" style="width:100%;"
+          @click.native.prevent="handleRegister">
           <span v-if="!loading">注 册</span>
           <span v-else>注 册 中...</span>
         </el-button>
@@ -67,7 +47,7 @@
 </template>
 
 <script>
-import { getCodeImg, register } from "@/api/login";
+import { getCaptcha, register } from "@/api/login";
 
 export default {
   name: "Register",
@@ -80,8 +60,8 @@ export default {
       }
     };
     return {
-      registerTitle : process.env.VUE_APP_REGISTER_TITLE,
-      copyright : process.env.VUE_APP_COPYRIGHT,
+      registerTitle: process.env.VUE_APP_REGISTER_TITLE,
+      copyright: process.env.VUE_APP_COPYRIGHT,
       codeUrl: "",
       registerForm: {
         username: "",
@@ -106,7 +86,7 @@ export default {
         code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
-      captchaEnabled: true
+      captchaLock: true
     };
   },
   created() {
@@ -114,12 +94,20 @@ export default {
   },
   methods: {
     getCode() {
-      getCodeImg().then(res => {
-        this.captchaEnabled = res.data.captchaEnabled === undefined ? true : res.data.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.data.img;
-          this.registerForm.uuid = res.data.uuid;
+      getCaptcha().then(res => {
+        this.captchaLock = res.data.captchaLock === undefined ? true : res.data.captchaLock;
+        if (this.captchaLock) {
+          if (res.data.captchaType === 0) {
+            //图片验证码
+            this.codeUrl = "data:image/gif;base64," + res.data.image.img;
+            this.registerForm.uuid = res.data.image.uuid;
+          } else if (res.data.captchaType === 1) {
+            //滑块验证码（待实现）
+          } else if (res.data.captchaType === 2) {
+            //文字点选验证码（待实现）
+          }
         }
+
       });
     },
     handleRegister() {
@@ -134,10 +122,10 @@ export default {
               type: 'success'
             }).then(() => {
               this.$router.push("/login");
-            }).catch(() => {});
+            }).catch(() => { });
           }).catch(() => {
             this.loading = false;
-            if (this.captchaEnabled) {
+            if (this.captchaLock) {
               this.getCode();
             }
           })
@@ -157,6 +145,7 @@ export default {
   background-image: url("../assets/images/login-background.png");
   background-size: cover;
 }
+
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
@@ -168,32 +157,39 @@ export default {
   background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
+
   .el-input {
     height: 38px;
+
     input {
       height: 38px;
     }
   }
+
   .input-icon {
     height: 39px;
     width: 14px;
     margin-left: 2px;
   }
 }
+
 .register-tip {
   font-size: 13px;
   text-align: center;
   color: #bfbfbf;
 }
+
 .register-code {
   width: 33%;
   height: 38px;
   float: right;
+
   img {
     cursor: pointer;
     vertical-align: middle;
   }
 }
+
 .el-register-footer {
   height: 40px;
   line-height: 40px;
@@ -206,6 +202,7 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
 }
+
 .register-code-img {
   height: 38px;
 }

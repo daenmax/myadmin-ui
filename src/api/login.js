@@ -51,9 +51,9 @@ export function logout() {
 }
 
 // 获取验证码
-export function getCodeImg() {
+export function getCaptcha() {
   return request({
-    url: '/captchaImage',
+    url: '/captcha',
     headers: {
       ignoreToken: true
     },
