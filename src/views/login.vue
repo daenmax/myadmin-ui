@@ -4,28 +4,28 @@
       <h3 class="title">{{ loginTitle }}</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon"/>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码"
-          @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+                  @keyup.enter.native="handleLogin">
+          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon"/>
         </el-input>
       </el-form-item>
-      <el-form-item prop="code" v-if="captchaLock">
+      <el-form-item prop="code" v-if="captchaLock" v-show="captchaType===0">
         <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%"
-          @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+                  @keyup.enter.native="handleLogin">
+          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon"/>
         </el-input>
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img" />
+          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button :loading="loading" size="medium" type="primary" style="width:100%;"
-          @click.native.prevent="handleLogin">
+                   @click.native.prevent="handleLogin">
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
@@ -42,14 +42,16 @@
 </template>
 
 <script>
-import { getCaptcha } from "@/api/login";
+
+import {getCaptcha} from "@/api/login";
 import Cookies from "js-cookie";
-import { encrypt, decrypt } from '@/utils/jsencrypt'
+import {encrypt, decrypt} from '@/utils/jsencrypt'
 
 export default {
   name: "Login",
   data() {
     return {
+      captchaType: undefined,
       loginTitle: process.env.VUE_APP_LOGIN_TITLE,
       copyright: process.env.VUE_APP_COPYRIGHT,
       codeUrl: "",
@@ -59,16 +61,17 @@ export default {
         rememberMe: false,
         loginType: "account",
         code: "",
-        uuid: ""
+        uuid: "",
+        randStr: "",
+        ticket: ""
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" }
+          {required: true, trigger: "blur", message: "请输入您的账号"}
         ],
         password: [
-          { required: true, trigger: "blur", message: "请输入您的密码" }
-        ],
-        code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+          {required: true, trigger: "blur", message: "请输入您的密码"}
+        ]
       },
       loading: false,
       // 验证码开关
@@ -91,10 +94,31 @@ export default {
     this.getCookie();
   },
   methods: {
+    getSliderCaptcha() {
+      var captcha = new TencentCaptcha('2090581062', this.callback, {});
+      // 调用方法，显示验证码
+      captcha.show();
+    },
+    callback(res) {
+      // 第一个参数传入回调结果，结果如下：
+      // ret         Int       验证结果，0：验证成功。2：用户主动关闭验证码。
+      // ticket      String    验证成功的票据，当且仅当 ret = 0 时 ticket 有值。
+      // CaptchaAppId       String    验证码应用ID。
+      // bizState    Any       自定义透传参数。
+      // randstr     String    本次验证的随机串，后续票据校验时需传递该参数。
+      if (res.ret === 0) {
+        var str = '【randstr】->【' + res.randstr + '】      【ticket】->【' + res.ticket + '】';
+        console.log("验证成功" + str)
+        this.loginForm.randStr = res.randstr;
+        this.loginForm.ticket = res.ticket;
+        this.doLogin()
+      }
+    },
     getCode() {
       getCaptcha().then(res => {
         this.captchaLock = res.data.captchaLock === undefined ? true : res.data.captchaLock;
         if (this.captchaLock) {
+          this.captchaType = res.data.captchaType;
           if (res.data.captchaType === 0) {
             //图片验证码
             this.codeUrl = "data:image/gif;base64," + res.data.image.img;
@@ -105,7 +129,7 @@ export default {
             //文字点选验证码（待实现）
           }
         }
-      }).catch(() => { 
+      }).catch(() => {
         this.codeUrl = "data:image/gif;base64,xxx";
       });
     },
@@ -123,24 +147,34 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
-          if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, { expires: 30 });
-            Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
-            Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
+          console.log(this.captchaType)
+          console.log(this.captchaType === 1)
+          if (this.captchaType === 1) {
+            this.getSliderCaptcha()
           } else {
-            Cookies.remove("username");
-            Cookies.remove("password");
-            Cookies.remove('rememberMe');
+            this.doLogin()
           }
-          this.$store.dispatch("Login", this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || "/" }).catch(() => { });
-          }).catch(() => {
-            this.loading = false;
-            if (this.captchaLock) {
-              this.getCode();
-            }
-          });
+        }
+      });
+    },
+    doLogin() {
+      this.loading = true;
+      if (this.loginForm.rememberMe) {
+        Cookies.set("username", this.loginForm.username, {expires: 30});
+        Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
+        Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
+      } else {
+        Cookies.remove("username");
+        Cookies.remove("password");
+        Cookies.remove('rememberMe');
+      }
+      this.$store.dispatch("Login", this.loginForm).then(() => {
+        this.$router.push({path: this.redirect || "/"}).catch(() => {
+        });
+      }).catch(() => {
+        this.loading = false;
+        if (this.captchaLock) {
+          this.getCode();
         }
       });
     }

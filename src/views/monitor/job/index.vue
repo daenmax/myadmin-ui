@@ -17,6 +17,12 @@
           <el-option v-for="dict in dict.type.sys_job_status" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
+      <el-form-item label="通知渠道" prop="notifyChannel">
+        <el-select v-model="queryParams.notifyChannel" placeholder="请选择通知渠道" clearable>
+          <el-option v-for="dict in dict.type.sys_notify_channel" :key="dict.value" :label="dict.label"
+            :value="dict.value" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="queryParams.remark" placeholder="请输入备注" clearable style="width: 240px;"
           @keyup.enter.native="handleQuery" />
@@ -46,7 +52,6 @@
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
     <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange" :default-sort="defaultSort"
       @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -59,8 +64,12 @@
       </el-table-column>
       <el-table-column label="调用目标" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
       <el-table-column label="cron执行表达式" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
-
-      <el-table-column label="下次执行时间" align="center" prop="nextValidTime" width="150">
+      <el-table-column label="通知渠道" align="center" prop="notifyChannel">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_notify_channel" :value="scope.row.notifyChannel" />
+        </template>
+      </el-table-column>
+      <el-table-column label="下次执行" align="center" prop="nextValidTime" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.nextValidTime) }}</span>
         </template>
@@ -149,7 +158,7 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item prop="misfirePolicy">
               <span slot="label">
                 哑火策略
@@ -182,9 +191,64 @@
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
-                <el-radio v-for="dict in dict.type.sys_job_status" :key="dict.value"
-                  :label="dict.value">{{ dict.label }}</el-radio>
+                <el-radio v-for="dict in dict.type.sys_job_status" :key="dict.value" :label="dict.value">{{ dict.label
+                }}</el-radio>
               </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item prop="notifyChannel">
+              <span slot="label">
+                通知渠道
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    当定时任务执行发生异常时，需要发送通知吗？如果需要，希望通过什么渠道通知？<br>
+                    需要在系统参数里进行配置好各个渠道哦
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
+              <el-select v-model="form.notifyChannel" placeholder="请选择通知渠道">
+                <el-option v-for="dict in dict.type.sys_notify_channel" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item prop="notifyObjs" v-show="form.notifyChannel==1 || form.notifyChannel==2 || form.notifyChannel==3">
+              <span slot="label">
+                通知对象
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    多个用,隔开<br /><br />
+                    邮件渠道时，写邮箱<br />
+                    短信渠道时，写手机号<br />
+                    钉钉渠道时，写botName
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
+              <el-input v-model="form.notifyObjs" placeholder="请输入通知对象，多个用,隔开" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item prop="notifySmsInfo" v-show="form.notifyChannel==2">
+              <span slot="label">
+                短信配置
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    例如：{"variable":"content","templateId":"123123","length":70}<br /><br />
+                    variable：变量名<br />
+                    templateId：模板ID<br />
+                    length：短信截取长度
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
+              <el-input type="textarea" v-model="form.notifySmsInfo" placeholder="请输入短信配置，json格式" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -205,25 +269,25 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
+            <el-form-item label="通知渠道：">{{ notifyChannelFormat(form) }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="任务分组：">{{ jobGroupFormat(form) }}</el-form-item>
+            <el-form-item label="cron表达式：">{{ form.cronExpression }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="通知对象：">{{ form.notifyObjs }}</el-form-item>
+            <el-form-item label="调用方法：">{{ form.invokeTarget }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="创建时间：">{{ form.createTime }}</el-form-item>
-            <el-form-item label="cron表达式：">{{ form.cronExpression }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="下次执行时间：">{{ parseTime(form.nextValidTime) }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="调用目标方法：">{{ form.invokeTarget }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="任务状态：">
               <div v-if="form.status === '0'"><el-tag type="success" size="mini">正常</el-tag></div>
               <div v-else-if="form.status === '1'"><el-tag type="warning" size="mini">暂停</el-tag></div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="下次执行：">{{ parseTime(form.nextValidTime) }}</el-form-item>
             <el-form-item label="是否并发：">
               <div v-if="form.concurrent === '0'"><el-tag type="success" size="mini">允许</el-tag></div>
               <div v-else-if="form.concurrent === '1'"><el-tag type="info" size="mini">禁止</el-tag></div>
@@ -253,7 +317,7 @@ import Crontab from '@/components/Crontab'
 export default {
   components: { Crontab },
   name: "Job",
-  dicts: ['sys_job_group', 'sys_job_status'],
+  dicts: ['sys_job_group', 'sys_job_status', 'sys_notify_channel'],
   data() {
     return {
       // 遮罩层
@@ -291,6 +355,7 @@ export default {
         jobName: undefined,
         invokeTarget: undefined,
         jobGroup: undefined,
+        notifyChannel: undefined,
         status: undefined,
         remark: undefined
       },
@@ -327,6 +392,10 @@ export default {
     jobGroupFormat(row, column) {
       return this.selectDictLabel(this.dict.type.sys_job_group, row.jobGroup);
     },
+    // 通知渠道典翻译
+    notifyChannelFormat(row, column) {
+      return this.selectDictLabel(this.dict.type.sys_notify_channel, row.notifyChannel);
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -340,6 +409,9 @@ export default {
         jobGroup: undefined,
         invokeTarget: undefined,
         cronExpression: undefined,
+        notifyChannel: "0",
+        notifyObjs: undefined,
+        notifySmsInfo: undefined,
         misfirePolicy: 1,
         concurrent: 1,
         status: "0"
