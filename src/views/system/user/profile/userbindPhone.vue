@@ -105,9 +105,8 @@ export default {
             this.codeUrl = "data:image/gif;base64," + res.data.image.img;
             this.changeForm.uuid = res.data.image.uuid;
           } else if (res.data.captchaType === 1) {
-            //滑块验证码（待实现）
-          } else if (res.data.captchaType === 2) {
-            //文字点选验证码（待实现）
+            //滑块验证码
+            this.changeForm.uuid = res.data.slider.uuid;
           }
         }
       }).catch(() => {
