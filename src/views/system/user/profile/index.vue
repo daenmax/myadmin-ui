@@ -112,8 +112,11 @@
             <el-tab-pane label="个人资料" name="userinfo">
               <userInfo :user="user" />
             </el-tab-pane>
-            <el-tab-pane label="账号绑定" name="userbind">
-              <userbind :bind="bind" />
+            <el-tab-pane label="绑定邮箱" name="userbindEmail">
+              <userbindEmail :bind="bindEmail" />
+            </el-tab-pane>
+            <el-tab-pane label="绑定手机" name="userbindPhone">
+              <userbindPhone :bind="bindPhone" />
             </el-tab-pane>
             <el-tab-pane label="修改密码" name="resetPwd">
               <resetPwd />
@@ -128,20 +131,23 @@
 <script>
 import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
-import userbind from "./userbind";
+import userbindPhone from "./userbindPhone.vue";
+import userbindEmail from "./userbindEmail";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
 import { regFenToYuan } from '@/utils/myUtil'
 
 export default {
   name: "Profile",
-  components: { userAvatar, userInfo, userbind, resetPwd },
+  components: { userAvatar, userInfo, userbindPhone, userbindEmail, resetPwd },
   data() {
     return {
       user: {},
-      bind: {
-        phone: undefined,
+      bindEmail: {
         email: undefined
+      },
+      bindPhone: {
+        phone: undefined
       },
       roleGroup: {},
       postGroup: [],
@@ -158,8 +164,8 @@ export default {
         this.user.money = regFenToYuan(this.user.money);
         this.roleGroup = response.data.roleGroup;
         this.postGroup = response.data.postGroup;
-        this.bind.phone = response.data.user.phone;
-        this.bind.email = response.data.user.email;
+        this.bindPhone.phone = response.data.user.phone;
+        this.bindEmail.email = response.data.user.email;
       });
     }
   }

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { parseStrEmpty } from "@/utils/ruoyi";
+import {parseStrEmpty} from "@/utils/ruoyi";
 
 // 查询用户列表
 export function listUser(query) {
@@ -138,5 +138,54 @@ export function deptTreeSelect() {
   return request({
     url: '/system/user/deptTree',
     method: 'get'
+  })
+}
+
+// 获取邮箱验证码
+export function getEmailValidCode(data) {
+  return request({
+    url: '/system/user/getEmailValidCode',
+    method: 'post',
+    data: data
+  })
+}
+
+// 获取手机验证码
+export function getPhoneValidCode(data) {
+  return request({
+    url: '/system/user/getPhoneValidCode',
+    method: 'post',
+    data: data
+  })
+}
+
+
+// 修改邮箱绑定
+export function updateBindEmail(data) {
+  return request({
+    url: '/system/user/updateBindEmail',
+    headers: {
+      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
+      //false是不忽略限制，不允许重复
+      //true是忽略限制，允许重复
+      ignoreRepeatSubmit: false
+    },
+    method: 'put',
+    data: data
+  })
+}
+
+// 修改手机号绑定
+export function updateBindPhone(data) {
+  return request({
+    url: '/system/user/updateBindPhone',
+    headers: {
+      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
+      //false是不忽略限制，不允许重复
+      //true是忽略限制，允许重复
+      ignoreRepeatSubmit: false
+    },
+    method: 'put',
+    data: data
   })
 }

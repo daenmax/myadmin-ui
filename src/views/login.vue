@@ -94,9 +94,11 @@ export default {
     this.getCookie();
   },
   methods: {
+    /**
+     * 获取腾讯滑块
+     */
     getSliderCaptcha() {
       var captcha = new TencentCaptcha('2090581062', this.callback, {});
-      // 调用方法，显示验证码
       captcha.show();
     },
     callback(res) {
@@ -107,8 +109,6 @@ export default {
       // bizState    Any       自定义透传参数。
       // randstr     String    本次验证的随机串，后续票据校验时需传递该参数。
       if (res.ret === 0) {
-        var str = '【randstr】->【' + res.randstr + '】      【ticket】->【' + res.ticket + '】';
-        console.log("验证成功" + str)
         this.loginForm.randStr = res.randstr;
         this.loginForm.ticket = res.ticket;
         this.doLogin()
@@ -147,10 +147,16 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          console.log(this.captchaType)
-          console.log(this.captchaType === 1)
-          if (this.captchaType === 1) {
-            this.getSliderCaptcha()
+          if (this.captchaLock) {
+            if (this.captchaType === 1) {
+              this.getSliderCaptcha()
+            } else {
+              if (!this.loginForm.code || this.loginForm.code.length == 0) {
+                this.$modal.msgError("请输入验证码");
+                return;
+              }
+              this.doLogin()
+            }
           } else {
             this.doLogin()
           }
