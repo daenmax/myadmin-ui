@@ -164,28 +164,16 @@ export function getPhoneValidCode(data) {
 export function updateBindEmail(data) {
   return request({
     url: '/system/user/updateBindEmail',
-    headers: {
-      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
-      //false是不忽略限制，不允许重复
-      //true是忽略限制，允许重复
-      ignoreRepeatSubmit: false
-    },
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
 
-// 修改手机号绑定
+// 修改手机绑定
 export function updateBindPhone(data) {
   return request({
     url: '/system/user/updateBindPhone',
-    headers: {
-      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
-      //false是不忽略限制，不允许重复
-      //true是忽略限制，允许重复
-      ignoreRepeatSubmit: false
-    },
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

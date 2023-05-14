@@ -153,6 +153,11 @@ export default {
             time--;
           }
         }, 1000);
+        this.$modal.msgSuccess(res.data.msg);
+      }).catch(() => {
+        if (this.captchaLock) {
+          this.getCode();
+        }
       })
 
     },
@@ -160,7 +165,11 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           updateBindPhone({...this.bind, ...this.changeForm}).then(response => {
-            this.$modal.msgSuccess("修改成功");
+            this.$modal.msgSuccess(response.data.msg);
+          }).catch(() => {
+            if (this.captchaLock) {
+              this.getCode();
+            }
           });
         }
       });
