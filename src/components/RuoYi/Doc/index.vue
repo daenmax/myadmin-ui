@@ -9,7 +9,7 @@ export default {
   name: 'RuoYiDoc',
   data() {
     return {
-      url: 'https://gitee.com/daenmax/myadmin/wikis/pages'
+      url: 'https://myadmin.daenx.cn/'
     }
   },
   methods: {
