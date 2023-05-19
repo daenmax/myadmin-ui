@@ -1,16 +1,7 @@
 import request from '@/utils/request'
 
 // 登录方法
-export function login(username, password, loginType, code, uuid, randStr, ticket) {
-  const data = {
-    username,
-    password,
-    loginType,
-    code,
-    uuid,
-    randStr,
-    ticket
-  }
+export function login(data) {
   return request({
     url: '/login',
     headers: {
@@ -64,14 +55,29 @@ export function getCaptcha() {
   })
 }
 
-// 短信验证码
-export function getCodeSms() {
+
+// 获取邮箱验证码
+export function getEmailValidCode(data) {
   return request({
-    url: '/captchaSms',
+    url: '/getEmailValidCode',
     headers: {
       ignoreToken: true
     },
-    method: 'get',
-    timeout: 20000
+    method: 'post',
+    data: data
   })
 }
+
+
+// 获取手机验证码
+export function getPhoneValidCode(data) {
+  return request({
+    url: '/getPhoneValidCode',
+    headers: {
+      ignoreToken: true
+    },
+    method: 'post',
+    data: data
+  })
+}
+

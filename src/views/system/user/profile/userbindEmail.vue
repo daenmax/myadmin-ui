@@ -50,10 +50,10 @@ export default {
       // 表单校验
       rules: {
         email: [
-          {required: false, message: "邮箱地址不能为空", trigger: "blur"},
+          {required: false, message: "邮箱不能为空", trigger: "blur"},
           {
             type: "email",
-            message: "请输入正确的邮箱地址",
+            message: "请输入正确的邮箱",
             trigger: ["blur", "change"]
           }
         ]

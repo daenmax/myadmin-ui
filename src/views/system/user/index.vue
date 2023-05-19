@@ -211,7 +211,7 @@
             </template>
           </el-table-column>
           <el-table-column label="备注" align="center" key="remark" prop="remark" v-if="columns[11].visible" width="120"   :show-overflow-tooltip="true"/>
-          
+
           <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[12].visible" width="160">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -265,13 +265,13 @@
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          
+
           <el-col :span="12">
             <el-form-item v-if="form.id == undefined" label="用户账号" prop="username">
               <el-input v-model="form.username" placeholder="请输入用户账号" maxlength="30" />
             </el-form-item>
           </el-col>
-      
+
           <el-col :span="12">
             <el-form-item v-if="form.id == undefined" label="用户密码" prop="password">
               <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
@@ -421,7 +421,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-          
+
         <el-row>
           <el-col :span="24">
             <el-form-item label="个性签名">
@@ -443,7 +443,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -590,7 +590,7 @@ export default {
         email: [
           {
             type: "email",
-            message: "请输入正确的邮箱地址",
+            message: "请输入正确的邮箱",
             trigger: ["blur", "change"]
           }
         ],
