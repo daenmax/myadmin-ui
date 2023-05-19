@@ -9,8 +9,6 @@
           * 前端开发框架 Vue、Element UI<br/>
           * 后端开发框架 Spring Boot 3.x<br/>
           * 权限认证框架 Sa-Token、Jwt 支持多终端认证系统<br/>
-          * 关系数据库 MySQL 适配 8.X 最低 5.7<br/>
-          * 缓存数据库 Redis 适配 6.X 最低 4.X<br/>
           * 数据库框架 Mybatis-Plus 快速 CRUD 增加开发效率<br/>
           * 多数据源框架 dynamic-datasource 支持主从与多种类数据库异构<br/>
           * 序列化框架 Jackson 统一使用 jackson 高效可靠<br/>
