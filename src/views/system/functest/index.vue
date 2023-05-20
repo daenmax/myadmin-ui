@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20" style="padding-bottom: 10px">
 
-      <el-col :span="8" :xs="24">
+      <el-col :span="8" :xs="24" v-hasPermi="['system:functest:sendEmail']">
         <el-form label-width="96px" ref="sendEmailForm" :model="sendEmailForm" :rules="rulesEmail">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -32,7 +32,7 @@
         </el-form>
       </el-col>
 
-      <el-col :span="8" :xs="24">
+      <el-col :span="8" :xs="24" v-hasPermi="['system:functest:sendSms']">
         <el-form label-width="96px" ref="sendSmsForm" :model="sendSmsForm" :rules="rulesSms">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -116,7 +116,7 @@
       </el-col>
 
 
-      <el-col :span="8" :xs="24">
+      <el-col :span="8" :xs="24" v-hasPermi="['system:functest:sendDingTalk']">
         <el-form label-width="96px" ref="sendDingTalkForm" :model="sendDingTalkForm" :rules="rulesDingTalk">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
