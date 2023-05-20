@@ -18,3 +18,12 @@ export function sendSms(data) {
     data: data
   })
 }
+
+// 测试钉钉发送
+export function sendDingTalk(data) {
+  return request({
+    url: '/system/functest/sendDingTalk',
+    method: 'post',
+    data: data
+  })
+}

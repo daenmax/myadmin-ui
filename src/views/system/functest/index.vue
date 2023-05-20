@@ -116,6 +116,30 @@
       </el-col>
 
 
+      <el-col :span="8" :xs="24">
+        <el-form label-width="96px" ref="sendDingTalkForm" :model="sendDingTalkForm" :rules="rulesDingTalk">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>钉钉测试</span>
+            </div>
+            <div>
+              <el-form-item label="机器人名称" prop="botName">
+                <el-input v-model="sendDingTalkForm.botName" placeholder="在系统参数里自己填的" clearable/>
+              </el-form-item>
+              <el-form-item label="消息内容" prop="msg">
+                <el-input type="textarea" v-model="sendDingTalkForm.msg" placeholder="消息内容" clearable/>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="float: right;width: 100px" @click="sendDingTalkHandle"
+                           :loading="sendDingTalkLoading">发送
+                </el-button>
+              </el-form-item>
+
+            </div>
+          </el-card>
+        </el-form>
+      </el-col>
+
     </el-row>
 
 
@@ -124,14 +148,12 @@
 
 <script>
 
-import {sendEmail, sendSms} from "@/api/system/functest";
+import {sendEmail, sendSms, sendDingTalk} from "@/api/system/functest";
 
 export default {
   name: "Functest",
   data() {
     return {
-      kvs: [{value1: '', value2: ''}],
-      phones: [{value: ''}],
       sendEmailLoading: false,
       sendEmailForm: {
         formEmail: undefined,
@@ -151,6 +173,8 @@ export default {
         ]
       },
 
+      kvs: [{value1: '', value2: ''}],
+      phones: [{value: ''}],
       smsTypeOptions: [{
         value: 'aliyun',
         label: '阿里云'
@@ -175,19 +199,31 @@ export default {
         // kv: [
         //   {required: true, message: "kv不能为空", trigger: "change"}
         // ]
-      }
+      },
+
+      sendDingTalkLoading: false,
+      sendDingTalkForm: {
+        botName: undefined,
+        msg: undefined
+      },
+      rulesDingTalk: {
+        botName: [
+          {required: true, message: "机器人名称不能为空", trigger: "blur"}
+        ],
+        msg: [
+          {required: true, message: "消息内容不能为空", trigger: "change"}
+        ],
+        content: [
+          {required: true, message: "内容不能为空", trigger: "change"}
+        ]
+      },
     };
   },
   created() {
 
   },
   methods: {
-    addkv() {
-      this.kvs.push({value1: '', value2: ''})
-    },
-    addPhone() {
-      this.phones.push({value: ''})
-    },
+
     //发送邮件
     sendEmailHandle: function () {
       this.$refs.sendEmailForm.validate(valid => {
@@ -201,6 +237,13 @@ export default {
           });
         }
       });
+    },
+
+    addkv() {
+      this.kvs.push({value1: '', value2: ''})
+    },
+    addPhone() {
+      this.phones.push({value: ''})
     },
     //发送短信
     sendSmsHandle: function () {
@@ -223,6 +266,21 @@ export default {
             this.$modal.msgSuccess(response.msg);
           }).catch(() => {
             this.sendSmsLoading = false;
+          });
+        }
+      });
+    },
+
+    //发送钉钉
+    sendDingTalkHandle: function () {
+      this.$refs.sendDingTalkForm.validate(valid => {
+        if (valid) {
+          this.sendDingTalkLoading = true;
+          sendDingTalk(this.sendDingTalkForm).then(response => {
+            this.sendDingTalkLoading = false;
+            this.$modal.msgSuccess(response.msg);
+          }).catch(() => {
+            this.sendDingTalkLoading = false;
           });
         }
       });
