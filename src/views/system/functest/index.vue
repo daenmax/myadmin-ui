@@ -66,7 +66,7 @@
               </span>
                 <el-row :gutter="20" class="phone-input-item">
                   <el-col :span="20" v-for="(item,index) in phones" :key="index" style="padding-bottom: 8px;">
-                    <el-input v-model="item.value" placeholder="多个用,隔开" clearable/>
+                    <el-input v-model="item.value" placeholder="手机号码" clearable/>
                   </el-col>
                   <el-col :span="3">
                     <i @click="addPhone" class="el-icon-circle-plus-outline"></i>
