@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listNotice(query) {
   return request({
-    url: '/system/notice/list',
+    url: '/monitor/notice/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listNotice(query) {
 // 查询详细
 export function getNotice(noticeId) {
   return request({
-    url: '/system/notice/' + noticeId,
+    url: '/monitor/notice/' + noticeId,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getNotice(noticeId) {
 // 新增
 export function addNotice(data) {
   return request({
-    url: '/system/notice',
+    url: '/monitor/notice',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addNotice(data) {
 // 修改
 export function updateNotice(data) {
   return request({
-    url: '/system/notice',
+    url: '/monitor/notice',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateNotice(data) {
 // 删除
 export function delNotice(ids) {
   return request({
-    url: '/system/notice',
+    url: '/monitor/notice',
     method: 'delete',
     data: ids
   })

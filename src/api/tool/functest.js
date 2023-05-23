@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 测试邮件发送
 export function sendEmail(data) {
   return request({
-    url: '/system/functest/sendEmail',
+    url: '/tool/functest/sendEmail',
     method: 'post',
     data: data
   })
@@ -13,7 +13,7 @@ export function sendEmail(data) {
 // 测试短信发送
 export function sendSms(data) {
   return request({
-    url: '/system/functest/sendSms',
+    url: '/tool/functest/sendSms',
     method: 'post',
     data: data
   })
@@ -22,7 +22,7 @@ export function sendSms(data) {
 // 测试钉钉发送
 export function sendDingTalk(data) {
   return request({
-    url: '/system/functest/sendDingTalk',
+    url: '/tool/functest/sendDingTalk',
     method: 'post',
     data: data
   })

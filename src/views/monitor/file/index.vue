@@ -64,19 +64,19 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleFile"
-          v-hasPermi="['system:file:upload']" v-show="uploadFileShow">上传文件</el-button>
+          v-hasPermi="['monitor:file:upload']" v-show="uploadFileShow">上传文件</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleImage"
-          v-hasPermi="['system:file:upload']" v-show="uploadImageShow">上传图片</el-button>
+          v-hasPermi="['monitor:file:upload']" v-show="uploadImageShow">上传图片</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['system:file:remove']">删除</el-button>
+          v-hasPermi="['monitor:file:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="el-icon-s-operation" size="mini" @click="handleOssConfig"
-          v-hasPermi="['system:ossConfig:list']">配置管理</el-button>
+          v-hasPermi="['monitor:ossConfig:list']">配置管理</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -128,9 +128,9 @@
       <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-download" @click="handleDownload(scope.row)"
-            v-hasPermi="['system:file:download']">下载</el-button>
+            v-hasPermi="['monitor:file:download']">下载</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:file:remove']">删除</el-button>
+            v-hasPermi="['monitor:file:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,8 +157,8 @@
 </template>
 
 <script>
-import { listFile, delFile } from "@/api/system/file";
-import { allListOssConfig } from "@/api/system/ossConfig";
+import { listFile, delFile } from "@/api/monitor/file";
+import { allListOssConfig } from "@/api/monitor/ossConfig";
 
 export default {
   name: "File",
@@ -173,10 +173,10 @@ export default {
       // 按钮loading
       buttonLoading: false,
       // 文件上传按钮是否可见
-      // 注意，只有这个参数 和 数据权限['system:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
+      // 注意，只有这个参数 和 数据权限['monitor:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
       uploadFileShow: false,
       // 图片上传按钮是否可见
-      // 注意，只有这个参数 和 数据权限['system:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
+      // 注意，只有这个参数 和 数据权限['monitor:file:upload'] 同时成立，按钮才会可见，是 与&& 的关系
       uploadImageShow: false,
       // 遮罩层
       loading: true,
@@ -382,7 +382,7 @@ export default {
     },
     /** 配置管理 */
     handleOssConfig() {
-      this.$router.push({ path: '/system/oss-config/index' })
+      this.$router.push({ path: '/monitor/oss-config/index' })
     },
     /** 文件按钮操作 */
     handleFile() {

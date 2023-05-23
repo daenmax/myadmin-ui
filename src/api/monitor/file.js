@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询文件列表
 export function listFile(query) {
   return request({
-    url: '/system/file/list',
+    url: '/monitor/file/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listFile(query) {
 // 查询文件列表_根据指定ID列表
 export function listByIds(fileIds) {
   return request({
-    url: '/system/file/listByIds/' + fileIds,
+    url: '/monitor/file/listByIds/' + fileIds,
     method: 'get'
   })
 }
@@ -26,7 +26,7 @@ export function delFile(ids) {
     data =ids
   }
   return request({
-    url: '/system/file',
+    url: '/monitor/file',
     method: 'delete',
     data: data
   })

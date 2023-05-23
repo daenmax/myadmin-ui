@@ -32,7 +32,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { listByIds, delFile } from "@/api/system/file";
+import { listByIds, delFile } from "@/api/monitor/file";
 
 export default {
   name: "FileUpload",

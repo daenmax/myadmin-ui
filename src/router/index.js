@@ -149,16 +149,16 @@ export const dynamicRoutes = [
     ]
   },
   {
-    path: '/system/oss-config',
+    path: '/monitor/oss-config',
     component: Layout,
     hidden: true,
-    permissions: ['system:ossConfig:edit'],
+    permissions: ['monitor:ossConfig:edit'],
     children: [
       {
         path: 'index',
-        component: () => import('@/views/system/file/config'),
+        component: () => import('@/views/monitor/file/config'),
         name: 'OssConfig',
-        meta: { title: '配置管理', activeMenu: '/system/file' }
+        meta: { title: '配置管理', activeMenu: '/monitor/file' }
       }
     ]
   },

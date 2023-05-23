@@ -34,15 +34,15 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['system:ossConfig:add']">新增</el-button>
+          v-hasPermi="['monitor:ossConfig:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['system:ossConfig:edit']">修改</el-button>
+          v-hasPermi="['monitor:ossConfig:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['system:ossConfig:remove']">删除</el-button>
+          v-hasPermi="['monitor:ossConfig:remove']">删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -81,9 +81,9 @@
       <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:ossConfig:edit']">修改</el-button>
+            v-hasPermi="['monitor:ossConfig:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:ossConfig:remove']">删除</el-button>
+            v-hasPermi="['monitor:ossConfig:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -158,7 +158,7 @@ import {
   updateOssConfig,
   changeOssConfigStatus,
   changeOssConfigInUse
-} from "@/api/system/ossConfig";
+} from "@/api/monitor/ossConfig";
 
 export default {
   name: "OssConfig",
