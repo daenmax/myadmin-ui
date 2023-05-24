@@ -59,12 +59,12 @@
       <el-table-column label="接口uri" align="center" prop="apiUri" :show-overflow-tooltip="true" />
       <el-table-column label="单个用户限制策略" align="center" prop="single" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.singleFrequency }}次/{{ scope.row.singleTime }}{{ timeUnit(scope.row.singleTimeUnit) }}</span>
+          <span>{{ showTrans(scope.row.singleTime, scope.row.singleFrequency, scope.row.singleTimeUnit) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="全部用户限制策略" align="center" prop="whole" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.wholeFrequency }}次/{{ scope.row.wholeTime }}{{ timeUnit(scope.row.wholeTimeUnit) }}</span>
+          <span>{{ showTrans(scope.row.wholeTime, scope.row.wholeFrequency, scope.row.wholeTimeUnit) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="限制类型" align="center" prop="limitType">
@@ -159,8 +159,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        
-        <el-row  v-show="form.limitType == 0">
+
+        <el-row v-show="form.limitType == 0">
           <el-col :span="8">
             <el-form-item label="单个用户在" prop="singleTime">
               <el-input v-model="form.singleTime" placeholder="时间内" />
@@ -178,7 +178,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row  v-show="form.limitType == 0">
+        <el-row v-show="form.limitType == 0">
           <el-col :span="8">
             <el-form-item label="全部用户在" prop="wholeTime">
               <el-input v-model="form.wholeTime" placeholder="时间内" />
@@ -286,6 +286,13 @@ export default {
     // 时间单位翻译
     timeUnit(rowUnit, column) {
       return this.selectDictLabel(this.dict.type.sys_time_unit, rowUnit);
+    },
+    // 策略显示转换
+    showTrans(time, num, unit) {
+      if (time == undefined && num == undefined) {
+        return "无";
+      }
+      return num + "次/" + time + this.timeUnit(unit);
     },
     // 取消按钮
     cancel() {
