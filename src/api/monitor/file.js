@@ -26,8 +26,8 @@ export function delFile(ids) {
     data =ids
   }
   return request({
-    url: '/monitor/file',
-    method: 'delete',
+    url: '/monitor/file/remove',
+    method: 'post',
     data: data
   })
 }

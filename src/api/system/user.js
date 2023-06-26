@@ -21,7 +21,7 @@ export function getUser(id) {
 // 新增用户
 export function addUser(data) {
   return request({
-    url: '/system/user',
+    url: '/system/user/add',
     method: 'post',
     data: data
   })
@@ -30,8 +30,8 @@ export function addUser(data) {
 // 修改用户
 export function updateUser(data) {
   return request({
-    url: '/system/user',
-    method: 'put',
+    url: '/system/user/edit',
+    method: 'post',
     data: data
   })
 }
@@ -39,8 +39,8 @@ export function updateUser(data) {
 // 删除用户
 export function delUser(ids) {
   return request({
-    url: '/system/user',
-    method: 'delete',
+    url: '/system/user/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -53,7 +53,7 @@ export function resetUserPwd(id, password) {
   }
   return request({
     url: '/system/user/resetPwd',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -66,7 +66,7 @@ export function changeUserStatus(id, status) {
   }
   return request({
     url: '/system/user/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -82,14 +82,14 @@ export function getUserProfile() {
 // 修改用户个人信息
 export function updateUserProfile(data) {
   return request({
-    url: '/system/user/profile',
+    url: '/system/user/editProfile',
     headers: {
       //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
       //false是不忽略限制，不允许重复
       //true是忽略限制，允许重复
       ignoreRepeatSubmit: false
     },
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -102,7 +102,7 @@ export function updateUserPwd(oldPassword, newPassword) {
   }
   return request({
     url: '/system/user/updatePwd',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -128,7 +128,7 @@ export function getAuthRole(id) {
 export function updateAuthRole(data) {
   return request({
     url: '/system/user/authRole',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

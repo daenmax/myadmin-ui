@@ -12,8 +12,8 @@ export function list(query) {
 // 删除操作日志
 export function delLogOper(ids) {
   return request({
-    url: '/monitor/logOper',
-    method: 'delete',
+    url: '/monitor/logOper/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -22,6 +22,6 @@ export function delLogOper(ids) {
 export function cleanLogOper() {
   return request({
     url: '/monitor/logOper/clean',
-    method: 'delete'
+    method: 'post'
   })
 }

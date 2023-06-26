@@ -20,7 +20,7 @@ export function getJob(jobId) {
 // 新增定时任务调度
 export function addJob(data) {
   return request({
-    url: '/monitor/job',
+    url: '/monitor/job/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addJob(data) {
 // 修改定时任务调度
 export function updateJob(data) {
   return request({
-    url: '/monitor/job',
-    method: 'put',
+    url: '/monitor/job/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updateJob(data) {
 // 删除定时任务调度
 export function delJob(ids) {
   return request({
-    url: '/monitor/job',
-    method: 'delete',
+    url: '/monitor/job/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -52,7 +52,7 @@ export function changeJobStatus(id, status) {
   }
   return request({
     url: '/monitor/job/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

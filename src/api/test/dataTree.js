@@ -20,7 +20,7 @@ export function getDataTree(id) {
 // 新增测试树表
 export function addDataTree(data) {
   return request({
-    url: '/test/dataTree',
+    url: '/test/dataTree/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addDataTree(data) {
 // 修改测试树表
 export function updateDataTree(data) {
   return request({
-    url: '/test/dataTree',
-    method: 'put',
+    url: '/test/dataTree/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updateDataTree(data) {
 // 删除测试树表
 export function delDataTree(id) {
   return request({
-    url: '/test/dataTree/' + id,
-    method: 'delete'
+    url: '/test/dataTree/remove/' + id,
+    method: 'post'
   })
 }
 
@@ -51,7 +51,7 @@ export function changeDataTreeStatus(id, status) {
   }
   return request({
     url: '/test/dataTree/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

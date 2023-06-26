@@ -12,8 +12,8 @@ export function list(query) {
 // 删除登录日志
 export function delLogLogin(ids) {
   return request({
-    url: '/monitor/logLogin',
-    method: 'delete',
+    url: '/monitor/logLogin/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -22,6 +22,6 @@ export function delLogLogin(ids) {
 export function cleanLogLogin() {
   return request({
     url: '/monitor/logLogin/clean',
-    method: 'delete'
+    method: 'post'
   })
 }

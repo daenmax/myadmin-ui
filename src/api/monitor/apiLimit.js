@@ -20,7 +20,7 @@ export function getApiLimit(id) {
 // 新增接口限制
 export function addApiLimit(data) {
   return request({
-    url: '/monitor/apiLimit',
+    url: '/monitor/apiLimit/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addApiLimit(data) {
 // 修改接口限制
 export function updateApiLimit(data) {
   return request({
-    url: '/monitor/apiLimit',
-    method: 'put',
+    url: '/monitor/apiLimit/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updateApiLimit(data) {
 // 删除接口限制
 export function delApiLimit(ids) {
   return request({
-    url: '/monitor/apiLimit',
-    method: 'delete',
+    url: '/monitor/apiLimit/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -52,7 +52,7 @@ export function changeApiLimitStatus(id, status) {
   }
   return request({
     url: '/monitor/apiLimit/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

@@ -37,8 +37,8 @@ export function addData(data) {
 // 修改字典数据
 export function updateData(data) {
   return request({
-    url: '/system/dict/detail',
-    method: 'put',
+    url: '/system/dict/detail/edit',
+    method: 'post',
     data: data
   })
 }
@@ -46,8 +46,8 @@ export function updateData(data) {
 // 删除字典数据
 export function delData(dictCodes) {
   return request({
-    url: '/system/dict/detail',
-    method: 'delete',
+    url: '/system/dict/detail/remove',
+    method: 'post',
     data: dictCodes
   })
 }

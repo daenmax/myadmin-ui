@@ -20,7 +20,7 @@ export function getNotice(noticeId) {
 // 新增
 export function addNotice(data) {
   return request({
-    url: '/monitor/notice',
+    url: '/monitor/notice/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addNotice(data) {
 // 修改
 export function updateNotice(data) {
   return request({
-    url: '/monitor/notice',
-    method: 'put',
+    url: '/monitor/notice/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updateNotice(data) {
 // 删除
 export function delNotice(ids) {
   return request({
-    url: '/monitor/notice',
-    method: 'delete',
+    url: '/monitor/notice/remove',
+    method: 'post',
     data: ids
   })
 }

@@ -28,7 +28,7 @@ export function getConfigKey(key) {
 // 新增参数配置
 export function addConfig(data) {
   return request({
-    url: '/system/config',
+    url: '/system/config/add',
     method: 'post',
     data: data
   })
@@ -37,8 +37,8 @@ export function addConfig(data) {
 // 修改参数配置
 export function updateConfig(data) {
   return request({
-    url: '/system/config',
-    method: 'put',
+    url: '/system/config/edit',
+    method: 'post',
     data: data
   })
 }
@@ -46,8 +46,8 @@ export function updateConfig(data) {
 // 删除参数配置
 export function delConfig(ids) {
   return request({
-    url: '/system/config',
-    method: 'delete',
+    url: '/system/config/remove',
+    method: 'post',
     data: ids
   })
 }

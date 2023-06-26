@@ -20,7 +20,7 @@ export function getType(dictId) {
 // 新增字典类型
 export function addType(data) {
   return request({
-    url: '/system/dict',
+    url: '/system/dict/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addType(data) {
 // 修改字典类型
 export function updateType(data) {
   return request({
-    url: '/system/dict',
-    method: 'put',
+    url: '/system/dict/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updateType(data) {
 // 删除字典类型
 export function delType(dictIds) {
   return request({
-    url: '/system/dict',
-    method: 'delete',
+    url: '/system/dict/remove',
+    method: 'post',
     data: dictIds
   })
 }

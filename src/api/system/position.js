@@ -20,7 +20,7 @@ export function getPosition(id) {
 // 新增岗位
 export function addPosition(data) {
   return request({
-    url: '/system/position',
+    url: '/system/position/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addPosition(data) {
 // 修改岗位
 export function updatePosition(data) {
   return request({
-    url: '/system/position',
-    method: 'put',
+    url: '/system/position/edit',
+    method: 'post',
     data: data
   })
 }
@@ -38,8 +38,8 @@ export function updatePosition(data) {
 // 删除岗位
 export function delPosition(ids) {
   return request({
-    url: '/system/position',
-    method: 'delete',
+    url: '/system/position/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -66,7 +66,7 @@ export function unallocatedUserList(query) {
 export function authUserCancel(data) {
   return request({
     url: '/system/position/authUser/cancel',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -76,7 +76,7 @@ export function authUserCancel(data) {
 export function authUserSave(data) {
   return request({
     url: '/system/position/authUser/save',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

@@ -29,7 +29,7 @@ export function getOssConfig(id) {
 // 新增对象存储配置
 export function addOssConfig(data) {
   return request({
-    url: '/monitor/ossConfig',
+    url: '/monitor/ossConfig/add',
     method: 'post',
     data: data
   })
@@ -38,8 +38,8 @@ export function addOssConfig(data) {
 // 修改对象存储配置
 export function updateOssConfig(data) {
   return request({
-    url: '/monitor/ossConfig',
-    method: 'put',
+    url: '/monitor/ossConfig/edit',
+    method: 'post',
     data: data
   })
 }
@@ -47,8 +47,8 @@ export function updateOssConfig(data) {
 // 删除对象存储配置
 export function delOssConfig(ids) {
   return request({
-    url: '/monitor/ossConfig',
-    method: 'delete',
+    url: '/monitor/ossConfig/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -61,7 +61,7 @@ export function changeOssConfigStatus(id, status) {
   }
   return request({
     url: '/monitor/ossConfig/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
@@ -74,7 +74,7 @@ export function changeOssConfigInUse(id, status) {
   }
   return request({
     url: '/monitor/ossConfig/changeInUse',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }

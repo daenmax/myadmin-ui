@@ -38,7 +38,7 @@ export function getData(id) {
 // 新增测试数据
 export function addData(data) {
   return request({
-    url: '/test/data',
+    url: '/test/data/add',
     method: 'post',
     data: data
   })
@@ -47,8 +47,8 @@ export function addData(data) {
 // 修改测试数据
 export function updateData(data) {
   return request({
-    url: '/test/data',
-    method: 'put',
+    url: '/test/data/edit',
+    method: 'post',
     data: data
   })
 }
@@ -56,8 +56,8 @@ export function updateData(data) {
 // 删除测试数据
 export function delData(ids) {
   return request({
-    url: '/test/data',
-    method: 'delete',
+    url: '/test/data/remove',
+    method: 'post',
     data: ids
   })
 }
@@ -70,7 +70,7 @@ export function changeDataStatus(id, status) {
   }
   return request({
     url: '/test/data/changeStatus',
-    method: 'put',
+    method: 'post',
     data: data
   })
 }
