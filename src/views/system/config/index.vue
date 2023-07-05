@@ -5,8 +5,8 @@
         <el-input v-model="queryParams.name" placeholder="请输入参数名称" clearable style="width: 240px"
           @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="参数键名" prop="key">
-        <el-input v-model="queryParams.key" placeholder="请输入参数键名" clearable style="width: 240px"
+      <el-form-item label="参数键名" prop="keyVa">
+        <el-input v-model="queryParams.keyVa" placeholder="请输入参数键名" clearable style="width: 240px"
           @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="参数键值" prop="value">
@@ -63,7 +63,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="参数主键" align="center" prop="id" /> -->
       <el-table-column label="参数名称" align="center" prop="name" :show-overflow-tooltip="true" />
-      <el-table-column label="参数键名" align="center" prop="key" :show-overflow-tooltip="true" />
+      <el-table-column label="参数键名" align="center" prop="keyVa" :show-overflow-tooltip="true" />
       <el-table-column label="参数键值" align="center" prop="value" :show-overflow-tooltip="true" />
       <el-table-column label="系统内置" align="center" prop="type">
         <template slot-scope="scope">
@@ -100,8 +100,8 @@
         <el-form-item label="参数名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入参数名称" />
         </el-form-item>
-        <el-form-item label="参数键名" prop="key">
-          <el-input v-model="form.key" placeholder="请输入参数键名" />
+        <el-form-item label="参数键名" prop="keyVa">
+          <el-input v-model="form.keyVa" placeholder="请输入参数键名" />
         </el-form-item>
         <el-form-item label="参数键值" prop="value">
           <el-input v-model="form.value" type="textarea" :rows="4" placeholder="请输入参数键值" />
@@ -164,7 +164,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         name: undefined,
-        key: undefined,
+        keyVa: undefined,
         value: undefined,
         type: undefined,
         status: undefined,
@@ -178,7 +178,7 @@ export default {
         name: [
           { required: true, message: "参数名称不能为空", trigger: "blur" }
         ],
-        key: [
+        keyVa: [
           { required: true, message: "参数键名不能为空", trigger: "blur" }
         ],
         value: [
@@ -214,7 +214,7 @@ export default {
       this.form = {
         id: undefined,
         name: undefined,
-        key: undefined,
+        keyVa: undefined,
         value: undefined,
         type: "0",
         status: "0",
