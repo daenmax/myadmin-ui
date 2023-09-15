@@ -3,15 +3,13 @@
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>MyAdmin后台管理框架</h2>
-        <p>
-          MyAdmin-UI 是基于 RuoYi-Vue & RuoYi-Vue-Plus 前端部分 的后台管理系统前端框架
           <br/>
           * 前端开发框架 Vue、Element UI<br/>
-          * 后端开发框架 Spring Boot 3.x<br/>
+          * 后端开发框架 Spring Boot 3.x、JDK17<br/>
           * 权限认证框架 Sa-Token、Jwt 支持多终端认证系统<br/>
           * 数据库框架 Mybatis-Plus 快速 CRUD 增加开发效率<br/>
           * 多数据源框架 dynamic-datasource 支持主从与多种类数据库异构<br/>
-          * 序列化框架 Jackson 统一使用 jackson 高效可靠<br/>
+          * 序列化框架 Jackson2、FastJson2 随意切换 高效可靠<br/>
           * S3云存储 支持 Minio、七牛云、阿里云、腾讯云等<br/>
           * 校验框架 Validation 增强接口安全性 严谨性<br/>
           * Excel框架 Alibaba EasyExcel 性能优异 扩展性强<br/>
@@ -63,7 +61,7 @@
           <el-col :span="6">
             <h4>后端技术</h4>
             <ul>
-              <li>SpringBoot</li>
+              <li>SpringBoot3</li>
               <li>Sa-Token</li>
               <li>JWT</li>
               <li>MyBatisPlus</li>
