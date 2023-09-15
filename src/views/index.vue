@@ -3,6 +3,7 @@
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>MyAdmin后台管理框架</h2>
+        <p>
           <br/>
           * 前端开发框架 Vue、Element UI<br/>
           * 后端开发框架 Spring Boot 3.x、JDK17<br/>
