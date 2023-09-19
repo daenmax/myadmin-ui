@@ -40,14 +40,7 @@
             </div>
             <div>
               <el-form-item label="短信平台" prop="type">
-                <el-select v-model="sendSmsForm.type" placeholder="留空则使用配置" clearable>
-                  <el-option
-                    v-for="item in smsTypeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+                <el-input v-model="sendSmsForm.type" placeholder="例如：aliyun、tencent" clearable/>
               </el-form-item>
               <el-form-item label="模板ID" prop="templateId">
                 <el-input v-model="sendSmsForm.templateId" placeholder="模板ID" clearable/>
@@ -58,6 +51,7 @@
                 <el-tooltip placement="top">
                   <div slot="content">
                     手机号，多个用英文逗号,隔开
+                    <br/>以下两个是框架已经内置实现了的厂商平台说明
                     <br/>使用腾讯云时，每个手机号必须加前缀，例如+86，单次最多支持200个手机号
                     <br/>使用阿里云时，前缀加不加都可以，默认是+86，单次最多支持1000个手机号
                   </div>
@@ -80,6 +74,7 @@
                 <el-tooltip placement="top">
                   <div slot="content">
                     什么是kv，就是参数和值，多个参数就点+号增加一行
+                    <br/>以下两个是框架已经内置实现了的厂商平台说明
                     <br/>腾讯云时，例如模板为：验证码为：{1}，有效期为{2}分钟，如非本人操作，请忽略本短信。那么key=1，value=6666，key=2，value=5
                     <br/>阿里云时，例如模板为：您的验证码为：${code}，请勿泄露于他人！那么key=code，value=1234
                   </div>
@@ -175,13 +170,6 @@ export default {
 
       kvs: [{value1: '', value2: ''}],
       phones: [{value: ''}],
-      smsTypeOptions: [{
-        value: 'aliyun',
-        label: '阿里云'
-      }, {
-        value: 'tencent',
-        label: '腾讯云'
-      }],
       sendSmsLoading: false,
       sendSmsForm: {
         type: undefined,
