@@ -27,3 +27,21 @@ export function sendDingTalk(data) {
     data: data
   })
 }
+
+// 测试飞书发送
+export function sendFeishu(data) {
+  return request({
+    url: '/tool/functest/sendFeishu',
+    method: 'post',
+    data: data
+  })
+}
+
+// 测试企业微信发送
+export function sendWecom(data) {
+  return request({
+    url: '/tool/functest/sendWecom',
+    method: 'post',
+    data: data
+  })
+}

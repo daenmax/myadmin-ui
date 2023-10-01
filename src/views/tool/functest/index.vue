@@ -129,7 +129,6 @@
                            :loading="sendDingTalkLoading">发送
                 </el-button>
               </el-form-item>
-
             </div>
           </el-card>
         </el-form>
@@ -137,13 +136,63 @@
 
     </el-row>
 
+    <el-row :gutter="20" style="padding-bottom: 10px">
+
+
+      <el-col :span="8" :xs="24" v-hasPermi="['tool:functest:sendFeishu']">
+        <el-form label-width="96px" ref="sendFeishuForm" :model="sendFeishuForm" :rules="rulesFeishu">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>飞书测试</span>
+            </div>
+            <div>
+              <el-form-item label="机器人名称" prop="botName">
+                <el-input v-model="sendFeishuForm.botName" placeholder="在系统参数里自己填的" clearable/>
+              </el-form-item>
+              <el-form-item label="消息内容" prop="msg">
+                <el-input type="textarea" v-model="sendFeishuForm.msg" placeholder="消息内容" clearable/>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="float: right;width: 100px" @click="sendFeishuHandle"
+                           :loading="sendFeishuLoading">发送
+                </el-button>
+              </el-form-item>
+            </div>
+          </el-card>
+        </el-form>
+      </el-col>
+
+      <el-col :span="8" :xs="24" v-hasPermi="['tool:functest:sendWecom']">
+        <el-form label-width="96px" ref="sendWecomForm" :model="sendWecomForm" :rules="rulesWecom">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>企微测试</span>
+            </div>
+            <div>
+              <el-form-item label="机器人名称" prop="botName">
+                <el-input v-model="sendWecomForm.botName" placeholder="在系统参数里自己填的" clearable/>
+              </el-form-item>
+              <el-form-item label="消息内容" prop="msg">
+                <el-input type="textarea" v-model="sendWecomForm.msg" placeholder="消息内容" clearable/>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="float: right;width: 100px" @click="sendWecomHandle"
+                           :loading="sendWecomLoading">发送
+                </el-button>
+              </el-form-item>
+            </div>
+          </el-card>
+        </el-form>
+      </el-col>
+
+    </el-row>
 
   </div>
 </template>
 
 <script>
 
-import {sendEmail, sendSms, sendDingTalk} from "@/api/tool/functest";
+import {sendEmail, sendSms, sendDingTalk, sendFeishu, sendWecom} from "@/api/tool/functest";
 
 export default {
   name: "Functest",
@@ -200,11 +249,38 @@ export default {
         ],
         msg: [
           {required: true, message: "消息内容不能为空", trigger: "change"}
-        ],
-        content: [
-          {required: true, message: "内容不能为空", trigger: "change"}
         ]
       },
+
+      sendFeishuLoading: false,
+      sendFeishuForm: {
+        botName: undefined,
+        msg: undefined
+      },
+      rulesFeishu: {
+        botName: [
+          {required: true, message: "机器人名称不能为空", trigger: "blur"}
+        ],
+        msg: [
+          {required: true, message: "消息内容不能为空", trigger: "change"}
+        ]
+      },
+
+      sendWecomLoading: false,
+      sendWecomForm: {
+        botName: undefined,
+        msg: undefined
+      },
+      rulesWecom: {
+        botName: [
+          {required: true, message: "机器人名称不能为空", trigger: "blur"}
+        ],
+        msg: [
+          {required: true, message: "消息内容不能为空", trigger: "change"}
+        ]
+      },
+
+
     };
   },
   created() {
@@ -273,6 +349,38 @@ export default {
         }
       });
     },
+
+    //发送飞书
+    sendFeishuHandle: function () {
+      this.$refs.sendFeishuForm.validate(valid => {
+        if (valid) {
+          this.sendFeishuLoading = true;
+          sendFeishu(this.sendFeishuForm).then(response => {
+            this.sendFeishuLoading = false;
+            this.$modal.msgSuccess(response.msg);
+          }).catch(() => {
+            this.sendFeishuLoading = false;
+          });
+        }
+      });
+    },
+
+    //发送企业微信
+    sendWecomHandle: function () {
+      this.$refs.sendWecomForm.validate(valid => {
+        if (valid) {
+          this.sendWecomLoading = true;
+          sendWecom(this.sendWecomForm).then(response => {
+            this.sendWecomLoading = false;
+            this.$modal.msgSuccess(response.msg);
+          }).catch(() => {
+            this.sendWecomLoading = false;
+          });
+        }
+      });
+    },
+
+
   }
 };
 </script>
