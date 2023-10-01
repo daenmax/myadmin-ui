@@ -218,7 +218,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item prop="notifyObjs" v-show="form.notifyChannel==1 || form.notifyChannel==2 || form.notifyChannel==3">
+            <el-form-item prop="notifyObjs" v-show="form.notifyChannel==1 || form.notifyChannel==2 || form.notifyChannel==3 || form.notifyChannel==4 || form.notifyChannel==5">
               <span slot="label">
                 通知对象
                 <el-tooltip placement="top">
@@ -226,7 +226,7 @@
                     多个用,隔开<br /><br />
                     邮件渠道时，写邮箱<br />
                     短信渠道时，写手机号<br />
-                    钉钉渠道时，写botName
+                    钉钉、飞书、企业微信渠道时，写botName
                   </div>
                   <i class="el-icon-question"></i>
                 </el-tooltip>
