@@ -135,7 +135,8 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="submitForm" v-if="!holdon">确 定</el-button>
+        <el-button type="primary" :loading="true" v-else>请稍等...</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -156,6 +157,8 @@ export default {
       userList: [],
       // 遮罩层
       loading: true,
+      // 修改中
+      holdon: false,
       // 遮罩层
       userLoading: false,
       // 显示搜索条件
@@ -315,17 +318,24 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.holdon = true;
           if (this.form.id != undefined) {
             updateDept(this.form).then(response => {
+              this.holdon = false;
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
+            }).catch(res=>{
+              this.holdon = false;
             });
           } else {
             addDept(this.form).then(response => {
+              this.holdon = false;
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+            }).catch(res=>{
+              this.holdon = false;
             });
           }
         }
