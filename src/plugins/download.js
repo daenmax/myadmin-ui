@@ -10,7 +10,7 @@ let downloadLoadingInstance;
 
 export default {
   file(sysFileId ) {
-    var url = baseURL + '/system/file/download/' + sysFileId
+    var url = baseURL + '/monitor/file/download/' + sysFileId
     downloadLoadingInstance = Loading.service({ text: "正在下载，请稍等……", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)", })
     axios({
       method: 'get',
