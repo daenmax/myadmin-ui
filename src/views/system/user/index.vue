@@ -182,7 +182,7 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="UID" align="center" key="id" prop="id" v-if="columns[0].visible" />
+          <el-table-column label="UID" align="center" key="id" prop="id" v-if="columns[0].visible" :show-overflow-tooltip="true" />
           <el-table-column label="账号" align="center" key="username" prop="username" v-if="columns[1].visible" :show-overflow-tooltip="true" />
           <el-table-column label="状态" align="center" key="status" v-if="columns[2].visible">
             <template slot-scope="scope">
@@ -197,8 +197,8 @@
           <el-table-column label="昵称" align="center" key="nickName" prop="nickName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
           <el-table-column label="真实姓名" align="center" key="realName" prop="realName" v-if="columns[4].visible" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[5].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="手机" align="center" key="phone" prop="phone" v-if="columns[6].visible" width="120" />
-          <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" />
+          <el-table-column label="手机" align="center" key="phone" prop="phone" v-if="columns[6].visible" width="120" :show-overflow-tooltip="true" />
+          <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" :show-overflow-tooltip="true" />
           <el-table-column label="类型" align="center" prop="userType"  v-if="columns[8].visible">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.sys_user_type" :value="scope.row.userType"/>
@@ -242,9 +242,9 @@
                 <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="handleResetPwd" icon="el-icon-key"
-                    v-hasPermi="['system:user:resetPwd']">重置密码</el-dropdown-item>
+                                    v-hasPermi="['system:user:resetPwd']">重置密码</el-dropdown-item>
                   <el-dropdown-item command="handleAuthRole" icon="el-icon-circle-check"
-                    v-hasPermi="['system:user:edit']">分配角色</el-dropdown-item>
+                                    v-hasPermi="['system:user:edit']">分配角色</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -277,7 +277,7 @@
               <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password/>
             </el-form-item>
           </el-col>
-          </el-row>
+        </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -290,7 +290,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-          <el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="性别" prop="sex">
               <el-select v-model="form.sex" placeholder="请选择性别">
@@ -314,8 +314,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          </el-row>
-          <el-row>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="年龄" prop="age">
               <el-input v-model="form.age" placeholder="请输入年龄" maxlength="30" />
@@ -327,7 +327,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-          <el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="手机" prop="phone">
               <el-input v-model="form.phone" placeholder="请输入手机号码" maxlength="11" />
@@ -339,7 +339,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-          <el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="openId" prop="openId">
               <el-input v-model="form.openId" placeholder="请输入微信open_id" maxlength="11" />
@@ -351,7 +351,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-          <el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="解锁时间" prop="banToTime">
               <el-date-picker clearable size="small"
@@ -758,10 +758,10 @@ export default {
         inputPattern: /^.{6,16}$/,
         inputErrorMessage: "用户密码长度必须介于 6 和 16 之间"
       }).then(({ value }) => {
-          resetUserPwd(row.id, value).then(response => {
-            this.$modal.msgSuccess("修改成功，新密码是：" + value);
-          });
-        }).catch(() => {});
+        resetUserPwd(row.id, value).then(response => {
+          this.$modal.msgSuccess("修改成功，新密码是：" + value);
+        });
+      }).catch(() => {});
     },
     /** 分配角色操作 */
     handleAuthRole: function(row) {
