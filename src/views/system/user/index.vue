@@ -797,7 +797,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
+      const ids = row.id ? [row.id] : this.ids;
       const usernames = row.username || this.usernames;
       this.$modal.confirm('是否确认删除用户账号为"' + usernames + '"的数据项？').then(function() {
         return delUser(ids);

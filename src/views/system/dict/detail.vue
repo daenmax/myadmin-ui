@@ -403,7 +403,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
+      const ids = row.id ? [row.id] : this.ids;
       const labels = row.label || this.labels;
       this.$modal.confirm('是否确认删除字典标签为"' + labels + '"的数据项？').then(function() {
         return delData(ids);
