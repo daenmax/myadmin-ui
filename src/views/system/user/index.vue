@@ -196,7 +196,7 @@
           </el-table-column>
           <el-table-column label="昵称" align="center" key="nickName" prop="nickName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
           <el-table-column label="真实姓名" align="center" key="realName" prop="realName" v-if="columns[4].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[5].visible" :show-overflow-tooltip="true" />
+<!--          <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[5].visible" :show-overflow-tooltip="true" />-->
           <el-table-column label="手机" align="center" key="phone" prop="phone" v-if="columns[6].visible" width="120" :show-overflow-tooltip="true" />
           <el-table-column label="邮箱" align="center" key="email" prop="email" v-if="columns[7].visible" width="120" :show-overflow-tooltip="true" />
           <el-table-column label="类型" align="center" prop="userType"  v-if="columns[8].visible">
@@ -403,8 +403,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择所属部门" />
+            <el-form-item label="部门" prop="deptIds">
+              <treeselect v-model="form.deptIds" :multiple="true" :options="deptOptions" :show-count="true" placeholder="请选择所属部门" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -554,7 +554,7 @@ export default {
         username: undefined,
         phone: undefined,
         status: undefined,
-        deptId: undefined,
+        deptIds: undefined,
         startTime: undefined,
         endTime: undefined
       },
@@ -610,7 +610,7 @@ export default {
         userType: [
           { required: true, message: "用户类型不能为空", trigger: "blur" }
         ],
-        deptId: [
+        deptIds: [
           { required: true, message: "部门不能为空", trigger: "blur" }
         ]
       }
@@ -676,7 +676,7 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        deptId: undefined,
+        deptIds: undefined,
         username: undefined,
         nickName: undefined,
         password: undefined,
@@ -742,8 +742,10 @@ export default {
         this.form.money = regFenToYuan(this.form.money);
         this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
+        this.deptIds = response.data.deptIds;
         this.$set(this.form, "positionIds", response.data.positionIds);
         this.$set(this.form, "roleIds", response.data.roleIds);
+        this.$set(this.form, "deptIds", response.data.deptIds);
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";

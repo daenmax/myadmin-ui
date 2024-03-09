@@ -147,7 +147,6 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="创建人部门" align="center" prop="createDept" />
       <el-table-column label="创建人" align="center" prop="createName" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -378,7 +377,6 @@ export default {
         type: "0",
         status: "0",
         remark: undefined,
-        createDept: undefined,
         createTime: undefined,
         createName: undefined,
         updateTime: undefined,
