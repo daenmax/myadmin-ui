@@ -9,7 +9,7 @@ export default {
   name: 'RuoYiDoc',
   data() {
     return {
-      url: 'https://myadmin.daenx.cn/'
+      url: 'https://daenmax.github.io/myadmin/'
     }
   },
   methods: {

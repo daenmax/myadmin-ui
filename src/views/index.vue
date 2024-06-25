@@ -49,7 +49,7 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://myadmin.daenx.cn/pages/07eb0b/')"
+            @click="goTarget('https://daenmax.github.io/myadmin/pages/07eb0b/')"
           >更新日志</el-button
           >
         </p>
