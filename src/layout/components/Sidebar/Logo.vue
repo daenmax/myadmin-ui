@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: 'MyAdmin',
+      title: process.env.VUE_APP_TITLE_LOGO,
       logo: logoImg
     }
   }
