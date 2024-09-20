@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询文件列表
-export function listFile(query) {
+export function pageFile(query) {
   return request({
-    url: '/monitor/file/list',
+    url: '/monitor/file/page',
     method: 'get',
     params: query
   })

@@ -76,7 +76,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="el-icon-s-operation" size="mini" @click="handleOssConfig"
-          v-hasPermi="['monitor:ossConfig:list']">配置管理</el-button>
+          v-hasPermi="['monitor:ossConfig:page']">配置管理</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import { listFile, delFile } from "@/api/monitor/file";
+import { pageFile, delFile } from "@/api/monitor/file";
 import { allListOssConfig } from "@/api/monitor/ossConfig";
 
 export default {
@@ -289,7 +289,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      listFile(this.queryParams).then(response => {
+      pageFile(this.queryParams).then(response => {
         this.fileList = response.data.records
         this.total = response.data.total;
         this.loading = false;

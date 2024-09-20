@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { allocatedUserList, authUserCancel } from "@/api/system/role";
+import { allocatedUserPage, authUserCancel } from "@/api/system/role";
 import selectUser from "./selectUser";
 
 export default {
@@ -147,7 +147,7 @@ export default {
     /** 查询授权用户列表 */
     getList() {
       this.loading = true;
-      allocatedUserList(this.queryParams).then(response => {
+      allocatedUserPage(this.queryParams).then(response => {
           this.userList = response.data.records
           this.total = response.data.total;
           this.loading = false;

@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import { list, delLogLogin, cleanLogLogin } from "@/api/monitor/logLogin";
+import { pageLogLogin, delLogLogin, cleanLogLogin } from "@/api/monitor/logLogin";
 
 export default {
   name: "LogLogin",
@@ -208,7 +208,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      list(this.queryParams).then(response => {
+      pageLogLogin(this.queryParams).then(response => {
           this.list = response.data.records
           this.total = response.data.total;
           this.loading = false;

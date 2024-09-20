@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询参数列表
-export function listConfig(query) {
+export function pageConfig(query) {
   return request({
-    url: '/system/config/list',
+    url: '/system/config/page',
     method: 'get',
     params: query
   })

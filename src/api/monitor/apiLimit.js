@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询接口限制列表
-export function listApiLimit(query) {
+export function pageApiLimit(query) {
   return request({
-    url: '/monitor/apiLimit/list',
+    url: '/monitor/apiLimit/page',
     method: 'get',
     params: query
   })

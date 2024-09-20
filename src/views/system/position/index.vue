@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { listPosition, getPosition, delPosition, addPosition, updatePosition } from "@/api/system/position";
+import { pagePosition, getPosition, delPosition, addPosition, updatePosition } from "@/api/system/position";
 
 export default {
   name: "Position",
@@ -178,7 +178,7 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      listPosition(this.queryParams).then(response => {
+      pagePosition(this.queryParams).then(response => {
         this.positionList = response.data.records
         this.total = response.data.total;
         this.loading = false;

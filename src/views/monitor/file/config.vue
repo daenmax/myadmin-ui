@@ -151,7 +151,7 @@
 <script>
 
 import {
-  listOssConfig,
+  pageOssConfig,
   getOssConfig,
   delOssConfig,
   addOssConfig,
@@ -259,7 +259,7 @@ export default {
     /** 查询对象存储配置列表 */
     getList() {
       this.loading = true;
-      listOssConfig(this.queryParams).then((response) => {
+      pageOssConfig(this.queryParams).then((response) => {
         this.ossConfigList = response.data.records
         this.total = response.data.total;
         this.loading = false;

@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询对象存储配置列表
-export function listOssConfig(query) {
+export function pageOssConfig(query) {
   return request({
-    url: '/monitor/ossConfig/list',
+    url: '/monitor/ossConfig/page',
     method: 'get',
     params: query
   })

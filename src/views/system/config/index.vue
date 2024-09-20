@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { listConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from "@/api/system/config";
+import { pageConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from "@/api/system/config";
 
 export default {
   name: "Config",
@@ -197,7 +197,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      listConfig(this.queryParams).then(response => {
+      pageConfig(this.queryParams).then(response => {
         this.configList = response.data.records
         this.total = response.data.total;
         this.loading = false;

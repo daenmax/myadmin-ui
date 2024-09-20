@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import { listApiLimit, getApiLimit, delApiLimit, addApiLimit, updateApiLimit, changeApiLimitStatus, refreshCache } from "@/api/monitor/apiLimit";
+import { pageApiLimit, getApiLimit, delApiLimit, addApiLimit, updateApiLimit, changeApiLimitStatus, refreshCache } from "@/api/monitor/apiLimit";
 
 export default {
   name: "ApiLimit",
@@ -277,7 +277,7 @@ export default {
     /** 查询定时任务列表 */
     getList() {
       this.loading = true;
-      listApiLimit(this.queryParams).then(response => {
+      pageApiLimit(this.queryParams).then(response => {
         this.apiLimitList = response.data.records
         this.total = response.data.total;
         this.loading = false;

@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询操作日志列表
-export function list(query) {
+export function pageLogOper(query) {
   return request({
-    url: '/monitor/logOper/list',
+    url: '/monitor/logOper/page',
     method: 'get',
     params: query
   })

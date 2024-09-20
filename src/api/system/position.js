@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询岗位列表
-export function listPosition(query) {
+export function pagePosition(query) {
   return request({
-    url: '/system/position/list',
+    url: '/system/position/page',
     method: 'get',
     params: query
   })
@@ -45,18 +45,18 @@ export function delPosition(ids) {
 }
 
 // 查询岗位已授权用户列表
-export function allocatedUserList(query) {
+export function allocatedUserPage(query) {
   return request({
-    url: '/system/position/authUser/allocatedList',
+    url: '/system/position/authUser/allocatedPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询岗位未授权用户列表
-export function unallocatedUserList(query) {
+export function unallocatedUserPage(query) {
   return request({
-    url: '/system/position/authUser/unallocatedList',
+    url: '/system/position/authUser/unallocatedPage',
     method: 'get',
     params: query
   })

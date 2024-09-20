@@ -102,7 +102,7 @@
               <el-dropdown-item command="handleView" icon="el-icon-view"
                 v-hasPermi="['monitor:job:query']">任务详细</el-dropdown-item>
               <el-dropdown-item command="handleJobLog" icon="el-icon-s-operation"
-                v-hasPermi="['monitor:jobLog:list']">调度日志</el-dropdown-item>
+                v-hasPermi="['monitor:jobLog:page']">调度日志</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -311,7 +311,7 @@
 </template>
 
 <script>
-import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
+import { pageJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
 import Crontab from '@/components/Crontab'
 
 export default {
@@ -382,7 +382,7 @@ export default {
     /** 查询定时任务列表 */
     getList() {
       this.loading = true;
-      listJob(this.queryParams).then(response => {
+      pageJob(this.queryParams).then(response => {
         this.jobList = response.data.records
         this.total = response.data.total;
         this.loading = false;

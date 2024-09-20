@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询调度日志列表
-export function listJobLog(query) {
+export function pageJobLog(query) {
   return request({
-    url: '/monitor/jobLog/list',
+    url: '/monitor/jobLog/page',
     method: 'get',
     params: query
   })

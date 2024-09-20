@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询角色列表
-export function listRole(query) {
+export function pageRole(query) {
   return request({
-    url: '/system/role/list',
+    url: '/system/role/page',
     method: 'get',
     params: query
   })
@@ -67,18 +67,18 @@ export function delRole(ids) {
 }
 
 // 查询角色已授权用户列表
-export function allocatedUserList(query) {
+export function allocatedUserPage(query) {
   return request({
-    url: '/system/role/authUser/allocatedList',
+    url: '/system/role/authUser/allocatedPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询角色未授权用户列表
-export function unallocatedUserList(query) {
+export function unallocatedUserPage(query) {
   return request({
-    url: '/system/role/authUser/unallocatedList',
+    url: '/system/role/authUser/unallocatedPage',
     method: 'get',
     params: query
   })

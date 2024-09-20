@@ -111,7 +111,7 @@
 
 <script>
 import { getJob } from "@/api/monitor/job";
-import { listJobLog, delJobLog, cleanJobLog } from "@/api/monitor/jobLog";
+import { pageJobLog, delJobLog, cleanJobLog } from "@/api/monitor/jobLog";
 
 export default {
   name: "JobLog",
@@ -164,7 +164,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      listJobLog(this.queryParams).then(response => {
+      pageJobLog(this.queryParams).then(response => {
         this.jobLogList = response.data.records;
         this.total = response.data.total;
         this.loading = false;

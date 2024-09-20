@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询登录日志列表
-export function list(query) {
+export function pageLogLogin(query) {
   return request({
-    url: '/monitor/logLogin/list',
+    url: '/monitor/logLogin/page',
     method: 'get',
     params: query
   })

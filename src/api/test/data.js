@@ -1,27 +1,27 @@
 import request from '@/utils/request'
 
 // 分页接口1
-export function listData1(query) {
+export function pageData1(query) {
   return request({
-    url: '/test/data/list1',
+    url: '/test/data/page1',
     method: 'get',
     params: query
   })
 }
 
 // 分页接口2
-export function listData2(query) {
+export function pageData2(query) {
   return request({
-    url: '/test/data/list2',
+    url: '/test/data/page2',
     method: 'get',
     params: query
   })
 }
 
 // 分页接口3
-export function listData3(query) {
+export function pageData3(query) {
   return request({
-    url: '/test/data/list3',
+    url: '/test/data/page3',
     method: 'get',
     params: query
   })

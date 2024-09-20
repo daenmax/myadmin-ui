@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { unallocatedUserList, authUserSave } from "@/api/system/role";
+import { unallocatedUserPage, authUserSave } from "@/api/system/role";
 export default {
   dicts: ['sys_normal_disable','sys_user_type'],
   props: {
@@ -107,7 +107,7 @@ export default {
     },
     // 查询表数据
     getList() {
-      unallocatedUserList(this.queryParams).then(res => {
+      unallocatedUserPage(this.queryParams).then(res => {
         this.userList = res.data.records;
         this.total = res.data.total;
       });

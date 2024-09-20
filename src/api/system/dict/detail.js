@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询字典数据列表
-export function listData(query) {
+export function pageData(query) {
   return request({
-    url: '/system/dict/detail/list',
+    url: '/system/dict/detail/page',
     method: 'get',
     params: query
   })

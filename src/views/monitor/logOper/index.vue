@@ -279,7 +279,7 @@
 </template>
 
 <script>
-import { list, delLogOper, cleanLogOper } from "@/api/monitor/logOper";
+import { pageLogOper, delLogOper, cleanLogOper } from "@/api/monitor/logOper";
 
 export default {
   name: "LogOper",
@@ -337,7 +337,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      list(this.queryParams).then( response => {
+      pageLogOper(this.queryParams).then( response => {
           this.list = response.data.records
           this.total = response.data.total;
           this.loading = false;

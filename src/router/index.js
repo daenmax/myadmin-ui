@@ -138,7 +138,7 @@ export const dynamicRoutes = [
     path: '/system/dict-detail',
     component: Layout,
     hidden: true,
-    permissions: ['system:dict:list'],
+    permissions: ['system:dict:page'],
     children: [
       {
         path: 'index/:dictId',
@@ -166,7 +166,7 @@ export const dynamicRoutes = [
     path: '/monitor/job-log',
     component: Layout,
     hidden: true,
-    permissions: ['monitor:job:list'],
+    permissions: ['monitor:job:page'],
     children: [
       {
         path: 'index/:jobId',

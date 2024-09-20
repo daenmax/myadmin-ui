@@ -284,7 +284,7 @@
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, roleDeptTreeSelect } from "@/api/system/role";
+import { pageRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, roleDeptTreeSelect } from "@/api/system/role";
 import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from "@/api/system/menu";
 
 export default {
@@ -368,7 +368,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listRole(this.queryParams).then(response => {
+      pageRole(this.queryParams).then(response => {
           this.roleList = response.data.records
           this.total = response.data.total;
           this.loading = false;

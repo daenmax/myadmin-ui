@@ -198,7 +198,7 @@
               <el-input v-model="form.perms" placeholder="请输入权限标识" maxlength="100" />
               <span slot="label">
                 权限字符
-                <el-tooltip content="控制器中定义的权限字符，如：@SaCheckPermission('system:user:list')" placement="top">
+                <el-tooltip content="控制器中定义的权限字符，如：@SaCheckPermission('system:user:page')" placement="top">
                 <i class="el-icon-question"></i>
                 </el-tooltip>
               </span>
@@ -274,7 +274,7 @@
 </template>
 
 <script>
-import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
+import { pageMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import IconSelect from "@/components/IconSelect";
@@ -333,7 +333,7 @@ export default {
     /** 查询菜单列表 */
     getList() {
       this.loading = true;
-      listMenu(this.queryParams).then(response => {
+      pageMenu(this.queryParams).then(response => {
         this.menuList = this.handleTree(response.data, "id");
         this.loading = false;
       });

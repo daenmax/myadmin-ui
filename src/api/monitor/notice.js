@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function listNotice(query) {
+export function pageNotice(query) {
   return request({
-    url: '/monitor/notice/list',
+    url: '/monitor/notice/page',
     method: 'get',
     params: query
   })

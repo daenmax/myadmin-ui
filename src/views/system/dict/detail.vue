@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import { listData, getData, delData, addData, updateData } from "@/api/system/dict/detail";
+import { pageData, getData, delData, addData, updateData } from "@/api/system/dict/detail";
 import { optionSelect as getDictOptionSelect, getType } from "@/api/system/dict/index";
 
 export default {
@@ -314,7 +314,7 @@ export default {
     /** 查询字典数据列表 */
     getList() {
       this.loading = true;
-      listData(this.queryParams).then(response => {
+      pageData(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;

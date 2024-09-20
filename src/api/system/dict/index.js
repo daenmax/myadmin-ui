@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询字典类型列表
-export function listType(query) {
+export function pageType(query) {
   return request({
-    url: '/system/dict/list',
+    url: '/system/dict/page',
     method: 'get',
     params: query
   })

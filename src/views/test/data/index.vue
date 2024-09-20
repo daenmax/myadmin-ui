@@ -250,7 +250,7 @@
 </template>
 
 <script>
-import { listData1, listData2, listData3, getData, delData, addData, updateData ,changeDataStatus} from "@/api/test/data";
+import { pageData1, pageData2, pageData3, getData, delData, addData, updateData ,changeDataStatus} from "@/api/test/data";
 import {getToken} from "@/utils/auth";
 
 export default {
@@ -333,7 +333,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listData1(this.queryParams).then(response => {
+      pageData1(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -345,7 +345,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listData2(this.queryParams).then(response => {
+      pageData2(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -357,7 +357,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listData3(this.queryParams).then(response => {
+      pageData3(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;

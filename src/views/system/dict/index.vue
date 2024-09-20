@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/index";
+import { pageType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/index";
 
 export default {
   name: "Dict",
@@ -251,7 +251,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listType(this.queryParams).then(response => {
+      pageType(this.queryParams).then(response => {
           this.typeList = response.data.records;
           this.total = response.data.total;
           this.loading = false;
