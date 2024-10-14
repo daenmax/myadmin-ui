@@ -7,8 +7,8 @@
 <a href='https://github.com/daenmax/myadmin'>
 <img src='https://img.shields.io/github/stars/daenmax/myadmin.svg?style=social&label=Stars' alt='star'>
 </a>
-<a href="https://gitee.com/classicChickenWings/ape-frame">
-<img src="https://img.shields.io/badge/version-v1.0.0-brightgreen.svg">
+<a href="#">
+<img src="https://img.shields.io/badge/version-v1.2.0-brightgreen.svg">
 </a>
 </p>
 
@@ -30,15 +30,27 @@
 
 ### 文档教程
 
-[官网](https://daenmax.github.io/myadmin/)
+[官网](https://daenmax.github.io/MyAdmin/)
 
 ### 在线体验
 
-[等待部署](https://daenmax.github.io/myadmin/)
+[等待部署](#)
 
 ### 后端仓库
 
+gitee码云
 [MyAdmin](https://gitee.com/daenmax/myadmin)
+
+github
+[MyAdmin](https://github.com/daenmax/myadmin)
+
+### 前端仓库
+
+gitee码云
+[MyAdmin-Ui](https://gitee.com/daenmax/myadmin-ui)
+
+github
+[MyAdmin-Ui](https://github.com/daenmax/myadmin-ui)
 
 ## 🐮 开始
 
@@ -87,7 +99,7 @@ npm run build:prod
         <p>MyAdmin 微信群(添加我微信备注"进群")</p>
       </td>
       <td align="center" valign="middle">
-        <img src="https://daenmax.github.io/myadmin/img/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87/qqGroup.png" alt="群号: 373752019" style="width:100px;margin: 10px;">
+        <img src="https://daenmax.github.io/MyAdmin/img/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87/qqGroup.png" alt="群号: 373752019" style="width:100px;margin: 10px;">
         <p>MyAdmin QQ群: 373752019</p>
       </td>
     </tr>
