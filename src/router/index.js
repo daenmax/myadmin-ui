@@ -192,7 +192,9 @@ Router.prototype.replace = function push(location) {
 
 export default new Router({
   base: process.env.VUE_APP_CONTEXT_PATH,
-  mode: 'history', // 去掉url中的#
+  // history 可以去掉url中的#，nginx部署请选择此项
+  // hash，将前端打包到后端springboot的static文件夹中时请选择此项
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
