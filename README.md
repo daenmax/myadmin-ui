@@ -99,7 +99,7 @@ server{
         server_name myadmin;
         # 代理前端
         location / {
-            root /www/wwwroot/galaxy_dist;
+            root /www/wwwroot/myadmin_ui;
             try_files $uri $uri/ /index.html;
             index index.html index.htm;
             error_page 405=200$request_uri;
