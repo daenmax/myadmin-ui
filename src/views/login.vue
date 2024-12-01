@@ -271,12 +271,9 @@ export default {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
       const rememberMe = Cookies.get('rememberMe')
-      this.loginForm = {
-        username: username === undefined ? this.loginForm.username : username,
-        password: password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
-        loginType: this.loginForm.loginType === undefined ? "username" : this.loginForm.loginType
-      };
+      this.loginForm.username=username;
+      this.loginForm.password=decrypt(password);
+      this.loginForm.rememberMe=Boolean(rememberMe);
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
