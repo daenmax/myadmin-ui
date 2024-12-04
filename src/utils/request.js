@@ -91,7 +91,7 @@ service.interceptors.response.use(res => {
       MessageBox.confirm(msg + '，当然您也可以继续留在该页面', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
         isRelogin.show = false;
         store.dispatch('LogOut').then(() => {
-          location.href = process.env.VUE_APP_CONTEXT_PATH + "index";
+          location.href = process.env.VUE_APP_CONTEXT_PATH + "";
         })
       }).catch(() => {
         isRelogin.show = false;
