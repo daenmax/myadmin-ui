@@ -44,7 +44,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['monitor:job:remove']">删除</el-button>
+          v-hasPermi="['monitor:job:del']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="el-icon-s-operation" size="mini" @click="handleJobLog"
@@ -92,7 +92,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['monitor:job:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['monitor:job:remove']">删除</el-button>
+            v-hasPermi="['monitor:job:del']">删除</el-button>
           <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)"
             v-hasPermi="['monitor:job:changeStatus', 'monitor:job:query']">
             <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
@@ -311,7 +311,7 @@
 </template>
 
 <script>
-import { pageJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
+import { page, query, del, add, edit, run, changeStatus } from "@/api/monitor/job";
 import Crontab from '@/components/Crontab'
 
 export default {
@@ -382,7 +382,7 @@ export default {
     /** 查询定时任务列表 */
     getList() {
       this.loading = true;
-      pageJob(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.jobList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -461,7 +461,7 @@ export default {
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""' + row.jobName + '"任务吗？').then(function () {
-        return changeJobStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function () {
@@ -471,14 +471,14 @@ export default {
     /* 立即执行一次 */
     handleRun(row) {
       this.$modal.confirm('确认要立即执行一次"' + row.jobName + '"任务吗？').then(function () {
-        return runJob(row.id);
+        return run(row.id);
       }).then(() => {
         this.$modal.msgSuccess("执行成功");
       }).catch(() => { });
     },
     /** 任务详细信息 */
     handleView(row) {
-      getJob(row.id).then(response => {
+      query(row.id).then(response => {
         this.form = response.data;
         this.openView = true;
       });
@@ -507,7 +507,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getJob(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改任务";
@@ -518,13 +518,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateJob(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addJob(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -538,7 +538,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除定时任务名称为"' + names + '"的数据项？').then(function () {
-        return delJob(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/system/position/exportData'
+
 // 查询岗位列表
-export function pagePosition(query) {
+export function page(query) {
   return request({
     url: '/system/position/page',
     method: 'get',
@@ -10,15 +13,19 @@ export function pagePosition(query) {
 }
 
 // 查询岗位详细
-export function getPosition(id) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/position/' + id,
-    method: 'get'
+    url: '/system/position/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增岗位
-export function addPosition(data) {
+export function add(data) {
   return request({
     url: '/system/position/add',
     method: 'post',
@@ -27,7 +34,7 @@ export function addPosition(data) {
 }
 
 // 修改岗位
-export function updatePosition(data) {
+export function edit(data) {
   return request({
     url: '/system/position/edit',
     method: 'post',
@@ -36,36 +43,36 @@ export function updatePosition(data) {
 }
 
 // 删除岗位
-export function delPosition(ids) {
+export function del(ids) {
   return request({
-    url: '/system/position/remove',
+    url: '/system/position/del',
     method: 'post',
     data: ids
   })
 }
 
 // 查询岗位已授权用户列表
-export function allocatedUserPage(query) {
+export function allocatedAuthUserPage(query) {
   return request({
-    url: '/system/position/authUser/allocatedPage',
+    url: '/system/position/allocatedAuthUserPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询岗位未授权用户列表
-export function unallocatedUserPage(query) {
+export function unallocatedAuthUserPage(query) {
   return request({
-    url: '/system/position/authUser/unallocatedPage',
+    url: '/system/position/unallocatedAuthUserPage',
     method: 'get',
     params: query
   })
 }
 
 // 取消用户授权岗位
-export function authUserCancel(data) {
+export function cancelAuthUser(data) {
   return request({
-    url: '/system/position/authUser/cancel',
+    url: '/system/position/cancelAuthUser',
     method: 'post',
     data: data
   })
@@ -73,9 +80,9 @@ export function authUserCancel(data) {
 
 
 // 保存授权用户选择
-export function authUserSave(data) {
+export function saveAuthUser(data) {
   return request({
-    url: '/system/position/authUser/save',
+    url: '/system/position/saveAuthUser',
     method: 'post',
     data: data
   })

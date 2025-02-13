@@ -97,7 +97,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:logLogin:remove']"
+          v-hasPermi="['monitor:logLogin:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -107,7 +107,7 @@
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
-          v-hasPermi="['monitor:logLogin:remove']"
+          v-hasPermi="['monitor:logLogin:del']"
         >清空</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import { pageLogLogin, delLogLogin, cleanLogLogin } from "@/api/monitor/logLogin";
+import { page, del, clean, exportData } from '@/api/monitor/logLogin'
 
 export default {
   name: "LogLogin",
@@ -208,7 +208,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageLogLogin(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
           this.list = response.data.records
           this.total = response.data.total;
           this.loading = false;
@@ -244,7 +244,7 @@ export default {
     handleDelete(row) {
       const ids = row.id ? [row.id] : this.ids;
       this.$modal.confirm('是否确认删除ID为"' + ids + '"的数据项？').then(function() {
-        return delLogLogin(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -253,7 +253,7 @@ export default {
     /** 清空按钮操作 */
     handleClean() {
       this.$modal.confirm('是否确认清空所有登录日志？').then(function() {
-        return cleanLogLogin();
+        return clean();
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("清空成功");
@@ -261,7 +261,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('monitor/logLogin/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `logLogin_${new Date().getTime()}.xlsx`)
     }

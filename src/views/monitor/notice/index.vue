@@ -72,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:notice:remove']"
+          v-hasPermi="['monitor:notice:del']"
         >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -118,7 +118,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['monitor:notice:remove']"
+            v-hasPermi="['monitor:notice:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import { pageNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/monitor/notice";
+import { page, query, del, add, edit } from "@/api/monitor/notice";
 
 export default {
   name: "Notice",
@@ -263,7 +263,7 @@ export default {
     /** 查询列表 */
     getList() {
       this.loading = true;
-      pageNotice(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.noticeList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -312,7 +312,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getNotice(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改";
@@ -323,13 +323,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateNotice(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addNotice(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -343,7 +343,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const titles = row.title || this.titles;
       this.$modal.confirm('是否确认删除标题为"' + titles + '"的内容吗？').then(function() {
-        return delNotice(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

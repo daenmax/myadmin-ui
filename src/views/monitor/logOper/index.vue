@@ -148,7 +148,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:logOper:remove']"
+          v-hasPermi="['monitor:logOper:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -158,7 +158,7 @@
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
-          v-hasPermi="['monitor:logOper:remove']"
+          v-hasPermi="['monitor:logOper:del']"
         >清空</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -279,7 +279,8 @@
 </template>
 
 <script>
-import { pageLogOper, delLogOper, cleanLogOper } from "@/api/monitor/logOper";
+import { page, del, clean } from "@/api/monitor/logOper";
+import { exportData } from '@/api/monitor/logLogin'
 
 export default {
   name: "LogOper",
@@ -337,7 +338,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageLogOper(this.queryParams).then( response => {
+      page(this.queryParams).then( response => {
           this.list = response.data.records
           this.total = response.data.total;
           this.loading = false;
@@ -380,7 +381,7 @@ export default {
     handleDelete(row) {
       const ids = row.id ? [row.id] : this.ids;
       this.$modal.confirm('是否确认删除日志ID为"' + ids + '"的数据项？').then(function() {
-        return delLogOper(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -389,7 +390,7 @@ export default {
     /** 清空按钮操作 */
     handleClean() {
       this.$modal.confirm('是否确认清空所有操作日志吗？').then(function() {
-        return cleanLogOper();
+        return clean();
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("清空成功");
@@ -397,7 +398,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('monitor/logOper/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `logOper_${new Date().getTime()}.xlsx`)
     }

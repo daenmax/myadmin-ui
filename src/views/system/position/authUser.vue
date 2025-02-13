@@ -44,7 +44,7 @@
           size="mini"
           :disabled="multiple"
           @click="cancelAuthUserAll"
-          v-hasPermi="['system:position:remove']"
+          v-hasPermi="['system:position:del']"
         >批量取消授权</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -87,7 +87,7 @@
             type="text"
             icon="el-icon-circle-close"
             @click="cancelAuthUser(scope.row)"
-            v-hasPermi="['system:position:remove']"
+            v-hasPermi="['system:position:del']"
           >取消授权</el-button>
         </template>
       </el-table-column>
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { allocatedUserPage, authUserCancel } from "@/api/system/position";
+import { allocatedAuthUserPage, cancelAuthUser } from "@/api/system/position";
 import selectUser from "./selectUser";
 
 export default {
@@ -147,7 +147,7 @@ export default {
     /** 查询授权用户列表 */
     getList() {
       this.loading = true;
-      allocatedUserPage(this.queryParams).then(response => {
+      allocatedAuthUserPage(this.queryParams).then(response => {
           this.userList = response.data.records
           this.total = response.data.total;
           this.loading = false;
@@ -185,7 +185,7 @@ export default {
         positionId: this.queryParams.positionId
       }
       this.$modal.confirm('确认要取消该用户"' + row.username + '"岗位吗？').then(function() {
-        return authUserCancel(data);
+        return cancelAuthUser(data);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("取消授权成功");
@@ -198,7 +198,7 @@ export default {
         positionId: this.queryParams.positionId
       }
       this.$modal.confirm('是否取消选中用户授权数据项？').then(function() {
-        return authUserCancel(data);
+        return cancelAuthUser(data);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("取消授权成功");

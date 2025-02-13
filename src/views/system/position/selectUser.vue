@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { unallocatedUserPage, authUserSave } from "@/api/system/position";
+import { unallocatedAuthUserPage, saveAuthUser } from "@/api/system/position";
 export default {
   dicts: ['sys_normal_disable','sys_user_type'],
   props: {
@@ -107,7 +107,7 @@ export default {
     },
     // 查询表数据
     getList() {
-      unallocatedUserPage(this.queryParams).then(res => {
+      unallocatedAuthUserPage(this.queryParams).then(res => {
         this.userList = res.data.records;
         this.total = res.data.total;
       });
@@ -132,7 +132,7 @@ export default {
         userIds: this.userIds,
         positionId: this.queryParams.positionId
       }
-      authUserSave(data).then(res => {
+      saveAuthUser(data).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

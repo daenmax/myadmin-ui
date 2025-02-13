@@ -1,7 +1,10 @@
+/**
+ * 接口限制
+ */
 import request from '@/utils/request'
 
 // 查询接口限制列表
-export function pageApiLimit(query) {
+export function page(query) {
   return request({
     url: '/monitor/apiLimit/page',
     method: 'get',
@@ -10,15 +13,19 @@ export function pageApiLimit(query) {
 }
 
 // 查询接口限制详细
-export function getApiLimit(id) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/monitor/apiLimit/' + id,
-    method: 'get'
+    url: '/monitor/apiLimit/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增接口限制
-export function addApiLimit(data) {
+export function add(data) {
   return request({
     url: '/monitor/apiLimit/add',
     method: 'post',
@@ -27,7 +34,7 @@ export function addApiLimit(data) {
 }
 
 // 修改接口限制
-export function updateApiLimit(data) {
+export function edit(data) {
   return request({
     url: '/monitor/apiLimit/edit',
     method: 'post',
@@ -36,16 +43,16 @@ export function updateApiLimit(data) {
 }
 
 // 删除接口限制
-export function delApiLimit(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/apiLimit/remove',
+    url: '/monitor/apiLimit/del',
     method: 'post',
     data: ids
   })
 }
 
 // 接口限制状态修改
-export function changeApiLimitStatus(id, status) {
+export function changeStatus(id, status) {
   const data = {
     id,
     status

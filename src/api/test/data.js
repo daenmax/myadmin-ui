@@ -1,16 +1,25 @@
 import request from '@/utils/request'
 
-// 分页接口1
-export function pageData1(query) {
+// 导出
+export const exportData =  '/test/data/exportData'
+
+// 导入
+export const importData =  '/test/data/importData'
+
+// 下载导入模板
+export const importTemplate =  '/test/data/importTemplate'
+
+// 分页列表
+export function page(query) {
   return request({
-    url: '/test/data/page1',
+    url: '/test/data/page',
     method: 'get',
     params: query
   })
 }
 
-// 分页接口2
-export function pageData2(query) {
+// 分页列表2
+export function page2(query) {
   return request({
     url: '/test/data/page2',
     method: 'get',
@@ -18,8 +27,8 @@ export function pageData2(query) {
   })
 }
 
-// 分页接口3
-export function pageData3(query) {
+// 分页列表3
+export function page3(query) {
   return request({
     url: '/test/data/page3',
     method: 'get',
@@ -27,16 +36,20 @@ export function pageData3(query) {
   })
 }
 
-// 查询测试数据详细
-export function getData(id) {
+// 查询
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/test/data/' + id,
-    method: 'get'
+    url: '/test/data/query',
+    method: 'get',
+    params: data
   })
 }
 
-// 新增测试数据
-export function addData(data) {
+// 新增
+export function add(data) {
   return request({
     url: '/test/data/add',
     method: 'post',
@@ -44,8 +57,8 @@ export function addData(data) {
   })
 }
 
-// 修改测试数据
-export function updateData(data) {
+// 修改
+export function edit(data) {
   return request({
     url: '/test/data/edit',
     method: 'post',
@@ -53,17 +66,17 @@ export function updateData(data) {
   })
 }
 
-// 删除测试数据
-export function delData(ids) {
+// 删除
+export function del(ids) {
   return request({
-    url: '/test/data/remove',
+    url: '/test/data/del',
     method: 'post',
     data: ids
   })
 }
 
-// 数据状态修改
-export function changeDataStatus(id, status) {
+// 修改状态
+export function changeStatus(id, status) {
   const data = {
     id,
     status

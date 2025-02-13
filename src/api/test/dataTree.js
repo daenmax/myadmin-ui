@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询测试树表列表
-export function listDataTree(query) {
+export function list(query) {
   return request({
     url: '/test/dataTree/list',
     method: 'get',
@@ -10,15 +10,19 @@ export function listDataTree(query) {
 }
 
 // 查询测试树表详细
-export function getDataTree(id) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/test/dataTree/' + id,
-    method: 'get'
+    url: '/test/dataTree/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增测试树表
-export function addDataTree(data) {
+export function add(data) {
   return request({
     url: '/test/dataTree/add',
     method: 'post',
@@ -27,7 +31,7 @@ export function addDataTree(data) {
 }
 
 // 修改测试树表
-export function updateDataTree(data) {
+export function edit(data) {
   return request({
     url: '/test/dataTree/edit',
     method: 'post',
@@ -36,15 +40,19 @@ export function updateDataTree(data) {
 }
 
 // 删除测试树表
-export function delDataTree(id) {
+export function del(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/test/dataTree/remove/' + id,
-    method: 'post'
+    url: '/test/dataTree/del',
+    method: 'post',
+    params: data
   })
 }
 
 // 数据状态修改
-export function changeDataTreeStatus(id, status) {
+export function changeStatus(id, status) {
   const data = {
     id,
     status

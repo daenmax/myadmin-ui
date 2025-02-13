@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/monitor/logLogin/exportData'
+
 // 查询登录日志列表
-export function pageLogLogin(query) {
+export function page(query) {
   return request({
     url: '/monitor/logLogin/page',
     method: 'get',
@@ -10,16 +13,16 @@ export function pageLogLogin(query) {
 }
 
 // 删除登录日志
-export function delLogLogin(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/logLogin/remove',
+    url: '/monitor/logLogin/del',
     method: 'post',
     data: ids
   })
 }
 
 // 清空登录日志
-export function cleanLogLogin() {
+export function clean() {
   return request({
     url: '/monitor/logLogin/clean',
     method: 'post'

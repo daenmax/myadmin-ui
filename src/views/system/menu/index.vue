@@ -96,7 +96,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:menu:remove']"
+            v-hasPermi="['system:menu:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -274,7 +274,7 @@
 </template>
 
 <script>
-import { pageMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
+import { page, query, del, add, edit } from "@/api/system/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import IconSelect from "@/components/IconSelect";
@@ -333,7 +333,7 @@ export default {
     /** 查询菜单列表 */
     getList() {
       this.loading = true;
-      pageMenu(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.menuList = this.handleTree(response.data, "id");
         this.loading = false;
       });
@@ -351,7 +351,7 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeselect() {
-      pageMenu().then(response => {
+      page().then(response => {
         this.menuOptions = [];
         const menu = { id: 0, menuName: '主类目', children: [] };
         menu.children = this.handleTree(response.data, "id");
@@ -412,7 +412,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       this.getTreeselect();
-      getMenu(row.id).then(response => {
+      query(row.id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改菜单";
@@ -423,13 +423,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateMenu(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addMenu(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -441,7 +441,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$modal.confirm('是否确认删除名称为"' + row.menuName + '"的数据项？').then(function() {
-        return delMenu(row.id);
+        return del(row.id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

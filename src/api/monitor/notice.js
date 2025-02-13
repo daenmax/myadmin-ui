@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询列表
-export function pageNotice(query) {
+export function page(query) {
   return request({
     url: '/monitor/notice/page',
     method: 'get',
@@ -10,15 +10,19 @@ export function pageNotice(query) {
 }
 
 // 查询详细
-export function getNotice(noticeId) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/monitor/notice/' + noticeId,
-    method: 'get'
+    url: '/monitor/notice/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增
-export function addNotice(data) {
+export function add(data) {
   return request({
     url: '/monitor/notice/add',
     method: 'post',
@@ -27,7 +31,7 @@ export function addNotice(data) {
 }
 
 // 修改
-export function updateNotice(data) {
+export function edit(data) {
   return request({
     url: '/monitor/notice/edit',
     method: 'post',
@@ -36,9 +40,9 @@ export function updateNotice(data) {
 }
 
 // 删除
-export function delNotice(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/notice/remove',
+    url: '/monitor/notice/del',
     method: 'post',
     data: ids
   })

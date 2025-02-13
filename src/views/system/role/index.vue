@@ -106,7 +106,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:role:remove']"
+          v-hasPermi="['system:role:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -163,7 +163,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:role:remove']"
+            v-hasPermi="['system:role:del']"
           >删除</el-button>
           <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
             <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
@@ -284,8 +284,9 @@
 </template>
 
 <script>
-import { pageRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus, roleDeptTreeSelect } from "@/api/system/role";
+import { page, query, del, add, edit, dataScope, changeRoleStatus, roleDeptTreeSelect } from "@/api/system/role";
 import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from "@/api/system/menu";
+import { exportData } from '@/api/system/user'
 
 export default {
   name: "Role",
@@ -368,7 +369,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageRole(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
           this.roleList = response.data.records
           this.total = response.data.total;
           this.loading = false;
@@ -530,7 +531,7 @@ export default {
       this.reset();
       const roleId = row.id || this.ids
       const roleMenu = this.getRoleMenuTreeSelect(roleId);
-      getRole(roleId).then(response => {
+      query(roleId).then(response => {
         this.form = response.data;
         this.open = true;
         this.$nextTick(() => {
@@ -556,7 +557,7 @@ export default {
     handleDataScope(row) {
       this.reset();
       const deptTreeSelect = this.getDeptTree(row.id);
-      getRole(row.id).then(response => {
+      query(row.id).then(response => {
         this.form = response.data;
         this.openDataScope = true;
         this.$nextTick(() => {
@@ -579,7 +580,7 @@ export default {
           this.holdon = true;
           if (this.form.id != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
-            updateRole(this.form).then(response => {
+            edit(this.form).then(response => {
               this.holdon = false;
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -589,7 +590,7 @@ export default {
             });
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys();
-            addRole(this.form).then(response => {
+            add(this.form).then(response => {
               this.holdon = false;
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -617,7 +618,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除角色名称为"' + names + '"的数据项？').then(function() {
-        return delRole(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -625,7 +626,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/role/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `role_${new Date().getTime()}.xlsx`)
     }

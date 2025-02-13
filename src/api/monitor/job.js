@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询定时任务调度列表
-export function pageJob(query) {
+export function page(query) {
   return request({
     url: '/monitor/job/page',
     method: 'get',
@@ -10,15 +10,19 @@ export function pageJob(query) {
 }
 
 // 查询定时任务调度详细
-export function getJob(jobId) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/monitor/job/' + jobId,
-    method: 'get'
+    url: '/monitor/job/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增定时任务调度
-export function addJob(data) {
+export function add(data) {
   return request({
     url: '/monitor/job/add',
     method: 'post',
@@ -27,7 +31,7 @@ export function addJob(data) {
 }
 
 // 修改定时任务调度
-export function updateJob(data) {
+export function edit(data) {
   return request({
     url: '/monitor/job/edit',
     method: 'post',
@@ -36,16 +40,16 @@ export function updateJob(data) {
 }
 
 // 删除定时任务调度
-export function delJob(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/job/remove',
+    url: '/monitor/job/del',
     method: 'post',
     data: ids
   })
 }
 
 // 任务状态修改
-export function changeJobStatus(id, status) {
+export function changeStatus(id, status) {
   const data = {
     id,
     status
@@ -59,7 +63,7 @@ export function changeJobStatus(id, status) {
 
 
 // 定时任务立即执行一次
-export function runJob(id) {
+export function run(id) {
   const data = {
     id
   }

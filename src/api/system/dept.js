@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询部门列表
-export function listDept(query) {
+export function list(query) {
   return request({
     url: '/system/dept/list',
     method: 'get',
@@ -18,15 +18,19 @@ export function listDeptExcludeChild(deptId) {
 }
 
 // 查询部门详细
-export function getDept(deptId) {
+export function getDept(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/dept/' + deptId,
-    method: 'get'
+    url: '/system/dept/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增部门
-export function addDept(data) {
+export function add(data) {
   return request({
     url: '/system/dept/add',
     method: 'post',
@@ -35,7 +39,7 @@ export function addDept(data) {
 }
 
 // 修改部门
-export function updateDept(data) {
+export function edit(data) {
   return request({
     url: '/system/dept/edit',
     method: 'post',
@@ -44,17 +48,21 @@ export function updateDept(data) {
 }
 
 // 删除部门
-export function delDept(id) {
+export function del(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/dept/remove/' + id,
-    method: 'post'
+    url: '/system/dept/del',
+    method: 'post',
+    params: data
   })
 }
 
 // 获取用户列表
-export function userList(params) {
+export function getUserList(params) {
   return request({
-    url: '/system/dept/userList',
+    url: '/system/dept/getUserList',
     method: 'get',
     params: params
   })

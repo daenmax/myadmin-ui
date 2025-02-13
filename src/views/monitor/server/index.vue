@@ -406,7 +406,7 @@
 </template>
 
 <script>
-import { getServer } from "@/api/monitor/server";
+import { getInfo } from "@/api/monitor/server";
 import * as echarts from "echarts";
 
 export default {
@@ -478,7 +478,7 @@ export default {
     queryInfo() {
       // this.openLoading();
       this.loading = true;
-      getServer()
+      getInfo()
         .then((response) => {
           this.server = response.data;
           // this.$modal.closeLoading();

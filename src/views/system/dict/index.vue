@@ -82,7 +82,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:dict:remove']"
+          v-hasPermi="['system:dict:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -144,7 +144,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:dict:remove']"
+            v-hasPermi="['system:dict:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { pageType, getType, delType, addType, updateType, refreshCache } from "@/api/system/dict/index";
+import { page, query, del, add, edit, refreshCache, exportData } from '@/api/system/dict/index'
 
 export default {
   name: "Dict",
@@ -251,7 +251,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageType(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
           this.typeList = response.data.records;
           this.total = response.data.total;
           this.loading = false;
@@ -302,7 +302,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getType(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改字典编码";
@@ -313,13 +313,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateType(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addType(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -333,7 +333,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除字典名称为"' + names + '"的数据项？').then(function() {
-        return delType(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -341,7 +341,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/dict/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `type_${new Date().getTime()}.xlsx`)
     },

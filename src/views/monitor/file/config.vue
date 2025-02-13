@@ -42,7 +42,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['monitor:ossConfig:remove']">删除</el-button>
+          v-hasPermi="['monitor:ossConfig:del']">删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -83,7 +83,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['monitor:ossConfig:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['monitor:ossConfig:remove']">删除</el-button>
+            v-hasPermi="['monitor:ossConfig:del']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,13 +151,13 @@
 <script>
 
 import {
-  pageOssConfig,
-  getOssConfig,
-  delOssConfig,
-  addOssConfig,
-  updateOssConfig,
-  changeOssConfigStatus,
-  changeOssConfigInUse
+  page,
+  query,
+  del,
+  add,
+  edit,
+  changeStatus,
+  changeInUse
 } from "@/api/monitor/ossConfig";
 
 export default {
@@ -259,7 +259,7 @@ export default {
     /** 查询对象存储配置列表 */
     getList() {
       this.loading = true;
-      pageOssConfig(this.queryParams).then((response) => {
+      page(this.queryParams).then((response) => {
         this.ossConfigList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -318,7 +318,7 @@ export default {
       this.loading = true;
       this.reset();
       const id = row.id || this.ids;
-      getOssConfig(id).then((response) => {
+      query(id).then((response) => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
@@ -331,7 +331,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateOssConfig(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -339,7 +339,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addOssConfig(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -356,7 +356,7 @@ export default {
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除配置名称为"' + names + '"的OSS吗?').then(() => {
         this.loading = true;
-        return delOssConfig(ids);
+        return del(ids);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -370,7 +370,7 @@ export default {
       let text = row.inUse === "1" ? "切换到" : "取消使用";
       let textMsg = row.inUse === "1" ? "系统将会自动切换到该配置" : "系统将无法使用文件存储功能";
       this.$modal.confirm('确认要 ' + text + " " + row.name + ' 配置吗?' + textMsg).then(() => {
-        return changeOssConfigInUse(row.id, row.inUse);
+        return changeInUse(row.id, row.inUse);
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess(text + "成功");
@@ -383,7 +383,7 @@ export default {
       let text = row.status === "0" ? "启用" : "停用";
       let textMsg = row.inUse === "0" ? "" : "系统将无法使用云存储功能";
       this.$modal.confirm('确认要 ' + text + " " + row.name + ' 配置吗?' + textMsg).then(() => {
-        return changeOssConfigStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess(text + "成功");

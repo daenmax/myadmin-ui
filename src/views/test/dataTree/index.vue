@@ -153,7 +153,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['test:dataTree:remove']"
+            v-hasPermi="['test:dataTree:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import { listDataTree, getDataTree, delDataTree, addDataTree, updateDataTree, changeDataTreeStatus } from "@/api/test/dataTree";
+import { list, query, del, add, edit, changeStatus } from "@/api/test/dataTree";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -270,7 +270,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      listDataTree(this.queryParams).then(response => {
+      list(this.queryParams).then(response => {
         this.dataTreeList = this.handleTree(response.data, "id", "parentId");
         this.loading = false;
       });
@@ -288,7 +288,7 @@ export default {
     },
     /** 查询测试树表下拉树结构 */
     getTreeselect() {
-      listDataTree().then(response => {
+      list().then(response => {
         this.treeOptions = [];
         const data = { id: 0, title: '顶级节点', children: [] };
         data.children = this.handleTree(response.data, "id", "parentId");
@@ -357,7 +357,7 @@ export default {
       if (row != null) {
         this.form.parentId = row.id;
       }
-      getDataTree(row.id).then(response => {
+      query(row.id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
@@ -370,7 +370,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateDataTree(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -378,7 +378,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addDataTree(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -392,9 +392,9 @@ export default {
     // 数据状态修改
     handleDataTreeChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
-      let msg = row.status === "0" ? "" : "其所有子级也将会被禁用"; 
+      let msg = row.status === "0" ? "" : "其所有子级也将会被禁用";
       this.$modal.confirm('确认要 ' + text + ' ' + row.title + ' 这条数据吗？'+msg).then(function() {
-        return changeDataTreeStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
         this.getList();
@@ -406,7 +406,7 @@ export default {
     handleDelete(row) {
       this.$modal.confirm('是否确认删除 "' + row.title + '" ？').then(() => {
         this.loading = true;
-        return delDataTree(row.id);
+        return del(row.id);
       }).then(() => {
         this.loading = false;
         this.getList();

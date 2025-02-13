@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/system/config/exportData'
+
 // 查询参数列表
-export function pageConfig(query) {
+export function page(query) {
   return request({
     url: '/system/config/page',
     method: 'get',
@@ -10,15 +13,19 @@ export function pageConfig(query) {
 }
 
 // 查询参数详细
-export function getConfig(configId) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/config/' + configId,
-    method: 'get'
+    url: '/system/config/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增参数配置
-export function addConfig(data) {
+export function add(data) {
   return request({
     url: '/system/config/add',
     method: 'post',
@@ -27,7 +34,7 @@ export function addConfig(data) {
 }
 
 // 修改参数配置
-export function updateConfig(data) {
+export function edit(data) {
   return request({
     url: '/system/config/edit',
     method: 'post',
@@ -36,9 +43,9 @@ export function updateConfig(data) {
 }
 
 // 删除参数配置
-export function delConfig(ids) {
+export function del(ids) {
   return request({
-    url: '/system/config/remove',
+    url: '/system/config/del',
     method: 'post',
     data: ids
   })

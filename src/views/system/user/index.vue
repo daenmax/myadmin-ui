@@ -154,7 +154,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              v-hasPermi="['system:user:remove']"
+              v-hasPermi="['system:user:del']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -236,7 +236,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                v-hasPermi="['system:user:remove']"
+                v-hasPermi="['system:user:del']"
               >删除</el-button>
               <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:user:resetPwd', 'system:user:edit']">
                 <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
@@ -484,7 +484,18 @@
 </template>
 
 <script>
-import { pageUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
+import {
+  page,
+  getUser,
+  del,
+  add,
+  edit,
+  resetPwd,
+  changeStatus,
+  deptTreeSelect,
+  exportData,
+  importTemplate, importData
+} from '@/api/system/user'
 import { getToken } from "@/utils/auth";
 import { checkTwoPointNum,regYuanToFen,regFenToYuan } from '@/utils/myUtil'
 import Treeselect from "@riophae/vue-treeselect";
@@ -545,7 +556,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/system/user/importData"
+        url: process.env.VUE_APP_BASE_API + importData
       },
       // 查询参数
       queryParams: {
@@ -633,7 +644,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageUser(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
           this.userList = response.data.records
           this.total = response.data.total;
           this.loading = false;
@@ -660,7 +671,7 @@ export default {
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要 ' + text + ' ' + row.username + ' 用户吗？').then(function() {
-        return changeUserStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
@@ -760,7 +771,7 @@ export default {
         inputPattern: /^.{6,16}$/,
         inputErrorMessage: "用户密码长度必须介于 6 和 16 之间"
       }).then(({ value }) => {
-        resetUserPwd(row.id, value).then(response => {
+        resetPwd(row.id, value).then(response => {
           this.$modal.msgSuccess("修改成功，新密码是：" + value);
         });
       }).catch(() => {});
@@ -782,13 +793,13 @@ export default {
             this.form.money = regYuanToFen(this.form.money);
           }
           if (this.form.id != undefined) {
-            updateUser(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addUser(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -802,7 +813,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const usernames = row.username || this.usernames;
       this.$modal.confirm('是否确认删除用户账号为"' + usernames + '"的数据项？').then(function() {
-        return delUser(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -810,7 +821,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/user/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `user_${new Date().getTime()}.xlsx`)
     },
@@ -821,7 +832,7 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('system/user/importTemplate', {
+      this.download(importTemplate, {
       }, `user_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
@@ -833,7 +844,7 @@ export default {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
+      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "->" + response.data + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
       this.getList();
     },
     // 提交上传文件

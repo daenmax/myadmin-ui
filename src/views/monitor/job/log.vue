@@ -29,11 +29,11 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['monitor:jobLog:remove']">删除</el-button>
+          v-hasPermi="['monitor:jobLog:del']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" @click="handleClean"
-          v-hasPermi="['monitor:jobLog:remove']">清空</el-button>
+          v-hasPermi="['monitor:jobLog:del']">清空</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
@@ -110,8 +110,8 @@
 </template>
 
 <script>
-import { getJob } from "@/api/monitor/job";
-import { pageJobLog, delJobLog, cleanJobLog } from "@/api/monitor/jobLog";
+import { query } from "@/api/monitor/job";
+import { page, del, clean, exportData } from "@/api/monitor/jobLog";
 
 export default {
   name: "JobLog",
@@ -149,7 +149,7 @@ export default {
   created() {
     const jobId = this.$route.params && this.$route.params.jobId;
     if (jobId !== undefined && jobId != 0) {
-      getJob(jobId).then(response => {
+      query(jobId).then(response => {
         this.queryParams.jobName = response.data.jobName;
         this.getList();
       });
@@ -164,7 +164,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      pageJobLog(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.jobLogList = response.data.records;
         this.total = response.data.total;
         this.loading = false;
@@ -201,7 +201,7 @@ export default {
     handleDelete(row) {
       const ids = this.ids;
       this.$modal.confirm('是否确认删除这' + ids.length + '条日志吗？').then(function () {
-        return delJobLog(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -210,7 +210,7 @@ export default {
     /** 清空按钮操作 */
     handleClean() {
       this.$modal.confirm('是否确认清空所有调度日志数据项？').then(function () {
-        return cleanJobLog();
+        return clean();
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("清空成功");
@@ -218,7 +218,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('/monitor/jobLog/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `log_${new Date().getTime()}.xlsx`)
     }

@@ -72,7 +72,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['monitor:file:remove']">删除</el-button>
+          v-hasPermi="['monitor:file:del']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="info" plain icon="el-icon-s-operation" size="mini" @click="handleOssConfig"
@@ -130,7 +130,7 @@
           <el-button size="mini" type="text" icon="el-icon-download" @click="handleDownload(scope.row)"
             v-hasPermi="['monitor:file:download']">下载</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['monitor:file:remove']">删除</el-button>
+            v-hasPermi="['monitor:file:del']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,8 +157,8 @@
 </template>
 
 <script>
-import { pageFile, delFile } from "@/api/monitor/file";
-import { allListOssConfig } from "@/api/monitor/ossConfig";
+import { page, del } from "@/api/monitor/file";
+import { allList } from "@/api/monitor/ossConfig";
 
 export default {
   name: "File",
@@ -246,7 +246,7 @@ export default {
   },
   methods: {
     getAllOssConfigList(){
-      allListOssConfig().then(response => {
+      allList().then(response => {
         this.ossConfigAllList = response.data
       });
     },
@@ -289,7 +289,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      pageFile(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.fileList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -413,7 +413,7 @@ export default {
       const fileNames = row.fileName || this.fileNames;
       this.$modal.confirm('是否确认删除文件名为"' + fileNames + '"的数据项?').then(() => {
         this.loading = true;
-        return delFile(fileIds);
+        return del(fileIds);
       }).then(() => {
         this.loading = false;
         this.getList();

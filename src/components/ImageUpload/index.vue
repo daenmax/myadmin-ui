@@ -24,7 +24,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { listByIds, delFile } from "@/api/monitor/file";
+import { listByIds, del } from "@/api/monitor/file";
 
 export default {
   props: {
@@ -162,7 +162,7 @@ export default {
       const findex = this.fileList.map(f => f.sysFileId).indexOf(file.sysFileId);
       if (findex > -1) {
         let sysFileId = this.fileList[findex].sysFileId;
-        delFile(sysFileId);
+        del(sysFileId);
         this.fileList.splice(findex, 1);
         this.$emit("input", this.listToString(this.fileList));
       }

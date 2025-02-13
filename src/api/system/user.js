@@ -1,8 +1,17 @@
 import request from '@/utils/request'
 import {parseStrEmpty} from "@/utils/ruoyi";
 
+// 导出
+export const exportData =  '/system/user/exportData'
+
+//导入
+export const importData =  '/system/user/importData'
+
+// 下载导入模板
+export const importTemplate =  '/system/user/importTemplate'
+
 // 查询用户列表
-export function pageUser(query) {
+export function page(query) {
   return request({
     url: '/system/user/page',
     method: 'get',
@@ -11,15 +20,19 @@ export function pageUser(query) {
 }
 
 // 查询用户详细
-export function getUser(id) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/user/' + parseStrEmpty(id),
-    method: 'get'
+    url: '/system/user/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增用户
-export function addUser(data) {
+export function add(data) {
   return request({
     url: '/system/user/add',
     method: 'post',
@@ -28,7 +41,7 @@ export function addUser(data) {
 }
 
 // 修改用户
-export function updateUser(data) {
+export function edit(data) {
   return request({
     url: '/system/user/edit',
     method: 'post',
@@ -37,16 +50,16 @@ export function updateUser(data) {
 }
 
 // 删除用户
-export function delUser(ids) {
+export function del(ids) {
   return request({
-    url: '/system/user/remove',
+    url: '/system/user/del',
     method: 'post',
     data: ids
   })
 }
 
 // 用户密码重置
-export function resetUserPwd(id, password) {
+export function resetPwd(id, password) {
   const data = {
     id,
     password
@@ -59,7 +72,7 @@ export function resetUserPwd(id, password) {
 }
 
 // 用户状态修改
-export function changeUserStatus(id, status) {
+export function changeStatus(id, status) {
   const data = {
     id,
     status

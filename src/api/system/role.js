@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/system/role/exportData'
+
 // 查询角色列表
-export function pageRole(query) {
+export function page(query) {
   return request({
     url: '/system/role/page',
     method: 'get',
@@ -10,15 +13,19 @@ export function pageRole(query) {
 }
 
 // 查询角色详细
-export function getRole(roleId) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/role/' + roleId,
-    method: 'get'
+    url: '/system/role/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增角色
-export function addRole(data) {
+export function add(data) {
   return request({
     url: '/system/role/add',
     method: 'post',
@@ -27,7 +34,7 @@ export function addRole(data) {
 }
 
 // 修改角色
-export function updateRole(data) {
+export function edit(data) {
   return request({
     url: '/system/role/edit',
     method: 'post',
@@ -58,36 +65,36 @@ export function changeRoleStatus(id, status) {
 }
 
 // 删除角色
-export function delRole(ids) {
+export function del(ids) {
   return request({
-    url: '/system/role/remove',
+    url: '/system/role/del',
     method: 'post',
     data: ids
   })
 }
 
 // 查询角色已授权用户列表
-export function allocatedUserPage(query) {
+export function allocatedAuthUserPage(query) {
   return request({
-    url: '/system/role/authUser/allocatedPage',
+    url: '/system/role/allocatedAuthUserPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询角色未授权用户列表
-export function unallocatedUserPage(query) {
+export function unallocatedAuthUserPage(query) {
   return request({
-    url: '/system/role/authUser/unallocatedPage',
+    url: '/system/role/unallocatedAuthUserPage',
     method: 'get',
     params: query
   })
 }
 
 // 取消用户授权角色
-export function authUserCancel(data) {
+export function cancelAuthUser(data) {
   return request({
-    url: '/system/role/authUser/cancel',
+    url: '/system/role/cancelAuthUser',
     method: 'post',
     data: data
   })
@@ -95,9 +102,9 @@ export function authUserCancel(data) {
 
 
 // 保存授权用户选择
-export function authUserSave(data) {
+export function saveAuthUser(data) {
   return request({
-    url: '/system/role/authUser/save',
+    url: '/system/role/saveAuthUser',
     method: 'post',
     data: data
   })

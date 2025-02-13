@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { getCache } from "@/api/monitor/cache";
+import { getInfo } from "@/api/monitor/cache";
 import * as echarts from "echarts";
 
 export default {
@@ -87,7 +87,7 @@ export default {
   methods: {
     /** 查缓存询信息 */
     getList() {
-      getCache().then((response) => {
+      getInfo().then((response) => {
         this.cache = response.data;
         this.$modal.closeLoading();
 

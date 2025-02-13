@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询文件列表
-export function pageFile(query) {
+export function page(query) {
   return request({
     url: '/monitor/file/page',
     method: 'get',
@@ -18,7 +18,7 @@ export function listByIds(fileIds) {
 }
 
 // 删除对象存储
-export function delFile(ids) {
+export function del(ids) {
   let data;
   if(typeof ids == 'string'){
     data = [ids]
@@ -26,7 +26,7 @@ export function delFile(ids) {
     data =ids
   }
   return request({
-    url: '/monitor/file/remove',
+    url: '/monitor/file/del',
     method: 'post',
     data: data
   })

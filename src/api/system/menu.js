@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询菜单列表
-export function pageMenu(query) {
+export function page(query) {
   return request({
     url: '/system/menu/page',
     method: 'get',
@@ -10,10 +10,14 @@ export function pageMenu(query) {
 }
 
 // 查询菜单详细
-export function getMenu(menuId) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/menu/' + menuId,
-    method: 'get'
+    url: '/system/menu/query',
+    method: 'get',
+    params: data
   })
 }
 
@@ -34,7 +38,7 @@ export function roleMenuTreeSelect(roleId) {
 }
 
 // 新增菜单
-export function addMenu(data) {
+export function add(data) {
   return request({
     url: '/system/menu/add',
     method: 'post',
@@ -43,7 +47,7 @@ export function addMenu(data) {
 }
 
 // 修改菜单
-export function updateMenu(data) {
+export function edit(data) {
   return request({
     url: '/system/menu/edit',
     method: 'post',
@@ -52,9 +56,13 @@ export function updateMenu(data) {
 }
 
 // 删除菜单
-export function delMenu(menuId) {
+export function del(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/system/menu/remove/' + menuId,
-    method: 'post'
+    url: '/system/menu/del',
+    method: 'post',
+    params: data
   })
 }

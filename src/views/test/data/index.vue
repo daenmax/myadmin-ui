@@ -7,7 +7,7 @@
           placeholder="请输入标题"
           clearable
           size="small"
-          @keyup.enter.native="handleList1"
+          @keyup.enter.native="handlePage"
         />
       </el-form-item>
       <el-form-item label="内容" prop="content">
@@ -16,7 +16,7 @@
           placeholder="请输入内容"
           clearable
           size="small"
-          @keyup.enter.native="handleList1"
+          @keyup.enter.native="handlePage"
         />
       </el-form-item>
       <el-form-item label="类型" prop="type">
@@ -46,7 +46,7 @@
           placeholder="请输入备注"
           clearable
           size="small"
-          @keyup.enter.native="handleList1"
+          @keyup.enter.native="handlePage"
         />
       </el-form-item>
       <el-form-item label="创建时间">
@@ -63,9 +63,9 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList1">搜索-MP分页插件</el-button>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList2">搜索-自己写的SQL</el-button>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleList3">搜索-MP自定义SQL</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handlePage">搜索-MP分页插件</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handlePage2">搜索-自己写的SQL</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handlePage3">搜索-MP自定义SQL</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -100,7 +100,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['test:data:remove']"
+          v-hasPermi="['test:data:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -123,7 +123,7 @@
           v-hasPermi="['test:data:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList1"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getPage"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="dataList" @selection-change="handleSelectionChange">
@@ -173,7 +173,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['test:data:remove']"
+            v-hasPermi="['test:data:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -184,7 +184,7 @@
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
-      @pagination="getList1"
+      @pagination="getPage"
     />
 
     <!-- 添加或修改测试数据对话框 -->
@@ -250,7 +250,19 @@
 </template>
 
 <script>
-import { pageData1, pageData2, pageData3, getData, delData, addData, updateData ,changeDataStatus} from "@/api/test/data";
+import {
+  page,
+  page2,
+  page3,
+  getData,
+  del,
+  add,
+  edit,
+  changeStatus,
+  exportData,
+  importTemplate,
+  importData
+} from '@/api/test/data'
 import {getToken} from "@/utils/auth";
 
 export default {
@@ -295,7 +307,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/test/data/importData"
+        url: process.env.VUE_APP_BASE_API + importData
       },
       // 查询参数
       queryParams: {
@@ -324,40 +336,40 @@ export default {
     };
   },
   created() {
-    this.getList1();
+    this.getPage();
   },
   methods: {
     /** 分页列表1 */
-    getList1() {
+    getPage() {
       this.loading = true;
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageData1(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
     },
     /** 分页列表2 */
-    getList2() {
+    getPage2() {
       this.loading = true;
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageData2(this.queryParams).then(response => {
+      page2(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
       });
     },
-    /** 分页列表3 */
-    getList3() {
+    /** 分页列表 */
+    getPage3() {
       this.loading = true;
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime=this.dateRange[0]
       this.queryParams.endTime=this.dateRange[1]
-      pageData3(this.queryParams).then(response => {
+      page3(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -386,25 +398,25 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleList1() {
+    handlePage() {
       this.queryParams.pageNum = 1;
-      this.getList1();
+      this.getPage();
     },
     /** 搜索按钮操作 */
-    handleList2() {
+    handlePage2() {
       this.queryParams.pageNum = 1;
-      this.getList2();
+      this.getPage2();
     },
     /** 搜索按钮操作 */
-    handleList3() {
+    handlePage3() {
       this.queryParams.pageNum = 1;
-      this.getList3();
+      this.getPage3();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.dateRange = [];
       this.resetForm("queryForm");
-      this.handleList1();
+      this.handlePage();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -436,18 +448,18 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            updateData(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList1();
+              this.getPage();
             }).finally(() => {
               this.buttonLoading = false;
             });
           } else {
-            addData(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList1();
+              this.getPage();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -461,10 +473,10 @@ export default {
       const titles = row.title || this.titles;
       this.$modal.confirm('是否确认删除 "' + titles + '" ？').then(() => {
         this.loading = true;
-        return delData(ids);
+        return del(ids);
       }).then(() => {
         this.loading = false;
-        this.getList1();
+        this.getPage();
         this.$modal.msgSuccess("删除成功");
       }).finally(() => {
         this.loading = false;
@@ -474,7 +486,7 @@ export default {
     handleDataChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要 ' + text + ' ' + row.title + ' 这条数据吗？').then(function() {
-        return changeDataStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
@@ -488,12 +500,12 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('test/data/importTemplate', {
+      this.download(importTemplate, {
       }, `data_template_${new Date().getTime()}.xlsx`)
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('test/data/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `data_${new Date().getTime()}.xlsx`)
     },
@@ -506,8 +518,8 @@ export default {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
-      this.getList1();
+      this.$alert(response.msg + "->" + response.data, "导入结果", { dangerouslyUseHTMLString: true });
+      this.getPage();
     },
     // 提交上传文件
     submitFileForm() {

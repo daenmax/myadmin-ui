@@ -32,7 +32,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { listByIds, delFile } from "@/api/monitor/file";
+import { listByIds, del } from "@/api/monitor/file";
 
 export default {
   name: "FileUpload",
@@ -170,7 +170,7 @@ export default {
     // 删除文件
     handleDelete(index) {
       let sysFileId = this.fileList[index].sysFileId;
-      delFile(sysFileId);
+      del(sysFileId);
       this.fileList.splice(index, 1);
       this.$emit("input", this.listToString(this.fileList));
     },

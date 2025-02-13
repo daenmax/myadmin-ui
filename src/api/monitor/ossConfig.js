@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询对象存储配置列表
-export function pageOssConfig(query) {
+export function page(query) {
   return request({
     url: '/monitor/ossConfig/page',
     method: 'get',
@@ -10,7 +10,7 @@ export function pageOssConfig(query) {
 }
 
 // 查询对象存储配置下拉列表
-export function allListOssConfig(query) {
+export function allList(query) {
   return request({
     url: '/monitor/ossConfig/allList',
     method: 'get',
@@ -19,15 +19,19 @@ export function allListOssConfig(query) {
 }
 
 // 查询对象存储配置详细
-export function getOssConfig(id) {
+export function query(id) {
+  const data = {
+    id
+  }
   return request({
-    url: '/monitor/ossConfig/' + id,
-    method: 'get'
+    url: '/monitor/ossConfig/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增对象存储配置
-export function addOssConfig(data) {
+export function add(data) {
   return request({
     url: '/monitor/ossConfig/add',
     method: 'post',
@@ -36,7 +40,7 @@ export function addOssConfig(data) {
 }
 
 // 修改对象存储配置
-export function updateOssConfig(data) {
+export function edit(data) {
   return request({
     url: '/monitor/ossConfig/edit',
     method: 'post',
@@ -45,16 +49,16 @@ export function updateOssConfig(data) {
 }
 
 // 删除对象存储配置
-export function delOssConfig(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/ossConfig/remove',
+    url: '/monitor/ossConfig/del',
     method: 'post',
     data: ids
   })
 }
 
 // 对象存储状态修改
-export function changeOssConfigStatus(id, status) {
+export function changeStatus(id, status) {
   const data = {
     id,
     status
@@ -67,7 +71,7 @@ export function changeOssConfigStatus(id, status) {
 }
 
 // 对象存储使用状态修改
-export function changeOssConfigInUse(id, status) {
+export function changeInUse(id, status) {
   const data = {
     id,
     status

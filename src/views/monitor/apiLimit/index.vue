@@ -43,7 +43,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['monitor:apiLimit:remove']">删除</el-button>
+          v-hasPermi="['monitor:apiLimit:del']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-refresh" size="mini" @click="handleRefreshCache"
@@ -91,7 +91,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['monitor:apiLimit:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['monitor:apiLimit:remove']">删除</el-button>
+            v-hasPermi="['monitor:apiLimit:del']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import { pageApiLimit, getApiLimit, delApiLimit, addApiLimit, updateApiLimit, changeApiLimitStatus, refreshCache } from "@/api/monitor/apiLimit";
+import { page, query, del, add, edit, changeStatus, refreshCache } from "@/api/monitor/apiLimit";
 
 export default {
   name: "ApiLimit",
@@ -277,7 +277,7 @@ export default {
     /** 查询定时任务列表 */
     getList() {
       this.loading = true;
-      pageApiLimit(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.apiLimitList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -345,7 +345,7 @@ export default {
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""' + row.apiName + '"的限制吗？').then(function () {
-        return changeApiLimitStatus(row.id, row.status);
+        return changeStatus(row.id, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function () {
@@ -362,7 +362,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getApiLimit(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改接口限制";
@@ -373,13 +373,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateApiLimit(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addApiLimit(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -393,7 +393,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const names = row.apiName || this.names;
       this.$modal.confirm('是否确认删除接口名称为"' + names + '"的限制吗？').then(function () {
-        return delApiLimit(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

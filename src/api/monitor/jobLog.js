@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/monitor/jobLog/exportData'
+
 // 查询调度日志列表
-export function pageJobLog(query) {
+export function page(query) {
   return request({
     url: '/monitor/jobLog/page',
     method: 'get',
@@ -10,16 +13,16 @@ export function pageJobLog(query) {
 }
 
 // 删除调度日志
-export function delJobLog(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/jobLog/remove',
+    url: '/monitor/jobLog/del',
     method: 'post',
     data: ids
   })
 }
 
 // 清空调度日志
-export function cleanJobLog() {
+export function clean() {
   return request({
     url: '/monitor/jobLog/clean',
     method: 'post'

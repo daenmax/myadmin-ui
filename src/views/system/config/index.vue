@@ -46,7 +46,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['system:config:remove']">删除</el-button>
+          v-hasPermi="['system:config:del']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
@@ -86,7 +86,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['system:config:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:config:remove']">删除</el-button>
+            v-hasPermi="['system:config:del']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { pageConfig, getConfig, delConfig, addConfig, updateConfig, refreshCache } from "@/api/system/config";
+import { page, query, del, add, edit, refreshCache, exportData } from '@/api/system/config'
 
 export default {
   name: "Config",
@@ -197,7 +197,7 @@ export default {
       this.dateRange = Array.isArray(this.dateRange) ? this.dateRange : [];
       this.queryParams.startTime = this.dateRange[0]
       this.queryParams.endTime = this.dateRange[1]
-      pageConfig(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.configList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -250,7 +250,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getConfig(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改参数";
@@ -261,13 +261,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateConfig(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addConfig(this.form).then(response => {
+            add(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -281,7 +281,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const names = row.name || this.names;
       this.$modal.confirm('是否确认删除参数名称为"' + names + '"的数据项？').then(function () {
-        return delConfig(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -289,7 +289,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/config/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `config_${new Date().getTime()}.xlsx`)
     },

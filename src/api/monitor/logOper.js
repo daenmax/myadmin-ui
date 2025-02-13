@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/monitor/logOper/exportData'
+
 // 查询操作日志列表
-export function pageLogOper(query) {
+export function page(query) {
   return request({
     url: '/monitor/logOper/page',
     method: 'get',
@@ -10,16 +13,16 @@ export function pageLogOper(query) {
 }
 
 // 删除操作日志
-export function delLogOper(ids) {
+export function del(ids) {
   return request({
-    url: '/monitor/logOper/remove',
+    url: '/monitor/logOper/del',
     method: 'post',
     data: ids
   })
 }
 
 // 清空操作日志
-export function cleanLogOper() {
+export function clean() {
   return request({
     url: '/monitor/logOper/clean',
     method: 'post'

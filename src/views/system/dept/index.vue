@@ -59,7 +59,7 @@
           <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
             v-hasPermi="['system:dept:add']">新增</el-button>
           <el-button v-if="scope.row.parentId != 0" size="mini" type="text" icon="el-icon-delete"
-            @click="handleDelete(scope.row)" v-hasPermi="['system:dept:remove']">删除</el-button>
+            @click="handleDelete(scope.row)" v-hasPermi="['system:dept:del']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,7 +110,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          
+
           <el-col :span="12">
             <el-form-item label="显示排序" prop="sort">
               <el-input-number v-model="form.sort" controls-position="right" :min="0" />
@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild, userList } from "@/api/system/dept";
+import { list, getDept, del, add, edit, listDeptExcludeChild, getUserList } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -211,7 +211,7 @@ export default {
     remoteMethod(keyword) {
       if (keyword !== '') {
         this.userLoading = true;
-        userList({ "keyword": keyword }).then(response => {
+        getUserList({ "keyword": keyword }).then(response => {
           this.userList = response.data
           this.userLoading = false;
         }).catch(error => {
@@ -225,7 +225,7 @@ export default {
     /** 查询部门列表 */
     getList() {
       this.loading = true;
-      listDept(this.queryParams).then(response => {
+      list(this.queryParams).then(response => {
         this.deptList = this.handleTree(response.data, "id");
         this.loading = false;
       });
@@ -279,7 +279,7 @@ export default {
       this.open = true;
       this.title = "添加部门";
       this.userList = [];
-      listDept().then(response => {
+      list().then(response => {
         this.deptOptions = this.handleTree(response.data, "id");
       });
     },
@@ -307,7 +307,7 @@ export default {
         });
       });
       this.userLoading = true;
-      userList({ "id": row.leaderUserId }).then(response => {
+      getUserList({ "id": row.leaderUserId }).then(response => {
         this.userList = response.data
         this.userLoading = false;
       }).catch(error => {
@@ -320,7 +320,7 @@ export default {
         if (valid) {
           this.holdon = true;
           if (this.form.id != undefined) {
-            updateDept(this.form).then(response => {
+            edit(this.form).then(response => {
               this.holdon = false;
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -329,7 +329,7 @@ export default {
               this.holdon = false;
             });
           } else {
-            addDept(this.form).then(response => {
+            add(this.form).then(response => {
               this.holdon = false;
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -344,7 +344,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$modal.confirm('是否确认删除部门：' + row.name + ' ？').then(function () {
-        return delDept(row.id);
+        return del(row.id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

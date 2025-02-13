@@ -1,7 +1,10 @@
 import request from '@/utils/request'
 
+// 导出
+export const exportData =  '/system/dict/detail/exportData'
+
 // 查询字典数据列表
-export function pageData(query) {
+export function page(query) {
   return request({
     url: '/system/dict/detail/page',
     method: 'get',
@@ -10,15 +13,19 @@ export function pageData(query) {
 }
 
 // 查询字典数据详细
-export function getData(dictCode) {
+export function queryDetail(dictCode) {
+  const data = {
+    dictCode
+  }
   return request({
-    url: '/system/dict/detail/' + dictCode,
-    method: 'get'
+    url: '/system/dict/detail/query',
+    method: 'get',
+    params: data
   })
 }
 
 // 新增字典数据
-export function addData(data) {
+export function add(data) {
   return request({
     url: '/system/dict/detail/add',
     method: 'post',
@@ -27,7 +34,7 @@ export function addData(data) {
 }
 
 // 修改字典数据
-export function updateData(data) {
+export function edit(data) {
   return request({
     url: '/system/dict/detail/edit',
     method: 'post',
@@ -36,9 +43,9 @@ export function updateData(data) {
 }
 
 // 删除字典数据
-export function delData(dictCodes) {
+export function del(dictCodes) {
   return request({
-    url: '/system/dict/detail/remove',
+    url: '/system/dict/detail/del',
     method: 'post',
     data: dictCodes
   })

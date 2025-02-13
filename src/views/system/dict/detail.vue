@@ -81,7 +81,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:dict:remove']"
+          v-hasPermi="['system:dict:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -142,7 +142,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:dict:remove']"
+            v-hasPermi="['system:dict:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -206,8 +206,8 @@
 </template>
 
 <script>
-import { pageData, getData, delData, addData, updateData } from "@/api/system/dict/detail";
-import { optionSelect as getDictOptionSelect, getType } from "@/api/system/dict/index";
+import { page, queryDetail, del, add, edit, exportData } from '@/api/system/dict/detail'
+import { optionSelect as getDictOptionSelect, query } from "@/api/system/dict/index";
 
 export default {
   name: "Detail",
@@ -299,7 +299,7 @@ export default {
   methods: {
     /** 查询字典类型详细 */
     getType(id) {
-      getType(id).then(response => {
+      query(id).then(response => {
         this.queryParams.dictCode = response.data.code;
         this.defaultDictCode = response.data.code;
         this.getList();
@@ -314,7 +314,7 @@ export default {
     /** 查询字典数据列表 */
     getList() {
       this.loading = true;
-      pageData(this.queryParams).then(response => {
+      page(this.queryParams).then(response => {
         this.dataList = response.data.records
         this.total = response.data.total;
         this.loading = false;
@@ -373,7 +373,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getData(id).then(response => {
+      query(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改字典数据";
@@ -384,14 +384,14 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateData(this.form).then(response => {
+            edit(this.form).then(response => {
               this.$store.dispatch('dict/removeDict', this.queryParams.dictCode);
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addData(this.form).then(response => {
+            add(this.form).then(response => {
               this.$store.dispatch('dict/removeDict', this.queryParams.dictCode);
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -406,7 +406,7 @@ export default {
       const ids = row.id ? [row.id] : this.ids;
       const labels = row.label || this.labels;
       this.$modal.confirm('是否确认删除字典标签为"' + labels + '"的数据项？').then(function() {
-        return delData(ids);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -415,7 +415,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/dict/detail/export', {
+      this.download(exportData, {
         ...this.queryParams
       }, `data_${new Date().getTime()}.xlsx`)
     }
