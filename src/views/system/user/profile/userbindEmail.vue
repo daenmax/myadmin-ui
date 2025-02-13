@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import {updateBindEmail, getEmailValidCode} from "@/api/system/user";
-import {getCaptcha} from "@/api/login";
+import {updateBindEmail, getEmailValidCode} from "@/api/base/userCenter";
+import {captcha} from "@/api/base/login";
 
 export default {
   props: {
@@ -96,7 +96,7 @@ export default {
       }
     },
     getCode() {
-      getCaptcha().then(res => {
+      captcha().then(res => {
         this.captchaLock = res.data.captchaLock === undefined ? true : res.data.captchaLock;
         if (this.captchaLock) {
           this.captchaType = res.data.captchaType;

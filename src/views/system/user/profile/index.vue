@@ -134,7 +134,7 @@ import userInfo from "./userInfo";
 import userbindPhone from "./userbindPhone.vue";
 import userbindEmail from "./userbindEmail";
 import resetPwd from "./resetPwd";
-import { getUserProfile } from "@/api/system/user";
+import { getProfile } from "@/api/base/userCenter";
 import { regFenToYuan } from '@/utils/myUtil'
 
 export default {
@@ -159,7 +159,7 @@ export default {
   },
   methods: {
     getUser() {
-      getUserProfile().then(response => {
+      getProfile().then(response => {
         this.user = response.data.user;
         this.user.money = regFenToYuan(this.user.money);
         this.roleGroup = response.data.roleGroup;

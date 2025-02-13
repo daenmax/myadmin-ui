@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { updateUserProfile } from "@/api/system/user";
+import { editProfile } from "@/api/base/userCenter";
 
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          updateUserProfile(this.bind).then(response => {
+          editProfile(this.bind).then(response => {
             this.$modal.msgSuccess("修改成功");
           });
         }

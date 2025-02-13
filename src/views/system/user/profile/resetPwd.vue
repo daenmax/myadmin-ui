@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { updateUserPwd } from "@/api/system/user";
+import { editPwd } from "@/api/base/userCenter";
 
 export default {
   data() {
@@ -54,7 +54,7 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          updateUserPwd(this.user.oldPassword, this.user.newPassword).then(response => {
+          editPwd(this.user.oldPassword, this.user.newPassword).then(response => {
             this.$modal.msgSuccess(response.msg);
           });
         }

@@ -56,7 +56,7 @@
 <script>
 import store from "@/store";
 import { VueCropper } from "vue-cropper";
-import { uploadAvatar } from "@/api/system/user";
+import { editAvatar } from "@/api/base/userCenter";
 import { debounce } from '@/utils'
 
 export default {
@@ -140,7 +140,7 @@ export default {
       this.$refs.cropper.getCropBlob(data => {
         let formData = new FormData();
         formData.append("avatar", data, this.options.filename);
-        uploadAvatar(formData).then(response => {
+        editAvatar(formData).then(response => {
           this.open = false;
           this.options.img = response.data.imgUrl;
           store.commit('SET_AVATAR', this.options.img);

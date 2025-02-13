@@ -71,51 +71,6 @@ export function changeUserStatus(id, status) {
   })
 }
 
-// 查询用户个人信息
-export function getUserProfile() {
-  return request({
-    url: '/system/user/profile',
-    method: 'get'
-  })
-}
-
-// 修改用户个人信息
-export function updateUserProfile(data) {
-  return request({
-    url: '/system/user/editProfile',
-    headers: {
-      //是否忽略POST和PUT的重复提交限制，不填写此参数的话，默认是false。
-      //false是不忽略限制，不允许重复
-      //true是忽略限制，允许重复
-      ignoreRepeatSubmit: false
-    },
-    method: 'post',
-    data: data
-  })
-}
-
-// 用户密码重置
-export function updateUserPwd(oldPassword, newPassword) {
-  const data = {
-    oldPassword,
-    newPassword
-  }
-  return request({
-    url: '/system/user/updatePwd',
-    method: 'post',
-    data: data
-  })
-}
-
-// 用户头像上传
-export function uploadAvatar(data) {
-  return request({
-    url: '/system/user/profile/avatar',
-    method: 'post',
-    data: data
-  })
-}
-
 // 查询授权角色
 export function getAuthRole(id) {
   return request({
@@ -141,39 +96,3 @@ export function deptTreeSelect() {
   })
 }
 
-// 获取邮箱验证码
-export function getEmailValidCode(data) {
-  return request({
-    url: '/system/user/getEmailValidCode',
-    method: 'post',
-    data: data
-  })
-}
-
-// 获取手机验证码
-export function getPhoneValidCode(data) {
-  return request({
-    url: '/system/user/getPhoneValidCode',
-    method: 'post',
-    data: data
-  })
-}
-
-
-// 修改邮箱绑定
-export function updateBindEmail(data) {
-  return request({
-    url: '/system/user/updateBindEmail',
-    method: 'post',
-    data: data
-  })
-}
-
-// 修改手机绑定
-export function updateBindPhone(data) {
-  return request({
-    url: '/system/user/updateBindPhone',
-    method: 'post',
-    data: data
-  })
-}

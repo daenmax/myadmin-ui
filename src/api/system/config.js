@@ -17,14 +17,6 @@ export function getConfig(configId) {
   })
 }
 
-// 根据参数键名查询参数值
-export function getConfigKey(key) {
-  return request({
-    url: '/system/config/key/' + key,
-    method: 'get'
-  })
-}
-
 // 新增参数配置
 export function addConfig(data) {
   return request({

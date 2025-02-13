@@ -126,7 +126,7 @@
 
 <script>
 
-import {getCaptcha, getEmailValidCode, getPhoneValidCode} from "@/api/login";
+import {captcha, getEmailValidCode, getPhoneValidCode} from "@/api/base/login";
 import Cookies from "js-cookie";
 import {encrypt, decrypt} from '@/utils/jsencrypt'
 
@@ -250,7 +250,7 @@ export default {
       }
     },
     getCode() {
-      getCaptcha().then(res => {
+      captcha().then(res => {
         this.captchaLock = res.data.captchaLock === undefined ? true : res.data.captchaLock;
         if (this.captchaLock) {
           this.captchaType = res.data.captchaType;

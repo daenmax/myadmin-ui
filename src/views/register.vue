@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import {getCaptcha, register} from "@/api/login";
+import {captcha, register} from "@/api/base/login";
 
 export default {
   name: "Register",
@@ -116,7 +116,7 @@ export default {
       }
     },
     getCode() {
-      getCaptcha().then(res => {
+      captcha().then(res => {
         this.captchaLock = res.data.captchaLock === undefined ? true : res.data.captchaLock;
         if (this.captchaLock) {
           this.captchaType = res.data.captchaType;
