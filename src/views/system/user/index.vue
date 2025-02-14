@@ -588,8 +588,8 @@ export default {
       // 表单校验
       rules: {
         username: [
-          { required: true, message: "用户名称不能为空", trigger: "blur" },
-          { min: 5, max: 30, message: '用户名称长度必须介于 5 和 30 之间', trigger: 'blur' }
+          { required: true, message: "用户账号不能为空", trigger: "blur" },
+          { min: 5, max: 30, message: '用户账号长度必须介于 5 和 30 之间', trigger: 'blur' }
         ],
         nickName: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
