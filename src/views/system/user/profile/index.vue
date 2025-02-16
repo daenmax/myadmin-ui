@@ -38,15 +38,15 @@
                 <div class="pull-right"><el-tag type="danger" size="mini">{{ user.money}}元</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" /> 注册日期
+                <svg-icon icon-class="date" /> 注册时间
                 <div class="pull-right"><el-tag type="warning" size="mini">{{ user.createTime }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" /> 过期日期
+                <svg-icon icon-class="date" /> 过期时间
                 <div class="pull-right"><el-tag type="warning" size="mini">{{ user.expireToTime==null?"永久":user.banToTime }}</el-tag></div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" /> 解封日期
+                <svg-icon icon-class="date" /> 解封时间
                 <div class="pull-right"><el-tag type="danger" size="mini">{{ user.banToTime==null?"正常":user.banToTime }}</el-tag></div>
               </li>
               <li class="list-group-item">
