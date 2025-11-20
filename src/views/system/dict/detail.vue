@@ -373,7 +373,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      query(id).then(response => {
+      queryDetail(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改字典数据";

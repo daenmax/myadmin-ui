@@ -254,7 +254,7 @@ import {
   page,
   page2,
   page3,
-  getData,
+  query,
   del,
   add,
   edit,
@@ -435,7 +435,7 @@ export default {
       this.loading = true;
       this.reset();
       const id = row.id || this.ids
-      getData(id).then(response => {
+      query(id).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;

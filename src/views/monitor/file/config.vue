@@ -78,6 +78,8 @@
             @change="handleStatusChange(scope.row)"></el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="链接访问有效期" align="center" prop="urlValidAccessTime" />
+      <el-table-column label="链接缓存有效期" align="center" prop="urlValidCacheTime" />
       <el-table-column label="操作" align="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -135,6 +137,12 @@
             <el-radio v-for="dict in dict.type.sys_normal_disable" :key="dict.value"
               :label="dict.value">{{ dict.label }}</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="链接访问有效期" prop="urlValidAccessTime">
+          <el-input v-model="form.urlValidAccessTime" placeholder="单位秒" />
+        </el-form-item>
+        <el-form-item label="链接缓存有效期" prop="urlValidCacheTime">
+          <el-input v-model="form.urlValidCacheTime" placeholder="单位秒，0=不缓存" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
@@ -248,6 +256,12 @@ export default {
         ],
         accessPolicy: [
           { required: true, message: "权限类型不能为空", trigger: "blur" }
+        ],
+        urlValidAccessTime: [
+          { required: true, message: "链接访问有效期不能为空", trigger: "blur" }
+        ],
+        urlValidCacheTime: [
+          { required: true, message: "链接缓存有效期不能为空", trigger: "blur" }
         ]
       },
     };

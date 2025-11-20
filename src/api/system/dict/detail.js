@@ -13,9 +13,9 @@ export function page(query) {
 }
 
 // 查询字典数据详细
-export function queryDetail(dictCode) {
+export function queryDetail(id) {
   const data = {
-    dictCode
+    id
   }
   return request({
     url: '/system/dict/detail/query',

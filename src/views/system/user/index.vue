@@ -486,7 +486,7 @@
 <script>
 import {
   page,
-  getUser,
+  query,
   del,
   add,
   edit,
@@ -737,7 +737,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      getUser().then(response => {
+      query().then(response => {
         this.postOptions = response.data.positions;
         this.roleOptions = response.data.roles;
         this.open = true;
@@ -748,7 +748,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getUser(id).then(response => {
+      query(id).then(response => {
         this.form = response.data.user;
         this.form.money = regFenToYuan(this.form.money);
         this.postOptions = response.data.positions;
