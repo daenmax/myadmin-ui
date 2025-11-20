@@ -9,7 +9,7 @@ export default {
   name: 'RuoYiGit',
   data() {
     return {
-      url: 'https://gitee.com/daenmax/myadmin'
+      url: 'https://github.com/daenmax/myadmin'
     }
   },
   methods: {

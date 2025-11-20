@@ -1,14 +1,11 @@
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">MyAdmin</h1>
 <h4 align="center">基于SpringBoot3.x开发的通用后台管理框架</h4>
 <p align="center">
-<a href='https://gitee.com/daenmax/myadmin/stargazers'>
-<img src='https://gitee.com/daenmax/myadmin/badge/star.svg?theme=dark' alt='star'>
-</a>
 <a href='https://github.com/daenmax/myadmin'>
 <img src='https://img.shields.io/github/stars/daenmax/myadmin.svg?style=social&label=Stars' alt='star'>
 </a>
 <a href="#">
-<img src="https://img.shields.io/badge/version-v1.2.0-brightgreen.svg">
+<img src="https://img.shields.io/badge/version-v1.3.0-brightgreen.svg">
 </a>
 </p>
 
@@ -38,25 +35,19 @@
 
 ### 后端仓库
 
-gitee码云
-[MyAdmin](https://gitee.com/daenmax/myadmin)
-
-github
 [MyAdmin](https://github.com/daenmax/myadmin)
 
 ### 前端仓库
 
-gitee码云
-[MyAdmin-Ui](https://gitee.com/daenmax/myadmin-ui)
-
-github
 [MyAdmin-Ui](https://github.com/daenmax/myadmin-ui)
 
 ## 🐮 开始
 
+node版本16.16.0
+
 ```bash
 # 克隆项目
-git clone https://gitee.com/daenmax/myadmin-ui
+git clone https://github.com/daenmax/myadmin-ui
 
 # 进入项目目录
 cd myadmin-ui
@@ -195,7 +186,7 @@ server:
 
 ## ⚡ 反馈与交流
 
-在使用过程中有任何问题和想法，请给我提 [Issue](https://gitee.com/daenmax/myadmin-ui/issues)
+在使用过程中有任何问题和想法，请给我提 [Issue](https://github.com/daenmax/myadmin-ui/issues)
 
 你也可以在Issue查看别人提的问题和给出解决方案。
 
